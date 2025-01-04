@@ -6,11 +6,13 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.units.measure.Angle;
 import frc.robot.Constants;
 
 public class ModuleIOSparkMax implements ModuleIO {
@@ -27,7 +29,7 @@ public class ModuleIOSparkMax implements ModuleIO {
     private final boolean isTurnMotorInverted = true;
     private final Rotation2d absoluteEncoderOffset;
 
-    private final StatusSignal<Double> turnAbsolutePosition;
+    private final StatusSignal<Angle> turnAbsolutePosition;
 
     public ModuleIOSparkMax(int index) {
         switch(index) {
@@ -137,11 +139,15 @@ public class ModuleIOSparkMax implements ModuleIO {
 
     @Override
     public void setDriveBrakeMode(boolean enabled) {
-        driveSparkMax.setIdleMode(enabled ? IdleMode.kBrake : IdleMode.kCoast);
+        SparkMaxConfig idleConfig = new SparkMaxConfig();
+        idleConfig.idleMode(enabled ? IdleMode.kBrake : IdleMode.kCoast);
+        driveSparkMax.configure(idleConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 
     @Override
     public void setTurnBrakeMode(boolean enabled) {
-        turnSparkMax.setIdleMode(enabled ? IdleMode.kBrake : IdleMode.kCoast);
+        SparkMaxConfig idleConfig = new SparkMaxConfig();
+        idleConfig.idleMode(enabled ? IdleMode.kBrake : IdleMode.kCoast);
+        turnSparkMax.configure(idleConfig, ResetMode.kNoResetSafeParameters, PersistMode.kNoPersistParameters);
     }
 }

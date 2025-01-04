@@ -1,9 +1,9 @@
 package frc.robot.subsystems.Gyro;
 
-import com.kauailabs.navx.frc.AHRS;
+import com.studica.frc.AHRS;
 
 public class GyroIONavx implements GyroIO {
-    private final AHRS navx = new AHRS();
+    private final AHRS navx = new AHRS(AHRS.NavXComType.kMXP_SPI);
 
     public GyroIONavx() {
         navx.zeroYaw();

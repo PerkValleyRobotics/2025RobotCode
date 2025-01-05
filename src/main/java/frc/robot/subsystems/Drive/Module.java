@@ -102,13 +102,13 @@ public class Module extends SubsystemBase{
     public SwerveModuleState runSetpoint(SwerveModuleState state) {
         // Optimize the state based on current angle
         // Controllers run in "periodic when the setpoint is not null"
-        SwerveModuleState optimizedState = SwerveModuleState.optimize(state, getAngle());
+        state.optimize(getAngle());
 
         // Update setpoints, controllers run in "periodic"
-        angleSetpoint = optimizedState.angle;
-        speedSetpoint = optimizedState.speedMetersPerSecond;
+        angleSetpoint = state.angle;
+        speedSetpoint = state.speedMetersPerSecond;
 
-        return optimizedState;
+        return state;
     }
 
     public void runCharacterization(double volts) {

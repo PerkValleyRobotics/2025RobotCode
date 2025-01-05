@@ -5,7 +5,7 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
-
+import frc.robot.Constants;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -56,9 +56,9 @@ public class DriveCommands {
               && DriverStation.getAlliance().get() == Alliance.Red;
           drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(
-              linearVelocity.getX() * drive.getMaxLinearSpeedMerterPerSec(), 
-              linearVelocity.getY() * drive.getMaxLinearSpeedMerterPerSec(),
-              omega * drive.getMaxAngularSpeedMerterPerSec(),
+              linearVelocity.getX() * Constants.MAX_LINEAR_SPEED, 
+              linearVelocity.getY() * Constants.MAX_LINEAR_SPEED,
+              omega * Constants.MAX_ANGULAR_SPEED,
               isFlipped
                 ? drive.getRotation().plus(new Rotation2d(Math.PI)) 
                 : drive.getRotation()));

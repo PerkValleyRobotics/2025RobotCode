@@ -103,6 +103,7 @@ public class Module extends SubsystemBase{
         // Optimize the state based on current angle
         // Controllers run in "periodic when the setpoint is not null"
         state.optimize(getAngle());
+        //state.cosineScale(inputs.turnPosition);
 
         // Update setpoints, controllers run in "periodic"
         angleSetpoint = state.angle;

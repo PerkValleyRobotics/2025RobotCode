@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import static frc.robot.subsystems.Drive.DriveConstants.*;
+
 import java.util.function.DoubleSupplier;
 import frc.robot.Constants;
 import edu.wpi.first.math.MathUtil;
@@ -23,6 +25,20 @@ public class DriveCommands {
   /** Creates a new DriveCommands. */
   public DriveCommands() {}
 
+  public static Translation2d getLinierVelocityFromJoysticks(double x, double y) {
+    // Apply Deadban
+    double linearMagnitude = MathUtil.applyDeadband(Math.hypot(x, y), DEADBAND);
+    Rotation2d linierDirection = new Rotation2d(Math.atan2(y, x));
+
+    // Square the linier magnitude for more presice control
+    linearMagnitude = linearMagnitude * linearMagnitude;
+
+    // Return new linear velocity
+    return new Pose2d(new Translation2d(), linierDirection)
+      .transformBy(new Transform2d(linearMagnitude, 0.0, new Rotation2d()))
+      .getTranslation();
+  }
+
   public static Command joyStickDrive(
     Drive drive,
     DoubleSupplier xSupplier,
@@ -30,35 +46,26 @@ public class DriveCommands {
     DoubleSupplier omegaSupplier) {
      return Commands.run(
       () -> {
-          // Apply deadband
-          double liearMagnitude = 
-            MathUtil.applyDeadband(
-              Math.hypot(xSupplier.getAsDouble(), ySupplier.getAsDouble()), DEADBAND);
-          Rotation2d linearDirection = 
-            new Rotation2d(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+          // Get linear velocity
+          Translation2d linearVelocity =  getLinierVelocityFromJoysticks(xSupplier.getAsDouble(), ySupplier.getAsDouble());
+
+          // Apply rotation deadband
           double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
 
-          // Suare valuse to get a quadratic relationship between joystick position and robot speed 
-          // Gives fine presision for small joystick movements and high speeds for large joystick movements
-          liearMagnitude = liearMagnitude * liearMagnitude;
           // Retain the original sign of omega
           omega = Math.copySign(omega * omega, omega);
 
-          // Calculate new linear velocity
-          Translation2d linearVelocity = 
-            new Pose2d(new Translation2d(), linearDirection)
-              .transformBy(new Transform2d(liearMagnitude, 0.0, new Rotation2d()))
-              .getTranslation();
 
           // Convert to field relative speeds and send command
           boolean isFlipped = 
             DriverStation.getAlliance().isPresent()
               && DriverStation.getAlliance().get() == Alliance.Red;
+
           drive.runVelocity(
             ChassisSpeeds.fromFieldRelativeSpeeds(
-              linearVelocity.getX() * Constants.MAX_LINEAR_SPEED, 
-              linearVelocity.getY() * Constants.MAX_LINEAR_SPEED,
-              omega * Constants.MAX_ANGULAR_SPEED,
+              linearVelocity.getX() * drive.getMaxLinerSpeedMetersPerSec(), 
+              linearVelocity.getY() * drive.getMaxLinerSpeedMetersPerSec(),
+              omega * drive.getMaxAngularSpeedRadPerSec(),
               isFlipped
                 ? drive.getRotation().plus(new Rotation2d(Math.PI)) 
                 : drive.getRotation()));

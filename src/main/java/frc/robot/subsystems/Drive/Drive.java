@@ -5,16 +5,15 @@
 package frc.robot.subsystems.Drive;
 
 import static edu.wpi.first.units.Units.*;
+import static frc.robot.subsystems.Drive.DriveConstants.*;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
-
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -37,7 +36,7 @@ public class Drive extends SubsystemBase {
   private final Module[] modules = new Module[4];
   private final SysIdRoutine sysId;
 
-  private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(Constants.MODULE_TRANSLATIONS);
+  private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
   private Rotation2d rawGyroRotation = new Rotation2d();
   private SwerveModulePosition[] lastModulePositions =
     new SwerveModulePosition[] {
@@ -62,9 +61,6 @@ public class Drive extends SubsystemBase {
     modules[1] = new Module(frModuleIO, 1);
     modules[2] = new Module(blModuleIO, 2);
     modules[3] = new Module(brModuleIO, 3);
-    
-    RobotConfig ppConfig;
-    ppConfig = Constants.ppConfig;
 
     AutoBuilder.configure(
         this::getPose,
@@ -120,7 +116,7 @@ public class Drive extends SubsystemBase {
     }
 
     if (DriverStation.isDisabled()) {
-      for (Module module :modules) {
+      for (Module module : modules) {
         module.stop();
       }
     }
@@ -161,7 +157,10 @@ public class Drive extends SubsystemBase {
     // Calculate module setpoints
     ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.02);
     SwerveModuleState[] setpointStates = kinematics.toSwerveModuleStates(discreteSpeeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, Constants.MAX_LINEAR_SPEED);
+    SwerveDriveKinematics.desaturateWheelSpeeds(setpointStates, MAX_LINEAR_SPEED);
+
+    Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
+    Logger.recordOutput("SwerveChasisSpeeds/setpoints", discreteSpeeds);
 
     // Send setpoints to modules
     SwerveModuleState[] optimizSetpointStates = new SwerveModuleState[4];
@@ -171,8 +170,7 @@ public class Drive extends SubsystemBase {
     }
 
     // Log setpoint states
-    Logger.recordOutput("SwerveStates/Setpoints", setpointStates);
-    Logger.recordOutput("SwerveStates/SetpoinsOptimezed", optimizSetpointStates);
+    Logger.recordOutput("SwerveStates/SetpoinsOptimized", optimizSetpointStates);
   }
 
   // Stop the drive
@@ -183,7 +181,7 @@ public class Drive extends SubsystemBase {
   public void stopWithX() {
     Rotation2d[] headings = new Rotation2d[4];
     for (int i = 0; i < 4; i++) {
-      headings[i] = Constants.MODULE_TRANSLATIONS[i].getAngle();
+      headings[i] = MODULE_TRANSLATIONS[i].getAngle();
     }
     kinematics.resetHeadings(headings);
     stop();
@@ -240,6 +238,14 @@ public class Drive extends SubsystemBase {
   // Add a vision measurement to the pose estimator
   public void addVisionMeasurement(Pose2d visionPose, double timestamp) {
     poseEstimatior.addVisionMeasurement(visionPose, timestamp);
+  }
+
+  public double getMaxLinerSpeedMetersPerSec() {
+    return MAX_ANGULAR_SPEED;
+  }
+
+  public double getMaxAngularSpeedRadPerSec() {
+    return MAX_ANGULAR_SPEED;
   }
 }
 

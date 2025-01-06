@@ -91,7 +91,7 @@ public class RobotContainer {
         drive,
         () -> m_driverController.getLeftY(),
         () -> m_driverController.getLeftX(),
-        () -> 0));
+        () -> m_driverController.getRightX()));
     //m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     m_driverController
       .b()

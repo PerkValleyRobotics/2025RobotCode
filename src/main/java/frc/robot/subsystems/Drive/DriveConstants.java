@@ -23,10 +23,15 @@ public class DriveConstants {
     };
 
   // Drive Motor Configuration
-  public static final DCMotor DRIVE_GREARBOX = DCMotor.getNEO(1);
-  public static double DRIVE_MOTOR_REDUCTION = 6.12;
-  public static double DRIVE_CURRENT_LIMIT = 50;
+  public static final DCMotor DRIVE_GEARBOX = DCMotor.getNEO(1);
+  public static final double DRIVE_MOTOR_REDUCTION = 6.12;
+  public static final double DRIVE_CURRENT_LIMIT = 50;
 
+  // Turn Motor Configuration
+  public static final DCMotor TURN_GEARBOX = DCMotor.getNEO(1);
+  public static final double TURN_MOTOR_REDUCTION = 150.0 / 7.0 ;
+  public static final double TURN_CURRENT_LIMIT = 40;
+  
   // Path planner constants
   public static final double ROBOT_MASS = 115;
   public static final double ROBOT_MOI = 0;
@@ -41,7 +46,7 @@ public class DriveConstants {
         WHEEL_RADIOUS_METERS,
         MAX_LINEAR_SPEED, 
         WHEEL_COF, 
-        DRIVE_GREARBOX.withReduction(DRIVE_MOTOR_REDUCTION),
+        DRIVE_GEARBOX.withReduction(DRIVE_MOTOR_REDUCTION),
         DRIVE_CURRENT_LIMIT,
         1),
       MODULE_TRANSLATIONS  

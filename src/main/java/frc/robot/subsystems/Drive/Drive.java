@@ -170,7 +170,7 @@ public class Drive extends SubsystemBase {
     }
 
     // Log setpoint states
-    Logger.recordOutput("SwerveStates/SetpoinsOptimized", optimizSetpointStates);
+    Logger.recordOutput("SwerveStates/SetpointsOptimized", optimizSetpointStates);
   }
 
   // Stop the drive

@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Drive;
 
+import static frc.robot.subsystems.Drive.DriveConstants.*;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
@@ -11,18 +13,26 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 public class ModuleIOSim implements ModuleIO{
     private static final double LOOP_PERIOD_SECS = 0.02;
-
-   // private DCMotorSim driveSim = new DCMotorSim(DCMotor.getNEO(1), 6.75, 0.025);
-    LinearSystem<N2, N1, N2> driveSys = LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1),6.75 , 0.025);
-    private DCMotorSim driveSim = new DCMotorSim(driveSys, DCMotor.getNEO(1));
-
-    LinearSystem<N2, N1, N2> turnSys = LinearSystemId.createDCMotorSystem(DCMotor.getNEO(1),150.0 / 7.0 , 0.004);
-    private DCMotorSim turnSim = new DCMotorSim(turnSys, DCMotor.getNEO(1));
-    //private DCMotorSim turnSim = new DCMotorSim(DCMotor.getNEO(1), 150.0 / 7.0, 0.004);
+    
+    private DCMotorSim driveSim;
+    private DCMotorSim turnSim;
 
     private final Rotation2d turnAbsoluteInitPosition = new Rotation2d(Math.random() * 2.0 * Math.PI);
     private double driveAppliedVolts = 0.0;
     private double turnAppliedVolts = 0.0;
+
+    public ModuleIOSim() {
+        driveSim = 
+            new DCMotorSim(
+                LinearSystemId.createDCMotorSystem(DRIVE_GEARBOX, 0.025, DRIVE_MOTOR_REDUCTION),
+                DRIVE_GEARBOX);
+        
+        turnSim =
+            new DCMotorSim(
+                LinearSystemId.createDCMotorSystem(TURN_GEARBOX, 0.004 , TURN_MOTOR_REDUCTION),
+                TURN_GEARBOX);
+    
+    }
 
 
     @Override

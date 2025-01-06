@@ -39,7 +39,7 @@ public class DriveCommands {
       .getTranslation();
   }
 
-  public static Command joyStickDrive(
+  public static Command FPSDrive(
     Drive drive,
     DoubleSupplier xSupplier,
     DoubleSupplier ySupplier,

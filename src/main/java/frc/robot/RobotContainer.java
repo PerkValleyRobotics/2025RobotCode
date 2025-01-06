@@ -87,7 +87,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     drive.setDefaultCommand(
-      DriveCommands.joyStickDrive(
+      DriveCommands.FPSDrive(
         drive,
         () -> m_driverController.getLeftY(),
         () -> m_driverController.getLeftX(),

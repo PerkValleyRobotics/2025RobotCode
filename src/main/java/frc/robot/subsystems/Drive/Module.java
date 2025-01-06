@@ -80,7 +80,7 @@ public class Module extends SubsystemBase{
             // only if closed loop turn control is running 
             if (speedSetpoint != null) {
                 // cos scailing of velocity setpoint
-                double adjustedSpeedSetpoint = speedSetpoint * Math.cos(turnFeedback.getPositionError());
+                double adjustedSpeedSetpoint = speedSetpoint * Math.cos(turnFeedback.getError());
 
                 //run drive controller
                 double velocityRadPerSec = adjustedSpeedSetpoint / WHEEL_RADIUS;

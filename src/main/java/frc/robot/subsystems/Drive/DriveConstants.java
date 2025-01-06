@@ -10,6 +10,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.Constants;
 
 public class DriveConstants {
+  public static final double  ODOMETRY_FREQUENCY = 100.0; // Hz
 
   // Drive Train constants
   public static final double MAX_LINEAR_SPEED = Units.feetToMeters(16.6);

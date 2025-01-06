@@ -9,15 +9,15 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Module extends SubsystemBase{
+public class Module {
     private final ModuleIO io;
     private final ModuleIOInputsAutoLogged inputs = new ModuleIOInputsAutoLogged();
     private final int index;
 
     private final Alert driveDisconnectedAlert;
     private final Alert turnDisconnectedAlert;
+    private SwerveModulePosition[] odometryPositions = new SwerveModulePosition[] {};
 
     // Just testing something here
     public Module(ModuleIO io, int index) {
@@ -37,6 +37,15 @@ public class Module extends SubsystemBase{
         io.updateInputs(inputs);
         Logger.processInputs("Drive/Module" + Integer.toString(index), inputs);
         
+        // Calculate positions for odometry 
+        int sampleCount = inputs.odometryTimestamps.length;
+        odometryPositions = new SwerveModulePosition[sampleCount];
+        for (int i = 0; i < sampleCount; i++) {
+            double positionMeters = inputs.odometryDrivePositionsRad[i] * WHEEL_RADIUS_METERS;
+            Rotation2d angle = inputs.odometryTurnPositions[i];
+            odometryPositions[i] = new SwerveModulePosition(positionMeters, angle);
+        }
+
         // Update alerts
         driveDisconnectedAlert.set(!inputs.driveConnected);
         turnDisconnectedAlert.set(!inputs.turnConnected);
@@ -92,7 +101,23 @@ public class Module extends SubsystemBase{
         return new SwerveModuleState(getVelocityMetersPerSec(), getAngle());
     }
 
-    public double GetFFCharacterizationVelocity() {
+    // Returns the module position received this cycle 
+    public SwerveModulePosition[] getOdometryPoositions() {
+        return odometryPositions;
+    }
+
+    // Return the timestamps of th sammples received this cycle.
+    public double[] getOdometryTimestamps() {
+        return inputs.odometryTimestamps;
+    }
+
+    // Returns the module positions in radians
+    public double getWheelRadiousCharacterizationPosition() {
+        return inputs.drivePositionRad;
+    }
+
+    // Return the module velocity in rad/sec
+    public double getFFCharacterizationVelocity() {
         return inputs.driveVelocityRadPerSec;
     }
 }

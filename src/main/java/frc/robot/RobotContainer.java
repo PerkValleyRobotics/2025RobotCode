@@ -5,10 +5,10 @@
 package frc.robot;
 
 
+import static frc.robot.subsystems.Vision.VisionConstants.*;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-
 import com.pathplanner.lib.auto.AutoBuilder;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -24,7 +24,9 @@ import frc.robot.subsystems.Drive.ModuleIOSparkMax;
 import frc.robot.subsystems.Gyro.GyroIO;
 import frc.robot.subsystems.Gyro.GyroIONavx;
 import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
+import frc.robot.subsystems.Vision.VisionIOPhotonVisionSim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -66,7 +68,9 @@ public class RobotContainer {
             new ModuleIOSim(),
             new ModuleIOSim(),
             new ModuleIOSim());
-        vision = null;
+        vision = new Vision(
+          drive::addVisionMeasurement,
+          new VisionIOPhotonVisionSim("limelight", robotToCamera, drive::getPose));
         break;
     
       default:
@@ -77,7 +81,7 @@ public class RobotContainer {
             new ModuleIO() {},
             new ModuleIO() {},
             new ModuleIO() {});
-        vision = null;
+        vision = new Vision(drive::addVisionMeasurement, new VisionIO() {});
         break;
     }
 

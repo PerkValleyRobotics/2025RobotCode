@@ -23,6 +23,8 @@ import frc.robot.subsystems.Drive.ModuleIOSim;
 import frc.robot.subsystems.Drive.ModuleIOSparkMax;
 import frc.robot.subsystems.Gyro.GyroIO;
 import frc.robot.subsystems.Gyro.GyroIONavx;
+import frc.robot.subsystems.Vision.Vision;
+import frc.robot.subsystems.Vision.VisionIOLimelight;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -33,6 +35,7 @@ import frc.robot.subsystems.Gyro.GyroIONavx;
 public class RobotContainer {
 
   private final Drive drive;
+  private final Vision vision;
 
   private final CommandXboxController m_driverController = new CommandXboxController(0);
 
@@ -49,6 +52,10 @@ public class RobotContainer {
             new ModuleIOSparkMax(1),
             new ModuleIOSparkMax(2),
             new ModuleIOSparkMax(3));
+        vision = 
+          new Vision(
+            drive::addVisionMeasurement,
+            new VisionIOLimelight("limelight", drive::getRotation));
         break;
 
       case SIM: 
@@ -59,6 +66,7 @@ public class RobotContainer {
             new ModuleIOSim(),
             new ModuleIOSim(),
             new ModuleIOSim());
+        vision = null;
         break;
     
       default:
@@ -69,6 +77,7 @@ public class RobotContainer {
             new ModuleIO() {},
             new ModuleIO() {},
             new ModuleIO() {});
+        vision = null;
         break;
     }
 

@@ -15,12 +15,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.ManualElevatorCommand;
 import frc.robot.subsystems.Drive.Drive;
 import frc.robot.subsystems.Drive.ModuleIO;
 import frc.robot.subsystems.Drive.ModuleIOSim;
 import frc.robot.subsystems.Drive.ModuleIOSparkMax;
+import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorIO;
+import frc.robot.subsystems.Elevator.ElevatorIOSim;
+import frc.robot.subsystems.Elevator.ElevatorIOSparkMax;
 import frc.robot.subsystems.Gyro.GyroIO;
 import frc.robot.subsystems.Gyro.GyroIONavx;
 import frc.robot.subsystems.Vision.Vision;
@@ -38,8 +43,10 @@ public class RobotContainer {
 
   private final Drive drive;
   private final Vision vision;
+  private final Elevator elevator;
 
-  private final CommandXboxController m_driverController = new CommandXboxController(0);
+  private final CommandXboxController driverController = new CommandXboxController(0);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -58,6 +65,10 @@ public class RobotContainer {
           new Vision(
             drive::addVisionMeasurement,
             new VisionIOLimelight("limelight", drive::getRotation));
+        elevator = 
+          new Elevator(
+            new ElevatorIOSparkMax());
+        
         break;
 
       case SIM: 
@@ -71,6 +82,9 @@ public class RobotContainer {
         vision = new Vision(
           drive::addVisionMeasurement,
           new VisionIOPhotonVisionSim("limelight", robotToCamera, drive::getPose));
+        elevator = 
+          new Elevator(
+            new ElevatorIOSim());
         break;
     
       default:
@@ -82,6 +96,7 @@ public class RobotContainer {
             new ModuleIO() {},
             new ModuleIO() {});
         vision = new Vision(drive::addVisionMeasurement, new VisionIO() {});
+        elevator = new Elevator(new ElevatorIO() {});
         break;
     }
 
@@ -102,11 +117,11 @@ public class RobotContainer {
     drive.setDefaultCommand(
       DriveCommands.FPSDrive(
         drive,
-        () -> m_driverController.getLeftY(),
-        () -> m_driverController.getLeftX(),
-        () -> m_driverController.getRightX()));
+        () -> driverController.getLeftY(),
+        () -> driverController.getLeftX(),
+        () -> driverController.getRightX()));
     //m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    m_driverController
+    driverController
       .b()
         .onTrue(
           Commands.runOnce(
@@ -115,10 +130,15 @@ public class RobotContainer {
                 new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
             drive)
           .ignoringDisable(true));
-    m_driverController.a().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
-    m_driverController.x().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-    m_driverController.b().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-    m_driverController.y().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+    elevator.setDefaultCommand(
+      new ManualElevatorCommand(
+        elevator,
+        () -> operatorController.getLeftY()));
+    operatorController.axisGreaterThan(0, 0).onTrue(ElevatorCommands.testElevator(elevator));
+    // m_driverController.a().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
+    // m_driverController.x().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    // m_driverController.b().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+    // m_driverController.y().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
   }
 
   /**

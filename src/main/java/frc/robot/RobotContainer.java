@@ -117,9 +117,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
       DriveCommands.FPSDrive(
         drive,
-        () -> driverController.getLeftY(),
-        () -> driverController.getLeftX(),
-        () -> driverController.getRightX()));
+        () -> -driverController.getLeftY(),
+        () -> -driverController.getLeftX(),
+        () -> -driverController.getRightX()));
     //m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     driverController
       .b()

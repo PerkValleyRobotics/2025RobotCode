@@ -145,7 +145,7 @@ public class ModuleIOSparkMax implements ModuleIO {
             .uvwAverageDepth(2);
         turnConfig
             .closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
             .positionWrappingEnabled(true)
             .positionWrappingInputRange(TURN_PID_MIN_INPUT, TURN_PID_MAX_INPUT)
             .pidf(TURN_P, 0.0, TURN_D, 0.0);

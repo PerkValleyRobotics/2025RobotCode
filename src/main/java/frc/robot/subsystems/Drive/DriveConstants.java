@@ -26,26 +26,26 @@ public class DriveConstants {
     };
 
   // swerve module offsets
-  public static final Rotation2d FRONT_LEFT_ZERO_ROTATION = new Rotation2d(Constants.currentMode == Constants.Mode.SIM ? 0 : 299.26764);
-  public static final Rotation2d FRONT_RIGHT_ZERO_ROTATION = new Rotation2d(Constants.currentMode == Constants.Mode.SIM ? 0 : 266.30856);
-  public static final Rotation2d BACK_LEFT_ZERO_ROTATION = new Rotation2d(Constants.currentMode == Constants.Mode.SIM ? 0 : 264.02328);
-  public static final Rotation2d BACK_RIGHT_ZERO_ROTATION = new Rotation2d(Constants.currentMode == Constants.Mode.SIM ? 0 : 152.3146);
+  public static final Rotation2d FRONT_LEFT_ZERO_ROTATION = new Rotation2d(0.0);
+  public static final Rotation2d FRONT_RIGHT_ZERO_ROTATION = new Rotation2d(0.0);
+  public static final Rotation2d BACK_LEFT_ZERO_ROTATION = new Rotation2d(0.0);
+  public static final Rotation2d BACK_RIGHT_ZERO_ROTATION = new Rotation2d(0.0);
 
   // CAN IDs
-  public static final int FRONT_LEFT_DRIVE_ID = 11;
-  public static final int FRONT_RIGHT_DRIVE_ID = 21;
-  public static final int BACK_RIGHT_DRIVE_ID = 31;
-  public static final int BACK_LEFT_DRIVE_ID = 41;
+  public static final int FRONT_LEFT_DRIVE_ID = 1;
+  public static final int FRONT_RIGHT_DRIVE_ID = 11;
+  public static final int BACK_RIGHT_DRIVE_ID = 21;
+  public static final int BACK_LEFT_DRIVE_ID = 31;
 
-  public static final int FRONT_LEFT_TURN_ID= 12;
-  public static final int FRONT_RIGHT_TURN_ID= 22;
-  public static final int BACK_RIGHT_TURN_ID= 32;
-  public static final int BACK_LEFT_TURN_ID= 42;
+  public static final int FRONT_LEFT_TURN_ID= 2;
+  public static final int FRONT_RIGHT_TURN_ID= 12;
+  public static final int BACK_RIGHT_TURN_ID= 22;
+  public static final int BACK_LEFT_TURN_ID= 32;
 
-  public static final int FRONT_LEFT_CANCODER_ID= 1;
-  public static final int FRONT_RIGHT_CANCODER_ID= 2;
-  public static final int BACK_RIGHT_CANCODER_ID= 3;
-  public static final int BACK_LEFT_CANCODER_ID= 4;
+  public static final int FRONT_LEFT_CANCODER_ID= 3;
+  public static final int FRONT_RIGHT_CANCODER_ID= 13;
+  public static final int BACK_RIGHT_CANCODER_ID= 23;
+  public static final int BACK_LEFT_CANCODER_ID= 33;
 
   // Drive Motor Configuration
   public static final DCMotor DRIVE_GEARBOX = DCMotor.getNEO(1);
@@ -59,10 +59,10 @@ public class DriveConstants {
     (2 * Math.PI) / 60.0 / DRIVE_MOTOR_REDUCTION; // Rotor RPM -> Wheel Rad/Sec
 
   // Drive PID Configuration
-  public static final double DRIVE_P = 0.05;
-  public static final double DRIVE_D = 0.0;
-  public static final double DRIVE_S = 0.0;
-  public static final double DRIVE_V = 0.0789; 
+  public static final double DRIVE_P = 0;
+  public static final double DRIVE_D = 0;
+  public static final double DRIVE_S = 0;
+  public static final double DRIVE_V = 0; 
   public static final double DRIVE_SIM_P = 0.05;
   public static final double DRIVE_SIM_D = 0.0;
   public static final double DRIVE_SIM_S = 0.0;
@@ -80,8 +80,8 @@ public class DriveConstants {
   public static final double TURN_ENCODER_VELOCITY_FACTOR = 2 * Math.PI / 60.0 / TURN_MOTOR_REDUCTION; // totor RPM - > Wheel Rad/Sec
 
   // Turn PID Configuration
-  public static final double TURN_P = 0.05;
-  public static final double TURN_D = 0.0;
+  public static final double TURN_P = 0.1;
+  public static final double TURN_D = 0;
   public static final double TURN_SIM_P = 8.0;
   public static final double TURN_SIM_D = 0.0;
   public static final double TURN_PID_MIN_INPUT = 0; // Radians

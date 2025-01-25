@@ -98,6 +98,7 @@ public class ModuleIOSparkMax implements ModuleIO {
         var driveConfig = new SparkMaxConfig();
         driveConfig
             .idleMode(IdleMode.kBrake)
+            .inverted(DRIVE_MOTOR_INVERTED)
             .smartCurrentLimit(DRIVE_CURRENT_LIMIT)
             .voltageCompensation(12.0);
         driveConfig
@@ -168,7 +169,7 @@ public class ModuleIOSparkMax implements ModuleIO {
         
         // Seed the turn relatinve encoder from Cancoder Absolute Value.
         turnAbsolutePosition.refresh();
-        tryUntilOK(driveSparkMax, 5, () -> driveEncoder.setPosition(turnAbsolutePosition.getValueAsDouble() * (2 * Math.PI)));
+        tryUntilOK(turnSparkMax, 5, () -> turnEncoder.setPosition(turnAbsolutePosition.getValueAsDouble() * (2 * Math.PI)));
 
         // Create odometry queues
         timestampQueue = SparkOdometryThread.getInstance().makeTimeStampQueue();

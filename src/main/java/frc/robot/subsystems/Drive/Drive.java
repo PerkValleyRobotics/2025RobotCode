@@ -71,8 +71,8 @@ public class Drive extends SubsystemBase {
     this.gyroIO = gyroIO;
     modules[0] = new Module(flModuleIO, 0);
     modules[1] = new Module(frModuleIO, 1);
-    modules[2] = new Module(blModuleIO, 2);
-    modules[3] = new Module(brModuleIO, 3);
+    modules[3] = new Module(blModuleIO, 3);
+    modules[2] = new Module(brModuleIO, 2);
 
     // Start Odometry thread
     SparkOdometryThread.getInstance().start();

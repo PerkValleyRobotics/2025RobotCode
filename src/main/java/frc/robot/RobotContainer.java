@@ -66,8 +66,7 @@ public class RobotContainer {
             drive::addVisionMeasurement,
             new VisionIOLimelight("limelight", drive::getRotation));
         elevator = 
-          new Elevator(
-            new ElevatorIOSparkMax());
+          new Elevator(new ElevatorIOSim());
         
         break;
 

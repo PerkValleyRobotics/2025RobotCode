@@ -46,7 +46,7 @@ public class RobotContainer {
   private final Elevator elevator;
 
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new CommandXboxController(1);
+  //private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -129,11 +129,14 @@ public class RobotContainer {
                 new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
             drive)
           .ignoringDisable(true));
-    elevator.setDefaultCommand(
+    /* 
+          elevator.setDefaultCommand(
       new ManualElevatorCommand(
         elevator,
         () -> operatorController.getLeftY()));
-    operatorController.axisGreaterThan(0, 0).onTrue(ElevatorCommands.testElevator(elevator));
+    */
+    //operatorController.axisGreaterThan(0, 0).onTrue(ElevatorCommands.testElevator(elevator));
+    // driverController.a().whileTrue(DriveCommands.feedforwardCharacterization(drive));
     // m_driverController.a().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     // m_driverController.x().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     // m_driverController.b().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));

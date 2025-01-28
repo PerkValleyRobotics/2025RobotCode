@@ -27,10 +27,10 @@ public class DriveConstants {
     };
 
   // swerve module offsets
-  public static final Rotation2d FRONT_LEFT_ZERO_ROTATION = new Rotation2d(0.0);
-  public static final Rotation2d FRONT_RIGHT_ZERO_ROTATION = new Rotation2d(0.0);
-  public static final Rotation2d BACK_LEFT_ZERO_ROTATION = new Rotation2d(0.0);
-  public static final Rotation2d BACK_RIGHT_ZERO_ROTATION = new Rotation2d(0.0);
+  public static final Rotation2d FRONT_LEFT_ZERO_ROTATION = new Rotation2d(-0.01);
+  public static final Rotation2d FRONT_RIGHT_ZERO_ROTATION = new Rotation2d(0.098);
+  public static final Rotation2d BACK_LEFT_ZERO_ROTATION = new Rotation2d(0.083);
+  public static final Rotation2d BACK_RIGHT_ZERO_ROTATION = new Rotation2d(-1.426);
 
   // CAN IDs
   public static final int FRONT_LEFT_DRIVE_ID = 1;
@@ -62,7 +62,7 @@ public class DriveConstants {
     (2 * Math.PI) / 60.0 / DRIVE_MOTOR_REDUCTION; // Rotor RPM -> Wheel Rad/Sec
 
   // Drive PID Configuration
-  public static final double DRIVE_P = 0.001;
+  public static final double DRIVE_P = 0.005;
   public static final double DRIVE_D = 0;
   public static final double DRIVE_S = 0;
   public static final double DRIVE_V = 0; 

@@ -165,6 +165,7 @@ public class Drive extends SubsystemBase {
 
       // Apply odometry update
       poseEstimatior.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
+    
     }
 
     // Update gyro alert

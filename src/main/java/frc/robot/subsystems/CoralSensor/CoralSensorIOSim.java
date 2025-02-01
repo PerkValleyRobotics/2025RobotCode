@@ -10,14 +10,12 @@ import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
 /** Add your docs here. */
-public class CoralSensorIOReal implements CoralSensorIO {
-    private final Rev2mDistanceSensor sensor;
+public class CoralSensorIOSim implements CoralSensorIO {
 
-    public CoralSensorIOReal() {
-        sensor = new Rev2mDistanceSensor(Port.kOnboard);
+    public CoralSensorIOSim() {
     }
 
     public void updateInputs(CoralIOInputs inputs) {
-        inputs.distance = sensor.GetRange();
+        inputs.distance = 0;
     }
 }

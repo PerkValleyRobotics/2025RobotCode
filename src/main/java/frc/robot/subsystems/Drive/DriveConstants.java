@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
 
 public class DriveConstants {
   public static final double  ODOMETRY_FREQUENCY = 100.0; // Hz

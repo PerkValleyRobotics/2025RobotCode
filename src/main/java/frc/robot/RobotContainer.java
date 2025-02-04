@@ -136,7 +136,7 @@ public class RobotContainer {
         () -> operatorController.getLeftY()));
     */
     //operatorController.axisGreaterThan(0, 0).onTrue(ElevatorCommands.testElevator(elevator));
-    // driverController.a().whileTrue(DriveCommands.feedforwardCharacterization(drive));
+    driverController.a().whileTrue(DriveCommands.feedforwardCharacterization(drive));
     // m_driverController.a().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kForward));
     // m_driverController.x().whileTrue(drive.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     // m_driverController.b().whileTrue(drive.sysIdQuasistatic(SysIdRoutine.Direction.kForward));

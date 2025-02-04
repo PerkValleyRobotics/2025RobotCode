@@ -64,8 +64,8 @@ public class DriveConstants {
   // Drive PID Configuration
   public static final double DRIVE_P = 0.005;
   public static final double DRIVE_D = 0;
-  public static final double DRIVE_S = 0;
-  public static final double DRIVE_V = 0; 
+  public static final double DRIVE_S = 0.12164;
+  public static final double DRIVE_V = 0.11983; 
   public static final double DRIVE_SIM_P = 0.05;
   public static final double DRIVE_SIM_D = 0.0;
   public static final double DRIVE_SIM_S = 0.0;

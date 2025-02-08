@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.354000000000001,
-        "y": 1.9774999999999978
+        "x": 3.943954918032787,
+        "y": 2.742315573770493
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4777138412800164,
-        "y": 1.5895359888479332
+        "x": 4.067668759312802,
+        "y": 2.3543515626184286
       },
       "isLocked": false,
       "linkedName": "ReefD"
@@ -20,12 +20,12 @@
         "y": 5.195
       },
       "prevControl": {
-        "x": 3.071768072430353,
-        "y": 3.0973169016877202
+        "x": 2.3735655737704917,
+        "y": 2.766290983606557
       },
       "nextControl": {
-        "x": 2.689798466809559,
-        "y": 5.441746502972459
+        "x": 2.7663008565749396,
+        "y": 5.442350455451215
       },
       "isLocked": false,
       "linkedName": null
@@ -41,7 +41,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CoralStation"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -61,10 +61,10 @@
     "rotation": -53.354350835379655
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Loading Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 58.67130713219583
   },
   "useDefaultConstraints": true
 }

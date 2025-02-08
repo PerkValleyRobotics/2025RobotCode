@@ -16,32 +16,32 @@
     },
     {
       "anchor": {
-        "x": 3.354000000000001,
-        "y": 1.9774999999999978
+        "x": 2.7691598360655743,
+        "y": 3.977049180327869
       },
       "prevControl": {
-        "x": 3.2331099822903413,
-        "y": 3.253987689174635
+        "x": 2.144941395394273,
+        "y": 5.108873825501124
       },
       "nextControl": {
-        "x": 3.377570830872994,
-        "y": 1.7286136485623251
+        "x": 2.8898940966301834,
+        "y": 3.7581354111722556
       },
       "isLocked": false,
-      "linkedName": "ReefD"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.94875,
-        "y": 2.7477499999999986
+        "x": 3.943954918032787,
+        "y": 2.742315573770493
       },
       "prevControl": {
-        "x": 3.7104614265155704,
-        "y": 2.8233711329375293
+        "x": 3.7056663445483573,
+        "y": 2.8179367067080237
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "ReefD"
     }
   ],
   "rotationTargets": [],
@@ -58,10 +58,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 57.68038349181972
+    "rotation": 58.67130713219583
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Scoring Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -53.354350835379655

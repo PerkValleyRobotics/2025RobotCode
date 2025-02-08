@@ -61,7 +61,7 @@
     "rotation": 55.30484646876607
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Scoring Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": -53.354350835379655

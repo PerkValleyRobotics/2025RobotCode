@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.16875,
-        "y": 4.181
+        "x": 8.115676229508196,
+        "y": 7.477459016393443
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5064428085408177,
-        "y": 3.603647428759712
+        "x": 9.115676229508205,
+        "y": 7.477459016393443
       },
       "isLocked": false,
-      "linkedName": "ReefA"
+      "linkedName": "SourcelessOrigin2"
     },
     {
       "anchor": {
-        "x": 1.4864754098360655,
-        "y": 7.16577868852459
+        "x": 4.974897540983608,
+        "y": 5.2597336065573765
       },
       "prevControl": {
-        "x": 1.638715799148657,
-        "y": 6.859072751906766
+        "x": 4.639241803278689,
+        "y": 5.2717213114754085
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CoralStation"
+      "linkedName": "ReefJ"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -53.354350835379655
+    "rotation": -121.26373169437757
   },
   "reversed": false,
-  "folder": "Loading Paths",
+  "folder": "Starting Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 179.30972280213493
   },
   "useDefaultConstraints": true
 }

@@ -6,6 +6,7 @@ package frc.robot.subsystems.Elevator;
 
 import static frc.robot.subsystems.Elevator.ElevatorConstants.*;
 
+import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -57,6 +58,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getClosedLoopError() {
-    return Math.abs(setpoint - inputs.positionMeters);
+    return Math.abs(setpoint - inputs.positionRads);
+  }
+  
+  @AutoLogOutput(key = "Elevator/Setpoint")
+  public double getCurrentSetpoint() {
+    return setpoint;
   }
 }

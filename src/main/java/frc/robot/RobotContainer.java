@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
@@ -53,8 +54,8 @@ public class RobotContainer {
   private final CoralSensor coralSensor;
 
   private final CommandXboxController driverController = new CommandXboxController(0);
-  // private final CommandXboxController operatorController = new
-  // CommandXboxController(1);
+  private final CommandXboxController operatorController = new
+  CommandXboxController(1);
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -64,7 +65,7 @@ public class RobotContainer {
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
-        coralSensor = new CoralSensor(new CoralSensorIOReal());
+        coralSensor = new CoralSensor(new CoralSensorIO(){});
         drive = new Drive(
             new GyroIONavx(),
             new ModuleIOSparkMax(0),
@@ -74,7 +75,7 @@ public class RobotContainer {
         vision = new Vision(
             drive::addVisionMeasurement,
             new VisionIOLimelight("limelight", drive::getRotation));
-        elevator = new Elevator(new ElevatorIOSim());
+        elevator = new Elevator(new ElevatorIOSparkMax());
 
         break;
 
@@ -149,6 +150,23 @@ public class RobotContainer {
                     new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                 drive)
                 .ignoringDisable(true));
+
+    // tempororary elevator command 
+    operatorController
+        .a()
+        .onTrue(
+          new InstantCommand(elevator::gotoL1)
+        );
+    operatorController
+        .x()
+        .onTrue(
+          new InstantCommand(elevator::gotoL2)
+        );
+    operatorController
+        .b()
+        .onTrue(
+          new InstantCommand(elevator::home)
+        );
     /*
      * elevator.setDefaultCommand(
      * new ManualElevatorCommand(

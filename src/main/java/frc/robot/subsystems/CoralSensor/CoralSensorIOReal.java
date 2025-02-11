@@ -4,10 +4,10 @@
 
 package frc.robot.subsystems.CoralSensor;
 
-import static frc.robot.util.SparkUtil.ifOk;
 
 import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
+import com.revrobotics.Rev2mDistanceSensor.RangeProfile;
 
 /** Add your docs here. */
 public class CoralSensorIOReal implements CoralSensorIO {
@@ -15,9 +15,11 @@ public class CoralSensorIOReal implements CoralSensorIO {
 
     public CoralSensorIOReal() {
         sensor = new Rev2mDistanceSensor(Port.kOnboard);
+        sensor.setAutomaticMode(true);
+        sensor.setRangeProfile(RangeProfile.kHighAccuracy);
     }
 
     public void updateInputs(CoralIOInputs inputs) {
-        inputs.distance = sensor.GetRange();
+        inputs.distance = sensor.getRange();
     }
 }

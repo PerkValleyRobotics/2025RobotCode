@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
 
 public class DriveConstants {
   public static final double  ODOMETRY_FREQUENCY = 100.0; // Hz
@@ -22,19 +21,22 @@ public class DriveConstants {
     new Translation2d[] { 
       new Translation2d(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
       new Translation2d(TRACK_WIDTH_X / 2.0, -TRACK_WIDTH_Y / 2.0),
-      new Translation2d(- TRACK_WIDTH_X / 2.0,-TRACK_WIDTH_Y / 2.0),
-      new Translation2d(- TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0),
+      new Translation2d(- TRACK_WIDTH_X / 2.0,TRACK_WIDTH_Y / 2.0),
+      new Translation2d(- TRACK_WIDTH_X / 2.0, -TRACK_WIDTH_Y / 2.0),
     };
 
   // swerve module offsets
-  public static final Rotation2d FRONT_LEFT_ZERO_ROTATION = new Rotation2d(-0.01);
-  public static final Rotation2d FRONT_RIGHT_ZERO_ROTATION = new Rotation2d(0.098);
-  public static final Rotation2d BACK_LEFT_ZERO_ROTATION = new Rotation2d(0.083);
-  public static final Rotation2d BACK_RIGHT_ZERO_ROTATION = new Rotation2d(-1.426);
+  public static final Rotation2d FRONT_LEFT_ZERO_ROTATION = new Rotation2d(-.242);
+  public static final Rotation2d FRONT_RIGHT_ZERO_ROTATION = new Rotation2d(0.12);
+  public static final Rotation2d BACK_RIGHT_ZERO_ROTATION = new Rotation2d(-1.437);
+  public static final Rotation2d BACK_LEFT_ZERO_ROTATION = new Rotation2d(0.084);
+  
 
   // CAN IDs
-  public static final int FRONT_LEFT_DRIVE_ID = 1;
-  public static final int FRONT_LEFT_TURN_ID= 2;
+  public static final int FRONT_LEFT_DRIVE_ID = 35; // should be 1
+  public static final int FRONT_LEFT_TURN_ID= 36; // should be 2  
+  //TODO: Return 1 and 2 drive values to front left module
+  
   public static final int FRONT_LEFT_CANCODER_ID= 3;
 
   public static final int FRONT_RIGHT_DRIVE_ID = 11;
@@ -64,8 +66,8 @@ public class DriveConstants {
   // Drive PID Configuration
   public static final double DRIVE_P = 0.005;
   public static final double DRIVE_D = 0;
-  public static final double DRIVE_S = 0;
-  public static final double DRIVE_V = 0; 
+  public static final double DRIVE_S = 0.12164;
+  public static final double DRIVE_V = 0.11983; 
   public static final double DRIVE_SIM_P = 0.05;
   public static final double DRIVE_SIM_D = 0.0;
   public static final double DRIVE_SIM_S = 0.0;
@@ -83,8 +85,8 @@ public class DriveConstants {
   public static final double TURN_ENCODER_VELOCITY_FACTOR = 2 * Math.PI / 60.0 / TURN_MOTOR_REDUCTION; // totor RPM - > Wheel Rad/Sec
 
   // Turn PID Configuration
-  public static final double TURN_P = 0.35;
-  public static final double TURN_D = 0;
+  public static final double TURN_P = 0.525;
+  public static final double TURN_D = 0.01;
   public static final double TURN_SIM_P = 8.0;
   public static final double TURN_SIM_D = 0.0;
   public static final double TURN_PID_MIN_INPUT = 0; // Radians

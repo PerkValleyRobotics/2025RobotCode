@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.*;
 import static frc.robot.subsystems.Drive.DriveConstants.*;
 
 import java.util.concurrent.locks.ReentrantLock;
+import java.io.IOException;
 import java.util.concurrent.locks.Lock;
 
 import org.littletonrobotics.junction.AutoLogOutput;
@@ -15,6 +16,7 @@ import org.littletonrobotics.junction.Logger;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
@@ -45,29 +47,28 @@ public class Drive extends SubsystemBase {
   private final GyroIOInputsAutoLogged gyroInputs = new GyroIOInputsAutoLogged();
   private final Module[] modules = new Module[4];
   private final SysIdRoutine sysId;
-  private final Alert gyroDisconnnectedAlert = 
-    new Alert("Disconnected gyro, using kinematics as fallback.", AlertType.kError);
+  private final Alert gyroDisconnnectedAlert = new Alert("Disconnected gyro, using kinematics as fallback.",
+      AlertType.kError);
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(MODULE_TRANSLATIONS);
   private Rotation2d rawGyroRotation = new Rotation2d();
-  private SwerveModulePosition[] lastModulePositions =
-    new SwerveModulePosition[] {
+  private SwerveModulePosition[] lastModulePositions = new SwerveModulePosition[] {
       new SwerveModulePosition(),
       new SwerveModulePosition(),
       new SwerveModulePosition(),
       new SwerveModulePosition(),
-    };
+  };
 
-  private SwerveDrivePoseEstimator poseEstimatior = 
-    new SwerveDrivePoseEstimator(kinematics, rawGyroRotation, lastModulePositions, new Pose2d());
+  private SwerveDrivePoseEstimator poseEstimatior = new SwerveDrivePoseEstimator(kinematics, rawGyroRotation,
+      lastModulePositions, new Pose2d());
 
   /** Creates a new Drive. */
   public Drive(
-    GyroIO gyroIO,
-    ModuleIO flModuleIO,
-    ModuleIO frModuleIO,
-    ModuleIO blModuleIO,
-    ModuleIO brModuleIO) {
+      GyroIO gyroIO,
+      ModuleIO flModuleIO,
+      ModuleIO frModuleIO,
+      ModuleIO blModuleIO,
+      ModuleIO brModuleIO) {
     this.gyroIO = gyroIO;
     modules[0] = new Module(flModuleIO, 0);
     modules[1] = new Module(frModuleIO, 1);
@@ -78,23 +79,28 @@ public class Drive extends SubsystemBase {
     SparkOdometryThread.getInstance().start();
 
     // Configure Auto Builder for PathPlanner
-    AutoBuilder.configure(
-        this::getPose,
-        this::setPose,
-        this::getChassisSpeeds,
-        this::runVelocity,
-        new PPHolonomicDriveController(
-            new PIDConstants(0, 0, 0),
-            new PIDConstants(0.0, 0, 0)),
-        ppConfig,
-        () -> {
-          var alliance = DriverStation.getAlliance();
-          if (alliance.isPresent()) {
-            return alliance.get() == DriverStation.Alliance.Red;
-          }
-          return false;
-        },
-        this);
+    try {
+      AutoBuilder.configure(
+          this::getPose,
+          this::setPose,
+          this::getChassisSpeeds,
+          this::runVelocity,
+          new PPHolonomicDriveController(
+              new PIDConstants(5.0, 0, 0),
+              new PIDConstants(5.0, 0, 0)),
+          RobotConfig.fromGUISettings(),
+          () -> {
+            var alliance = DriverStation.getAlliance();
+            DriverStation.reportWarning("Alliance: " + (alliance.isPresent()), false);
+            if (alliance.isPresent()) {
+              return alliance.get() == DriverStation.Alliance.Red;
+            }
+            return false;
+          },
+          this);
+    } catch (Exception e) {
+      DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", e.getStackTrace());
+    }
 
     PathPlannerLogging.setLogActivePathCallback(
         (activePath) -> {
@@ -122,7 +128,7 @@ public class Drive extends SubsystemBase {
     odometryLock.lock(); // Prevents odometry updates while reading data
     gyroIO.updateInputs(gyroInputs);
     Logger.processInputs("Drive/Gyro", gyroInputs);
-    for (Module module : modules){
+    for (Module module : modules) {
       module.periodic();
     }
     odometryLock.unlock();
@@ -165,7 +171,7 @@ public class Drive extends SubsystemBase {
 
       // Apply odometry update
       poseEstimatior.updateWithTime(sampleTimestamps[i], rawGyroRotation, modulePositions);
-    
+
     }
 
     // Update gyro alert
@@ -191,7 +197,7 @@ public class Drive extends SubsystemBase {
     Logger.recordOutput("SwerveStates/SetpointsOptimized", setpointStates);
   }
 
-  // Runs the drive in a straight line with the specified drove output 
+  // Runs the drive in a straight line with the specified drove output
   public void runCharacterization(double output) {
     for (int i = 0; i < 4; i++) {
       modules[i].runCharacterization(output);
@@ -226,7 +232,8 @@ public class Drive extends SubsystemBase {
         .andThen(sysId.dynamic(direction));
   }
 
-  // Returns the module states (turn angles and drive velocities) for all of the modules
+  // Returns the module states (turn angles and drive velocities) for all of the
+  // modules
   @AutoLogOutput(key = "SwerveStates/Measured")
   private SwerveModuleState[] getModuleStates() {
     SwerveModuleState[] states = new SwerveModuleState[4];
@@ -236,7 +243,8 @@ public class Drive extends SubsystemBase {
     return states;
   }
 
-  // Return the module position (turn angle and drive position) for all of the modules
+  // Return the module position (turn angle and drive position) for all of the
+  // modules
   private SwerveModulePosition[] getModulePositions() {
     SwerveModulePosition[] positions = new SwerveModulePosition[4];
     for (int i = 0; i < 4; i++) {
@@ -285,7 +293,8 @@ public class Drive extends SubsystemBase {
   }
 
   // Add a vision measurement to the pose estimator
-  public void addVisionMeasurement(Pose2d visionRobotPose, double timeStampSeconds, Matrix<N3, N1> visionMeasurementStdDevs) {
+  public void addVisionMeasurement(Pose2d visionRobotPose, double timeStampSeconds,
+      Matrix<N3, N1> visionMeasurementStdDevs) {
     poseEstimatior.addVisionMeasurement(visionRobotPose, timeStampSeconds, visionMeasurementStdDevs);
   }
 
@@ -297,4 +306,3 @@ public class Drive extends SubsystemBase {
     return MAX_ANGULAR_SPEED;
   }
 }
-

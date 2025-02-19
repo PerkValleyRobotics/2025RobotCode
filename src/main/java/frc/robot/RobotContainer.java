@@ -6,17 +6,11 @@ package frc.robot;
 
 import static frc.robot.subsystems.Vision.VisionConstants.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -24,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveToNearestReefSideCommand;
-import frc.robot.commands.ElevatorCommands;
-import frc.robot.commands.ManualElevatorCommand;
 import frc.robot.subsystems.Drive.Drive;
 import frc.robot.subsystems.Drive.ModuleIO;
 import frc.robot.subsystems.Drive.ModuleIOSim;
@@ -33,7 +25,6 @@ import frc.robot.subsystems.Drive.ModuleIOSparkMax;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
-import frc.robot.subsystems.Elevator.ElevatorIOSparkMax;
 import frc.robot.subsystems.Gyro.GyroIO;
 import frc.robot.subsystems.Gyro.GyroIONavx;
 import frc.robot.subsystems.Vision.Vision;
@@ -58,8 +49,7 @@ public class RobotContainer {
 
   private final CommandXboxController driverController = new CommandXboxController(0);
 
-  // private final Trigger joystickMoveTrigger = new Trigger(() ->
-  // isJoystickMoved());
+  private final Trigger joystickMoveTrigger = new Trigger(() -> isJoystickMoved());
   // private final CommandXboxController operatorController = new
   // CommandXboxController(1);
 
@@ -151,9 +141,9 @@ public class RobotContainer {
     // 3.0, 4.0,
     // Units.degreesToRadians(540), Units.degreesToRadians(720)));
 
-    driverController.x().onTrue(new DriveToNearestReefSideCommand(() -> isJoystickMoved()));
-    // joystickMoveTrigger.whileTrue(new InstantCommand(() ->
-    // driveToNearestReefSideCommand.end(false)));
+    Command driveToNearestReefSideCommand = new DriveToNearestReefSideCommand(drive, () -> isJoystickMoved());
+    driverController.x().onTrue(driveToNearestReefSideCommand);
+    joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommand.end(false)));
     // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     driverController
         .b()
@@ -190,10 +180,10 @@ public class RobotContainer {
 
   private boolean isJoystickMoved() {
     // Check if there's significant joystick movement
-    return Math.abs(driverController.getLeftY()) > 0.25 ||
-        Math.abs(driverController.getLeftX()) > 0.25 ||
-        Math.abs(driverController.getRightX()) > 0.25 ||
-        Math.abs(driverController.getRightY()) > 0.25;
+    return Math.abs(driverController.getLeftY()) > 0.5 ||
+        Math.abs(driverController.getLeftX()) > 0.5 ||
+        Math.abs(driverController.getRightX()) > 0.5 ||
+        Math.abs(driverController.getRightY()) > 0.5;
     // return driverController.axisMagnitudeGreaterThan(0, 0.5).getAsBoolean();
   }
 }

@@ -6,6 +6,10 @@ package frc.robot;
 
 import static frc.robot.subsystems.Vision.VisionConstants.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
@@ -19,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.DriveToNearestReefSideCommand;
 import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.ManualElevatorCommand;
 import frc.robot.subsystems.Drive.Drive;
@@ -52,8 +57,9 @@ public class RobotContainer {
   private final Elevator elevator;
 
   private final CommandXboxController driverController = new CommandXboxController(0);
-  
-  private final Trigger joystickMoveTrigger = new Trigger(() -> isJoystickMoved());
+
+  // private final Trigger joystickMoveTrigger = new Trigger(() ->
+  // isJoystickMoved());
   // private final CommandXboxController operatorController = new
   // CommandXboxController(1);
 
@@ -131,21 +137,23 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-      drive.setDefaultCommand(
-          DriveCommands.FPSDrive(
-              drive,
-              () -> -driverController.getLeftY(),
-              () -> -driverController.getLeftX(),
-              () -> -driverController.getRightX()));
-    
-    Command pathfindPath = AutoBuilder.pathfindToPose(
-                new Pose2d(10, 5, Rotation2d.fromDegrees(180)),
-                new PathConstraints(
-                    3.0, 4.0,
-                    Units.degreesToRadians(540), Units.degreesToRadians(720)));
 
-    driverController.rightStick().onTrue(pathfindPath);
-    joystickMoveTrigger.whileTrue(new InstantCommand(()-> pathfindPath.cancel()));
+    drive.setDefaultCommand(
+        DriveCommands.FPSDrive(
+            drive,
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
+
+    // Command pathfindPath = AutoBuilder.pathfindToPose(
+    // AprilTagPositions.WELDED_APRIL_TAG_POSITIONS.get(6),
+    // new PathConstraints(
+    // 3.0, 4.0,
+    // Units.degreesToRadians(540), Units.degreesToRadians(720)));
+
+    driverController.x().onTrue(new DriveToNearestReefSideCommand(() -> isJoystickMoved()));
+    // joystickMoveTrigger.whileTrue(new InstantCommand(() ->
+    // driveToNearestReefSideCommand.end(false)));
     // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     driverController
         .b()
@@ -182,9 +190,10 @@ public class RobotContainer {
 
   private boolean isJoystickMoved() {
     // Check if there's significant joystick movement
-    return Math.abs(driverController.getLeftY()) > 0.1 ||
-        Math.abs(driverController.getLeftX()) > 0.1 ||
-        Math.abs(driverController.getRightX()) > 0.1 ||
-        Math.abs(driverController.getRightY()) > 0.1;
+    return Math.abs(driverController.getLeftY()) > 0.25 ||
+        Math.abs(driverController.getLeftX()) > 0.25 ||
+        Math.abs(driverController.getRightX()) > 0.25 ||
+        Math.abs(driverController.getRightY()) > 0.25;
+    // return driverController.axisMagnitudeGreaterThan(0, 0.5).getAsBoolean();
   }
 }

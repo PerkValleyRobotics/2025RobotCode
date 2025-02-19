@@ -91,7 +91,6 @@ public class Drive extends SubsystemBase {
           RobotConfig.fromGUISettings(),
           () -> {
             var alliance = DriverStation.getAlliance();
-            DriverStation.reportWarning("Alliance: " + (alliance.isPresent()), false);
             if (alliance.isPresent()) {
               return alliance.get() == DriverStation.Alliance.Red;
             }

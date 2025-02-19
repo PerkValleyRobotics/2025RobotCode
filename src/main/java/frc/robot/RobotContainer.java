@@ -141,7 +141,7 @@ public class RobotContainer {
     // 3.0, 4.0,
     // Units.degreesToRadians(540), Units.degreesToRadians(720)));
 
-    Command driveToNearestReefSideCommand = new DriveToNearestReefSideCommand(drive, () -> isJoystickMoved());
+    Command driveToNearestReefSideCommand = new DriveToNearestReefSideCommand(drive);
     driverController.x().onTrue(driveToNearestReefSideCommand);
     joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommand.end(false)));
     // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));

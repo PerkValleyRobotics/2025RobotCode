@@ -21,20 +21,11 @@ import frc.robot.subsystems.Drive.Drive;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToNearestReefSideCommand extends Command {
   private Command pathfindPath;
-  private Boolean ignoreJoystickMovement = false;
-  private BooleanSupplier isJoystickMoved = new BooleanSupplier() {
-    @Override
-    public boolean getAsBoolean() {
-      return false;
-    }
-  };
-
   private Drive drive;
 
   /** Creates a new DriveToNearestReefSideCommand. */
-  public DriveToNearestReefSideCommand(Drive drive, BooleanSupplier isJoystickMoved) {
+  public DriveToNearestReefSideCommand(Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.isJoystickMoved = isJoystickMoved;
     this.drive = drive;
 
     addRequirements(drive);
@@ -43,9 +34,6 @@ public class DriveToNearestReefSideCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (isJoystickMoved.getAsBoolean()) {
-      ignoreJoystickMovement = true;
-    }
     pathfindPath = AutoBuilder.pathfindToPose(
         getClosestReefAprilTagPose(),
         new PathConstraints(
@@ -58,12 +46,6 @@ public class DriveToNearestReefSideCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (ignoreJoystickMovement && !isJoystickMoved.getAsBoolean()) {
-      ignoreJoystickMovement = false;
-    }
-    if (!ignoreJoystickMovement && isJoystickMoved.getAsBoolean()) {
-      this.cancel();
-    }
   }
 
   // Called once the command ends or is interrupted.

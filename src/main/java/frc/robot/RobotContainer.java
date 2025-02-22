@@ -10,6 +10,7 @@ import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -138,9 +139,9 @@ public class RobotContainer {
     drive.setDefaultCommand(
         DriveCommands.FPSDrive(
             drive,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX()));
+            () -> -driverController.getLeftY()/2,
+            () -> -driverController.getLeftX()/2,
+            () -> -driverController.getRightX()/2));
     // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     driverController
         .b()
@@ -150,12 +151,24 @@ public class RobotContainer {
                     new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
                 drive)
                 .ignoringDisable(true));
+    driverController
+      .y()
+        .onTrue(
+          Commands.runOnce(
+            () -> drive.setPose(
+              new Pose2d(new Translation2d(), new Rotation2d())),
+            drive)
+            .ignoringDisable(true));
 
+    driverController
+        .x()
+        .whileTrue(
+          DriveCommands.feedforwardCharacterization(drive));
     // tempororary elevator command 
     operatorController
         .a()
         .onTrue(
-          new InstantCommand(elevator::gotoL1)
+          new InstantCommand(elevator::home)
         );
     operatorController
         .x()
@@ -163,10 +176,31 @@ public class RobotContainer {
           new InstantCommand(elevator::gotoL2)
         );
     operatorController
+        .y()
+        .onTrue(
+          new InstantCommand(elevator::gotoL3)
+        );
+    operatorController
         .b()
         .onTrue(
-          new InstantCommand(elevator::home)
+          new InstantCommand(elevator::gotoL1)
         );
+    operatorController
+      .leftBumper()
+      .whileTrue(
+        new InstantCommand(elevator::incrementSetpoint, elevator)
+      );
+    
+    operatorController
+      .rightBumper()
+      .whileTrue(
+        new InstantCommand(elevator::decrementSetpoint, elevator)
+      );
+    // operatorController
+    //     .b()
+    //     .onTrue(
+    //       new InstantCommand(elevator::home)
+    //     );
     /*
      * elevator.setDefaultCommand(
      * new ManualElevatorCommand(

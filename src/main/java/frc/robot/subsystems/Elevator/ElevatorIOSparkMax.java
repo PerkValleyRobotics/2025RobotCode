@@ -10,6 +10,7 @@ import java.util.function.DoubleSupplier;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.AutoLogOutput;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.ClosedLoopSlot;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
@@ -30,21 +31,21 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     private final SparkBase leftSparkMax;    
     private final SparkBase rightSparkMax;    
     private final RelativeEncoder rightEncoder;
-    private final SparkAbsoluteEncoder leftEncoder;
+    private final AbsoluteEncoder absoluteEncoder;
+    private final RelativeEncoder leftEncoder;
     private final SparkClosedLoopController controller;
 
     private final Debouncer leftConnectedDebounce = new Debouncer(.05);
     private final Debouncer rightConnectedDebounce = new Debouncer(.05);
 
-    private double setpoint;
 
     public ElevatorIOSparkMax() {
         leftSparkMax = new SparkMax(LEFT_SPARKMAX_ID, MotorType.kBrushless);
         rightSparkMax = new SparkMax(RIGHT_SPARKMAX_ID, MotorType.kBrushless);
-        leftEncoder = leftSparkMax.getAbsoluteEncoder();
+        absoluteEncoder = leftSparkMax.getAbsoluteEncoder();
+        leftEncoder = leftSparkMax.getEncoder();
         rightEncoder = rightSparkMax.getEncoder();
         controller = leftSparkMax.getClosedLoopController();
-        setpoint = 0;
 
         SparkMaxConfig config = new SparkMaxConfig();
         config
@@ -54,12 +55,13 @@ public class ElevatorIOSparkMax implements ElevatorIO {
             .inverted(false);
         config
             .encoder
+            .positionConversionFactor(ELEVATOR_POSITION_CONVERSION_FACTOR)
             .uvwMeasurementPeriod(10)
             .uvwAverageDepth(2);
         config
             .closedLoop
-            .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-            .pidf(ELEVATOR_P, 0.0,
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            .pidf(ELEVATOR_P, ELEVATOR_I,
                   ELEVATOR_D, 0.0);
         // config
         //     .closedLoop
@@ -71,7 +73,7 @@ public class ElevatorIOSparkMax implements ElevatorIO {
             5, 
             () ->
                  leftSparkMax.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
-        //tryUntilOK(leftSparkMax, 5, () -> leftEncoder.setPosition(0.0));
+        tryUntilOK(leftSparkMax, 5, () -> leftEncoder.setPosition(0.0));
 
         SparkMaxConfig followerConfig =  new SparkMaxConfig();
         followerConfig
@@ -120,7 +122,6 @@ public class ElevatorIOSparkMax implements ElevatorIO {
 
     @Override
     public void setPosition(double position) {
-        setpoint = position;
         controller.setReference(position, SparkBase.ControlType.kPosition);
     }
 }

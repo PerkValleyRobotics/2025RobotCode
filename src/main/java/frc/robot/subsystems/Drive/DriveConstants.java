@@ -12,7 +12,7 @@ public class DriveConstants {
   public static final double  ODOMETRY_FREQUENCY = 100.0; // Hz
 
   // Drive Train constants
-  public static final double MAX_LINEAR_SPEED = Units.feetToMeters(16.6);
+  public static final double MAX_LINEAR_SPEED = 4.531;
   public static final double TRACK_WIDTH_X = Units.inchesToMeters(23.773);
   public static final double TRACK_WIDTH_Y = Units.inchesToMeters(23.773);
   public static final double DRIVE_BASE_RADIUS = Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
@@ -33,9 +33,8 @@ public class DriveConstants {
   
 
   // CAN IDs
-  public static final int FRONT_LEFT_DRIVE_ID = 35; // should be 1
-  public static final int FRONT_LEFT_TURN_ID= 36; // should be 2  
-  //TODO: Return 1 and 2 drive values to front left module
+  public static final int FRONT_LEFT_DRIVE_ID = 1;
+  public static final int FRONT_LEFT_TURN_ID= 2;
   
   public static final int FRONT_LEFT_CANCODER_ID= 3;
 
@@ -66,8 +65,8 @@ public class DriveConstants {
   // Drive PID Configuration
   public static final double DRIVE_P = 0.005;
   public static final double DRIVE_D = 0;
-  public static final double DRIVE_S = 0.12164;
-  public static final double DRIVE_V = 0.11983; 
+  public static final double DRIVE_S = 0.252119120641830;
+  public static final double DRIVE_V = 0.124239618893845; 
   public static final double DRIVE_SIM_P = 0.05;
   public static final double DRIVE_SIM_D = 0.0;
   public static final double DRIVE_SIM_S = 0.0;
@@ -93,10 +92,10 @@ public class DriveConstants {
   public static final double TURN_PID_MAX_INPUT = 2 * Math.PI; // Radians
   
   // Path planner constants
-  public static final double ROBOT_MASS = 115;
-  public static final double ROBOT_MOI = 0;
+  public static final double ROBOT_MASS = 31.7141;
+  public static final double ROBOT_MOI = 3.504;
   public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(2.0);
-  public static final double WHEEL_COF = 0;
+  public static final double WHEEL_COF = 1;
   public static final RobotConfig ppConfig = 
     new RobotConfig(
       ROBOT_MASS, 

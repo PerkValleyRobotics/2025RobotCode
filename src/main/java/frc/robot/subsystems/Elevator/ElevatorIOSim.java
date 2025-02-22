@@ -66,8 +66,9 @@ public class ElevatorIOSim implements ElevatorIO {
         inputs.rightAppliedVolts = outputVoltage;
         inputs.rightCurrentAmps = sim.getCurrentDrawAmps();
 
-        inputs.positionMeters = sim.getPositionMeters();
-        inputs.velocityMetersPerSec = sim.getVelocityMetersPerSecond();
+        inputs.positionRads = sim.getPositionMeters();
+
+        inputs.velocityRadsPerSec = sim.getVelocityMetersPerSecond();
 
         elevator.setLength(.25 + sim.getPositionMeters());
         Logger.recordOutput("Elevator/Mechanism", mech);

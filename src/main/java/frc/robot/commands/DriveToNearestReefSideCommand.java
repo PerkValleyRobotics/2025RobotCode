@@ -12,6 +12,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -84,7 +85,14 @@ public class DriveToNearestReefSideCommand extends Command {
       }
     }
 
-    return closestPose;
+    return translateCoord(closestPose, closestPose.getRotation().getDegrees(), -Units.inchesToMeters(23.773));
+  }
+
+  private Pose2d translateCoord(Pose2d originalPose, double degreesRotate, double distance) {
+    double newXCoord = originalPose.getX() + (Math.cos(Math.toRadians(degreesRotate)) * distance);
+    double newYCoord = originalPose.getY() + (Math.sin(Math.toRadians(degreesRotate)) * distance);
+
+    return new Pose2d(newXCoord, newYCoord, originalPose.getRotation());
   }
 
   private double findDistanceBetween(Pose2d pose1, Pose2d pose2) {

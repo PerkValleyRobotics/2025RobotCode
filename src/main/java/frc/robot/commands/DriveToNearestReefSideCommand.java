@@ -5,14 +5,14 @@
 package frc.robot.commands;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -23,11 +23,13 @@ import frc.robot.subsystems.Drive.Drive;
 public class DriveToNearestReefSideCommand extends Command {
   private Command pathfindPath;
   private Drive drive;
+  private boolean isLeftBumper = false;
 
   /** Creates a new DriveToNearestReefSideCommand. */
-  public DriveToNearestReefSideCommand(Drive drive) {
+  public DriveToNearestReefSideCommand(Drive drive, boolean isLeftBumper) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
+    this.isLeftBumper = isLeftBumper;
 
     addRequirements(drive);
   }
@@ -75,17 +77,37 @@ public class DriveToNearestReefSideCommand extends Command {
     Pose2d currentPose = drive.getPose();
     Pose2d closestPose = new Pose2d();
     double closestDistance = Double.MAX_VALUE;
+    Integer aprilTagNum = -1;
 
-    for (Pose2d pose : aprilTagsToAlignTo.values()) {
+    for (Map.Entry<Integer, Pose2d> entry : aprilTagsToAlignTo.entrySet()) {
+      Pose2d pose = entry.getValue();
       double distance = findDistanceBetween(currentPose, pose);
-      System.out.println(distance);
       if (distance < closestDistance) {
         closestDistance = distance;
         closestPose = pose;
+        aprilTagNum = entry.getKey();
       }
     }
 
-    return translateCoord(closestPose, closestPose.getRotation().getDegrees(), -Units.inchesToMeters(23.773));
+    Pose2d inFrontOfAprilTag = translateCoord(closestPose, closestPose.getRotation().getDegrees(),
+        -Units.inchesToMeters(23.773));
+
+    Pose2d leftOrRightOfAprilTag;
+    if (isLeftBumper) {
+      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.6);
+    } else {
+      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.6);
+    }
+
+    if (List.of(11, 10, 9, 22, 21, 20).contains(aprilTagNum)) {
+      if (isLeftBumper) {
+        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.6);
+      } else {
+        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.6);
+      }
+    }
+
+    return leftOrRightOfAprilTag;
   }
 
   private Pose2d translateCoord(Pose2d originalPose, double degreesRotate, double distance) {

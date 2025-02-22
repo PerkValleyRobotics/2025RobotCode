@@ -147,9 +147,15 @@ public class RobotContainer {
     // 3.0, 4.0,
     // Units.degreesToRadians(540), Units.degreesToRadians(720)));
 
-    Command driveToNearestReefSideCommand = new DriveToNearestReefSideCommand(drive);
-    driverController.x().onTrue(driveToNearestReefSideCommand);
-    joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommand.end(false)));
+    Command driveToNearestReefSideCommandLeft = new DriveToNearestReefSideCommand(drive,
+        true);
+    Command driveToNearestReefSideCommandRight = new DriveToNearestReefSideCommand(drive,
+        false);
+    driverController.leftBumper().onTrue(driveToNearestReefSideCommandLeft);
+
+    driverController.rightBumper().onTrue(driveToNearestReefSideCommandRight);
+    joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
+        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));
 
     // driverController.leftTrigger().onTrue(new PrintCommand("running here!!!!"));
     /*

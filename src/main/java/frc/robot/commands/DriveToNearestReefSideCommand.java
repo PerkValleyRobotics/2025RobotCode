@@ -10,18 +10,23 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.AprilTagPositions;
 import frc.robot.subsystems.Drive.Drive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToNearestReefSideCommand extends Command {
-  private Command pathfindPath;
+  private Command fullPath;
   private Drive drive;
   private boolean isLeftBumper = false;
 
@@ -37,13 +42,29 @@ public class DriveToNearestReefSideCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pathfindPath = AutoBuilder.pathfindToPose(
-        getClosestReefAprilTagPose(),
+    Pose2d closestAprilTagPose = getClosestReefAprilTagPose();
+    Command pathfindPath = AutoBuilder.pathfindToPose(
+      translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -0.5),
         new PathConstraints(
             3.0, 4.0,
             Units.degreesToRadians(540), Units.degreesToRadians(720)));
 
-    pathfindPath.schedule();
+    try {
+      // Load the path you want to follow using its name in the GUI
+      PathPlannerPath pathToFront = new PathPlannerPath(
+          PathPlannerPath.waypointsFromPoses(
+            translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -0.5),
+              closestAprilTagPose),
+          new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI),
+          null, 
+          new GoalEndState(0.0, closestAprilTagPose.getRotation())
+      );
+      pathToFront.preventFlipping = true;
+      fullPath = pathfindPath.andThen(AutoBuilder.followPath(pathToFront));
+      fullPath.schedule();
+    } catch (Exception e) {
+      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,8 +75,8 @@ public class DriveToNearestReefSideCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if (pathfindPath != null) {
-      pathfindPath.cancel();
+    if (fullPath != null) {
+      fullPath.cancel();
     }
   }
 
@@ -94,16 +115,16 @@ public class DriveToNearestReefSideCommand extends Command {
 
     Pose2d leftOrRightOfAprilTag;
     if (isLeftBumper) {
-      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.6);
+      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.1432265);
     } else {
-      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.6);
+      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.1432265);
     }
 
     if (List.of(11, 10, 9, 22, 21, 20).contains(aprilTagNum)) {
       if (isLeftBumper) {
-        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.6);
+        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.1432265);
       } else {
-        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.6);
+        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.1432265);
       }
     }
 

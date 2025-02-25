@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.9319672131147545,
+        "y": 5.283709016393443
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.497753930431763,
+        "y": 4.88218621879683
+      },
+      "isLocked": false,
+      "linkedName": "ReefK"
+    },
+    {
+      "anchor": {
+        "x": 1.4864754098360655,
+        "y": 7.16577868852459
+      },
+      "prevControl": {
+        "x": 1.2653887720135835,
+        "y": 7.282486437094899
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "CoralStation"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -53.354350835379655
+  },
+  "reversed": false,
+  "folder": "Loading Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -58.70696100407983
+  },
+  "useDefaultConstraints": true
+}

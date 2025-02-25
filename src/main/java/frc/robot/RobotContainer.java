@@ -24,6 +24,19 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveToNearestReefSideCommand;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.DriveCommands;
+import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.ManualElevatorCommand;
+import frc.robot.subsystems.CoralSensor.CoralSensor;
+import frc.robot.subsystems.CoralSensor.CoralSensorIO;
+import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
+import frc.robot.subsystems.CoralSensor.CoralSensorIOSim;
 import frc.robot.subsystems.Drive.Drive;
 import frc.robot.subsystems.Drive.ModuleIO;
 import frc.robot.subsystems.Drive.ModuleIOSim;
@@ -52,12 +65,12 @@ public class RobotContainer {
   private final Drive drive;
   private final Vision vision;
   private final Elevator elevator;
+  private final CoralSensor coralSensor;
 
   private final CommandXboxController driverController = new CommandXboxController(0);
-
   private final Trigger joystickMoveTrigger = new Trigger(() -> isJoystickMoved());
-  // private final CommandXboxController operatorController = new
-  // CommandXboxController(1);
+  private final CommandXboxController operatorController = new
+  CommandXboxController(1);
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -67,6 +80,7 @@ public class RobotContainer {
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
+        coralSensor = new CoralSensor(new CoralSensorIO(){});
         drive = new Drive(
             new GyroIONavx(),
             new ModuleIOSparkMax(0),
@@ -76,11 +90,12 @@ public class RobotContainer {
         vision = new Vision(
             drive::addVisionMeasurement,
             new VisionIOLimelight("limelight", drive::getRotation));
-        elevator = new Elevator(new ElevatorIOSim());
 
+        elevator = new Elevator(new ElevatorIOSparkMax());
         break;
 
       case SIM:
+        coralSensor = new CoralSensor(new CoralSensorIOSim());
         drive = new Drive(
             new GyroIO() {
             },
@@ -111,6 +126,8 @@ public class RobotContainer {
         });
         elevator = new Elevator(new ElevatorIO() {
         });
+        coralSensor = new CoralSensor(new CoralSensorIO() {
+        });
         break;
     }
 
@@ -134,19 +151,6 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    drive.setDefaultCommand(
-        DriveCommands.FPSDrive(
-            drive,
-            () -> -driverController.getLeftY(),
-            () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX()));
-
-    // Command pathfindPath = AutoBuilder.pathfindToPose(
-    // AprilTagPositions.WELDED_APRIL_TAG_POSITIONS.get(6),
-    // new PathConstraints(
-    // 3.0, 4.0,
-    // Units.degreesToRadians(540), Units.degreesToRadians(720)));
-
     Command driveToNearestReefSideCommandLeft = new DriveToNearestReefSideCommand(drive,
         true);
     Command driveToNearestReefSideCommandRight = new DriveToNearestReefSideCommand(drive,
@@ -157,7 +161,71 @@ public class RobotContainer {
     joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
         .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));
 
-    // driverController.leftTrigger().onTrue(new PrintCommand("running here!!!!"));
+      drive.setDefaultCommand(
+        DriveCommands.FPSDrive(
+            drive,
+            () -> -driverController.getLeftY()/2,
+            () -> -driverController.getLeftX()/2,
+            () -> -driverController.getRightX()/2));
+    // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
+    driverController
+        .b()
+        .onTrue(
+            Commands.runOnce(
+                () -> drive.setPose(
+                    new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+                drive)
+                .ignoringDisable(true));
+    driverController
+      .y()
+        .onTrue(
+          Commands.runOnce(
+            () -> drive.setPose(
+              new Pose2d(new Translation2d(), new Rotation2d())),
+            drive)
+            .ignoringDisable(true));
+
+    driverController
+        .x()
+        .whileTrue(
+          DriveCommands.feedforwardCharacterization(drive));
+    // tempororary elevator command 
+    operatorController
+        .a()
+        .onTrue(
+          new InstantCommand(elevator::home)
+        );
+    operatorController
+        .x()
+        .onTrue(
+          new InstantCommand(elevator::gotoL2)
+        );
+    operatorController
+        .y()
+        .onTrue(
+          new InstantCommand(elevator::gotoL3)
+        );
+    operatorController
+        .b()
+        .onTrue(
+          new InstantCommand(elevator::gotoL1)
+        );
+    operatorController
+      .leftBumper()
+      .whileTrue(
+        new InstantCommand(elevator::incrementSetpoint, elevator)
+      );
+    
+    operatorController
+      .rightBumper()
+      .whileTrue(
+        new InstantCommand(elevator::decrementSetpoint, elevator)
+      );
+    // operatorController
+    //     .b()
+    //     .onTrue(
+    //       new InstantCommand(elevator::home)
+    //     );
     /*
      * elevator.setDefaultCommand(
      * new ManualElevatorCommand(

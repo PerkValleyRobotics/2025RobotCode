@@ -7,13 +7,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import frc.robot.Constants;
 
 public class DriveConstants {
   public static final double ODOMETRY_FREQUENCY = 100.0; // Hz
 
   // Drive Train constants
-  public static final double MAX_LINEAR_SPEED = Units.feetToMeters(16.6);
+  public static final double MAX_LINEAR_SPEED = 4.531;
   public static final double TRACK_WIDTH_X = Units.inchesToMeters(23.773);
   public static final double TRACK_WIDTH_Y = Units.inchesToMeters(23.773);
   public static final double DRIVE_BASE_RADIUS = Math.hypot(TRACK_WIDTH_X / 2.0, TRACK_WIDTH_Y / 2.0);
@@ -26,10 +25,11 @@ public class DriveConstants {
   };
 
   // swerve module offsets
-  public static final Rotation2d FRONT_LEFT_ZERO_ROTATION = new Rotation2d(-0.01);
-  public static final Rotation2d FRONT_RIGHT_ZERO_ROTATION = new Rotation2d(0.098);
-  public static final Rotation2d BACK_LEFT_ZERO_ROTATION = new Rotation2d(0.083);
-  public static final Rotation2d BACK_RIGHT_ZERO_ROTATION = new Rotation2d(-1.426);
+  public static final Rotation2d FRONT_LEFT_ZERO_ROTATION = new Rotation2d(-.242);
+  public static final Rotation2d FRONT_RIGHT_ZERO_ROTATION = new Rotation2d(0.12);
+  public static final Rotation2d BACK_RIGHT_ZERO_ROTATION = new Rotation2d(-1.437);
+  public static final Rotation2d BACK_LEFT_ZERO_ROTATION = new Rotation2d(0.084);
+  
 
   // CAN IDs
   public static final int FRONT_LEFT_DRIVE_ID = 1;
@@ -64,9 +64,10 @@ public class DriveConstants {
   // Drive PID Configuration
   public static final double DRIVE_P = 0.005;
   public static final double DRIVE_D = 0;
-  public static final double DRIVE_S = 0;
-  public static final double DRIVE_V = 0;
-  public static final double DRIVE_SIM_P = 10;// 0.005;
+
+  public static final double DRIVE_S = 0.252119120641830;
+  public static final double DRIVE_V = 0.124239618893845; 
+  public static final double DRIVE_SIM_P = 0.05;
   public static final double DRIVE_SIM_D = 0.0;
   public static final double DRIVE_SIM_S = 0.0;
   public static final double DRIVE_SIM_V = 0.0789;
@@ -85,19 +86,21 @@ public class DriveConstants {
                                                                                                        // Wheel Rad/Sec
 
   // Turn PID Configuration
-  public static final double TURN_P = 0.35;
-  public static final double TURN_D = 0;
-  public static final double TURN_SIM_P = 10;// 0.35;
+
+  public static final double TURN_P = 0.525;
+  public static final double TURN_D = 0.01;
+  public static final double TURN_SIM_P = 8.0;
   public static final double TURN_SIM_D = 0.0;
   public static final double TURN_PID_MIN_INPUT = 0; // Radians
   public static final double TURN_PID_MAX_INPUT = 2 * Math.PI; // Radians
 
   // Path planner constants
-  public static final double ROBOT_MASS = 31.714;
-  public static final double ROBOT_MOI = 0;
+  public static final double ROBOT_MASS = 31.7141;
+  public static final double ROBOT_MOI = 3.504;
   public static final double WHEEL_RADIUS_METERS = Units.inchesToMeters(2.0);
-  public static final double WHEEL_COF = 0;
-  public static final RobotConfig ppConfig = new RobotConfig(
+  public static final double WHEEL_COF = 1;
+  public static final RobotConfig ppConfig = 
+    new RobotConfig(
       ROBOT_MASS,
       ROBOT_MOI,
       new ModuleConfig(

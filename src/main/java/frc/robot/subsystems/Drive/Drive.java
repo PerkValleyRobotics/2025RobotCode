@@ -40,6 +40,7 @@ import frc.robot.subsystems.Gyro.GyroIOInputsAutoLogged;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class Drive extends SubsystemBase {
   static final Lock odometryLock = new ReentrantLock();
@@ -72,8 +73,8 @@ public class Drive extends SubsystemBase {
     this.gyroIO = gyroIO;
     modules[0] = new Module(flModuleIO, 0);
     modules[1] = new Module(frModuleIO, 1);
-    modules[3] = new Module(blModuleIO, 3);
     modules[2] = new Module(brModuleIO, 2);
+    modules[3] = new Module(blModuleIO, 3);
 
     // Start Odometry thread
     SparkOdometryThread.getInstance().start();
@@ -111,8 +112,9 @@ public class Drive extends SubsystemBase {
           Logger.recordOutput("Odometry/TrajectorySetpoint", targetPose);
         });
 
-    // Congigure SysId
-    sysId = new SysIdRoutine(
+    // Configure SysId
+    sysId = 
+      new SysIdRoutine(
         new SysIdRoutine.Config(
             null,
             null,
@@ -144,13 +146,14 @@ public class Drive extends SubsystemBase {
     }
 
     // Update odometry
-    double[] sampleTimestamps = modules[0].getOdometryTimestamps(); // All signals are sampled to togethr
+    double[] sampleTimestamps = modules[0].getOdometryTimestamps(); // All signals are sampled together
     int sampleCount = sampleTimestamps.length;
     for (int i = 0; i < sampleCount; i++) {
       // Read whell positions and deltas from each module
       SwerveModulePosition[] modulePositions = getModulePositions();
       SwerveModulePosition[] moduleDeltas = new SwerveModulePosition[4];
       for (int moduleIndex = 0; moduleIndex < 4; moduleIndex++) {
+        modulePositions[moduleIndex] = modules[moduleIndex].getOdometryPoositions()[i];
         moduleDeltas[moduleIndex] = new SwerveModulePosition(
             modulePositions[moduleIndex].distanceMeters
                 - lastModulePositions[moduleIndex].distanceMeters,

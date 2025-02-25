@@ -8,8 +8,22 @@ import static frc.robot.subsystems.Vision.VisionConstants.*;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.DriveCommands;
+import frc.robot.commands.DriveToNearestReefSideCommand;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -30,7 +44,6 @@ import frc.robot.subsystems.Drive.ModuleIOSparkMax;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
-import frc.robot.subsystems.Elevator.ElevatorIOSparkMax;
 import frc.robot.subsystems.Gyro.GyroIO;
 import frc.robot.subsystems.Gyro.GyroIONavx;
 import frc.robot.subsystems.Vision.Vision;
@@ -55,6 +68,7 @@ public class RobotContainer {
   private final CoralSensor coralSensor;
 
   private final CommandXboxController driverController = new CommandXboxController(0);
+  private final Trigger joystickMoveTrigger = new Trigger(() -> isJoystickMoved());
   private final CommandXboxController operatorController = new
   CommandXboxController(1);
 
@@ -76,8 +90,8 @@ public class RobotContainer {
         vision = new Vision(
             drive::addVisionMeasurement,
             new VisionIOLimelight("limelight", drive::getRotation));
-        elevator = new Elevator(new ElevatorIOSparkMax());
 
+        elevator = new Elevator(new ElevatorIOSparkMax());
         break;
 
       case SIM:
@@ -136,7 +150,18 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    drive.setDefaultCommand(
+
+    Command driveToNearestReefSideCommandLeft = new DriveToNearestReefSideCommand(drive,
+        true);
+    Command driveToNearestReefSideCommandRight = new DriveToNearestReefSideCommand(drive,
+        false);
+    driverController.leftBumper().onTrue(driveToNearestReefSideCommandLeft);
+
+    driverController.rightBumper().onTrue(driveToNearestReefSideCommandRight);
+    joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
+        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));
+
+      drive.setDefaultCommand(
         DriveCommands.FPSDrive(
             drive,
             () -> -driverController.getLeftY()/2,
@@ -224,5 +249,14 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return autoChooser.get();
+  }
+
+  private boolean isJoystickMoved() {
+    // Check if there's significant joystick movement
+    return Math.abs(driverController.getLeftY()) > 0.5 ||
+        Math.abs(driverController.getLeftX()) > 0.5 ||
+        Math.abs(driverController.getRightX()) > 0.5 ||
+        Math.abs(driverController.getRightY()) > 0.5;
+    // return driverController.axisMagnitudeGreaterThan(0, 0.5).getAsBoolean();
   }
 }

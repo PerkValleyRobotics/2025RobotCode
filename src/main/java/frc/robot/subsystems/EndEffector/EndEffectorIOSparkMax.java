@@ -5,7 +5,6 @@ import static frc.robot.util.SparkUtil.ifOk;
 import static frc.robot.util.SparkUtil.sparkStickyFault;
 import static frc.robot.util.SparkUtil.tryUntilOK;
 
-import java.io.ObjectInputFilter.Config;
 import java.util.function.DoubleSupplier;
 
 import org.littletonrobotics.junction.AutoLog;

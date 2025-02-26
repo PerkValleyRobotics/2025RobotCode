@@ -29,12 +29,12 @@ public class Elevator extends SubsystemBase {
 
 
   public void incrementSetpoint(){
-    setpoint += .1;
+    setpoint += .005;
     gotoPos(setpoint);
   }
   
   public void decrementSetpoint(){
-    setpoint -= .1;
+    setpoint -= .005;
     gotoPos(setpoint);
   }
 

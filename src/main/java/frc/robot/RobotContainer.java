@@ -14,15 +14,21 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.DeAlgifierCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.EndEffectorCommands;
 import frc.robot.commands.ManualElevatorCommand;
 import frc.robot.subsystems.CoralSensor.CoralSensor;
 import frc.robot.subsystems.CoralSensor.CoralSensorIO;
 import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
 import frc.robot.subsystems.CoralSensor.CoralSensorIOSim;
+import frc.robot.subsystems.DeAlgifier.DeAlgifier;
+import frc.robot.subsystems.DeAlgifier.DeAlgifierIO;
+import frc.robot.subsystems.DeAlgifier.DeAlgifierIOSparkMax;
 import frc.robot.subsystems.Drive.Drive;
 import frc.robot.subsystems.Drive.ModuleIO;
 import frc.robot.subsystems.Drive.ModuleIOSim;
@@ -31,6 +37,9 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorIO;
 import frc.robot.subsystems.Elevator.ElevatorIOSim;
 import frc.robot.subsystems.Elevator.ElevatorIOSparkMax;
+import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorIO;
+import frc.robot.subsystems.EndEffector.EndEffectorIOSparkMax;
 import frc.robot.subsystems.Gyro.GyroIO;
 import frc.robot.subsystems.Gyro.GyroIONavx;
 import frc.robot.subsystems.Vision.Vision;
@@ -52,11 +61,12 @@ public class RobotContainer {
   private final Drive drive;
   private final Vision vision;
   private final Elevator elevator;
-  private final CoralSensor coralSensor;
+  // private final CoralSensor coralSensor;
+  private final EndEffector endEffector;
+  private final DeAlgifier deAlgifier;
 
   private final CommandXboxController driverController = new CommandXboxController(0);
-  private final CommandXboxController operatorController = new
-  CommandXboxController(1);
+  private final CommandXboxController operatorController = new CommandXboxController(1);
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
@@ -66,7 +76,7 @@ public class RobotContainer {
   public RobotContainer() {
     switch (Constants.currentMode) {
       case REAL:
-        coralSensor = new CoralSensor(new CoralSensorIO(){});
+        // coralSensor = new CoralSensor(new CoralSensorIOReal());
         drive = new Drive(
             new GyroIONavx(),
             new ModuleIOSparkMax(0),
@@ -75,13 +85,16 @@ public class RobotContainer {
             new ModuleIOSparkMax(3));
         vision = new Vision(
             drive::addVisionMeasurement,
-            new VisionIOLimelight("limelight", drive::getRotation));
+            new VisionIOLimelight("limelight-front", drive::getRotation));
         elevator = new Elevator(new ElevatorIOSparkMax());
+
+        endEffector = new EndEffector(new EndEffectorIOSparkMax());
+        deAlgifier = new DeAlgifier(new DeAlgifierIOSparkMax());
 
         break;
 
       case SIM:
-        coralSensor = new CoralSensor(new CoralSensorIOSim());
+        // coralSensor = new CoralSensor(new CoralSensorIOSim());
         drive = new Drive(
             new GyroIO() {
             },
@@ -94,6 +107,11 @@ public class RobotContainer {
             new VisionIOPhotonVisionSim("limelight", robotToCamera, drive::getPose));
         elevator = new Elevator(
             new ElevatorIOSim());
+
+            endEffector = new EndEffector(new EndEffectorIO() {
+            });
+            deAlgifier = new DeAlgifier(new DeAlgifierIO() {
+            });
         break;
 
       default:
@@ -112,7 +130,11 @@ public class RobotContainer {
         });
         elevator = new Elevator(new ElevatorIO() {
         });
-        coralSensor = new CoralSensor(new CoralSensorIO() {
+        // coralSensor = new CoralSensor(new CoralSensorIO() {
+        // });
+        endEffector = new EndEffector(new EndEffectorIO() {
+        });
+        deAlgifier = new DeAlgifier(new DeAlgifierIO() {
         });
         break;
     }
@@ -135,16 +157,25 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
   private void configureBindings() {
     drive.setDefaultCommand(
         DriveCommands.FPSDrive(
             drive,
-            () -> -driverController.getLeftY()/2,
-            () -> -driverController.getLeftX()/2,
+            () -> -driverController.getLeftY(),
+            () -> -driverController.getLeftX(),
+            () -> -driverController.getRightX()));
+    driverController
+        .y()
+        .whileTrue(
+          DriveCommands.FPSDrive(
+            drive, 
+            () -> -driverController.getLeftY()/2, 
+            () -> -driverController.getLeftX()/2, 
             () -> -driverController.getRightX()/2));
     // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     driverController
-        .b()
+        .x()
         .onTrue(
             Commands.runOnce(
                 () -> drive.setPose(
@@ -152,7 +183,7 @@ public class RobotContainer {
                 drive)
                 .ignoringDisable(true));
     driverController
-      .y()
+      .b()
         .onTrue(
           Commands.runOnce(
             () -> drive.setPose(
@@ -160,15 +191,21 @@ public class RobotContainer {
             drive)
             .ignoringDisable(true));
 
-    driverController
-        .x()
-        .whileTrue(
-          DriveCommands.feedforwardCharacterization(drive));
-    // tempororary elevator command 
+    // driverController
+    //     .x()
+    //     .whileTrue(
+    //       DriveCommands.feedforwardCharacterization(drive));
+
+    // Elevator setpoints 
     operatorController
         .a()
         .onTrue(
           new InstantCommand(elevator::home)
+        );
+    operatorController
+        .b()
+        .onTrue(
+          new InstantCommand(elevator::gotoL1)
         );
     operatorController
         .x()
@@ -180,22 +217,33 @@ public class RobotContainer {
         .onTrue(
           new InstantCommand(elevator::gotoL3)
         );
+
+    // Manual elevator control
     operatorController
-        .b()
-        .onTrue(
-          new InstantCommand(elevator::gotoL1)
-        );
-    operatorController
-      .leftBumper()
+      .pov(0)
       .whileTrue(
-        new InstantCommand(elevator::incrementSetpoint, elevator)
+        new RepeatCommand(new InstantCommand(elevator::incrementSetpoint))
       );
     
     operatorController
-      .rightBumper()
+      .pov(180)
       .whileTrue(
-        new InstantCommand(elevator::decrementSetpoint, elevator)
+        new RepeatCommand(new InstantCommand(elevator::decrementSetpoint))
       );
+
+    //End effector binds
+    operatorController.leftBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
+    operatorController.rightBumper().whileTrue(EndEffectorCommands.runBackCommand(endEffector, 1));
+    // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false, 1));
+
+    operatorController.leftBumper().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
+    operatorController.rightBumper().and(operatorController.back()).whileTrue(EndEffectorCommands.runBackCommand(endEffector, -1));
+    // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false, -1));
+    // operatorController.a().and(() -> !(coralSensor.getDistance() < 2)).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false));
+
+    // // dealgifier binds
+    // operatorController.b().toggleOnTrue(DeAlgifierCommands.toggleDealgifierCommand(deAlgifier));
+
     // operatorController
     //     .b()
     //     .onTrue(

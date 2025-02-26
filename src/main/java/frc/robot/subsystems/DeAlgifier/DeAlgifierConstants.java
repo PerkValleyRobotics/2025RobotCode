@@ -4,7 +4,7 @@ public class DeAlgifierConstants {
     public static final int ALGAE_WHEEL_ID = 28;
     public static final int ALGAE_PIVOT_ARM_ID = 27;
     // PID for Algae arm
-    public static final double ALGAE_PIVOT_P = 0.0;
+    public static final double ALGAE_PIVOT_P = 1.0;
     public static final double ALGAE_PIVOT_I = 0.0;
     public static final double ALGAE_PIVOT_D = 0.0;
 

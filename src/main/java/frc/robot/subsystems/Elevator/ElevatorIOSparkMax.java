@@ -17,6 +17,7 @@ import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -28,8 +29,8 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class ElevatorIOSparkMax implements ElevatorIO {
-    private final SparkBase leftSparkMax;    
-    private final SparkBase rightSparkMax;    
+    private final SparkBase leftSparkMax;
+    private final SparkBase rightSparkMax;
     private final RelativeEncoder rightEncoder;
     private final AbsoluteEncoder absoluteEncoder;
     private final RelativeEncoder leftEncoder;
@@ -37,7 +38,6 @@ public class ElevatorIOSparkMax implements ElevatorIO {
 
     private final Debouncer leftConnectedDebounce = new Debouncer(.05);
     private final Debouncer rightConnectedDebounce = new Debouncer(.05);
-
 
     public ElevatorIOSparkMax() {
         leftSparkMax = new SparkMax(LEFT_SPARKMAX_ID, MotorType.kBrushless);
@@ -49,67 +49,64 @@ public class ElevatorIOSparkMax implements ElevatorIO {
 
         SparkMaxConfig config = new SparkMaxConfig();
         config
-            .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(ELEVATOR_CURRENT_LIMIT)
-            .voltageCompensation(12.0)
-            .inverted(false);
-        config
-            .encoder
-            .positionConversionFactor(ELEVATOR_POSITION_CONVERSION_FACTOR)
-            .uvwMeasurementPeriod(10)
-            .uvwAverageDepth(2);
-        config
-            .closedLoop
-            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-            .pidf(ELEVATOR_P, ELEVATOR_I,
-                  ELEVATOR_D, 0.0);
-        // config
-        //     .closedLoop
-        //     .maxMotion
-        //     .maxVelocity(ELEVATOR_MAX_VELOCITY)
-        //     .maxAcceleration(ELEVATOR_MAX_ACCELERATION);
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(ELEVATOR_CURRENT_LIMIT)
+                .voltageCompensation(12.0)
+                .inverted(false);
+        config.encoder
+                .positionConversionFactor(ELEVATOR_POSITION_CONVERSION_FACTOR)
+                .uvwMeasurementPeriod(10)
+                .uvwAverageDepth(2);
+        config.closedLoop
+                .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                .pidf(ELEVATOR_UP_P, ELEVATOR_UP_I,
+                        ELEVATOR_UP_D, 0.0, ClosedLoopSlot.kSlot0)
+                .pidf(ELEVATOR_DOWN_P, ELEVATOR_DOWN_I, ELEVATOR_DOWN_D, 0.0, ClosedLoopSlot.kSlot1);
+        config.closedLoop.maxMotion
+                .allowedClosedLoopError(ELEVATOR_CLOSEDLOOP_TOLERANCE);
+                // .maxVelocity(ELEVATOR_MAX_VELOCITY)
+                // .maxAcceleration(ELEVATOR_MAX_ACCELERATION);
 
-        tryUntilOK(leftSparkMax, 
-            5, 
-            () ->
-                 leftSparkMax.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+        tryUntilOK(leftSparkMax,
+                5,
+                () -> leftSparkMax.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
         tryUntilOK(leftSparkMax, 5, () -> leftEncoder.setPosition(0.0));
 
-        SparkMaxConfig followerConfig =  new SparkMaxConfig();
+        SparkMaxConfig followerConfig = new SparkMaxConfig();
         followerConfig
-            .idleMode(IdleMode.kBrake)
-            .smartCurrentLimit(ELEVATOR_CURRENT_LIMIT)
-            .voltageCompensation(12.0)
-            .follow(LEFT_SPARKMAX_ID);
-        
+                .idleMode(IdleMode.kBrake)
+                .smartCurrentLimit(ELEVATOR_CURRENT_LIMIT)
+                .voltageCompensation(12.0)
+                .follow(LEFT_SPARKMAX_ID);
+
         tryUntilOK(
-            rightSparkMax, 
-            5, 
-            () ->
-                 rightSparkMax.configure(followerConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters));
+                rightSparkMax,
+                5,
+                () -> rightSparkMax.configure(followerConfig, ResetMode.kResetSafeParameters,
+                        PersistMode.kPersistParameters));
 
         tryUntilOK(rightSparkMax, 5, () -> rightEncoder.setPosition(0.0));
     }
 
     @Override
     public void updateInputs(ElevatorIOInputs inputs) {
-        // Update elevator inputs 
+        // Update elevator inputs
         sparkStickyFault = false;
         ifOk(leftSparkMax, leftEncoder::getPosition, (value) -> inputs.positionRads = value);
         ifOk(leftSparkMax, leftEncoder::getVelocity, (value) -> inputs.velocityRadsPerSec = value);
 
         // Update left motor inputs
-        ifOk(leftSparkMax, 
-            new DoubleSupplier[] {leftSparkMax::getAppliedOutput, leftSparkMax::getBusVoltage},
-            (values) -> inputs.leftAppliedVolts = values[0] * values[1]);
+        ifOk(leftSparkMax,
+                new DoubleSupplier[] { leftSparkMax::getAppliedOutput, leftSparkMax::getBusVoltage },
+                (values) -> inputs.leftAppliedVolts = values[0] * values[1]);
         ifOk(leftSparkMax, leftSparkMax::getOutputCurrent, (value) -> inputs.leftCurrentAmps = value);
         inputs.leftConnected = leftConnectedDebounce.calculate(!sparkStickyFault);
 
         // Update right motor inputs
         sparkStickyFault = false;
-        ifOk(rightSparkMax, 
-            new DoubleSupplier[] {rightSparkMax::getAppliedOutput, rightSparkMax::getBusVoltage},
-            (values) -> inputs.rightAppliedVolts = values[0] * values[1]);
+        ifOk(rightSparkMax,
+                new DoubleSupplier[] { rightSparkMax::getAppliedOutput, rightSparkMax::getBusVoltage },
+                (values) -> inputs.rightAppliedVolts = values[0] * values[1]);
         ifOk(rightSparkMax, rightSparkMax::getOutputCurrent, (value) -> inputs.rightCurrentAmps = value);
         inputs.rightConnected = rightConnectedDebounce.calculate(!sparkStickyFault);
     }
@@ -122,6 +119,9 @@ public class ElevatorIOSparkMax implements ElevatorIO {
 
     @Override
     public void setPosition(double position) {
-        controller.setReference(position, SparkBase.ControlType.kPosition);
+        if (leftEncoder.getPosition() < position)
+            controller.setReference(position, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+        else
+            controller.setReference(position, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
     }
 }

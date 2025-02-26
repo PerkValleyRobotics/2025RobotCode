@@ -7,31 +7,38 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
 /** Add your docs here. */
 public class EndEffectorCommands {
     public EndEffectorCommands() {
     }
 
-    public static Command runFrontMotors(EndEffector endEffector, boolean leftSlowed, boolean rightSlowed) {
+    public static Command runFrontMotors(EndEffector endEffector, boolean leftSlowed, boolean rightSlowed, double multiplier) {
         return Commands.run(() -> {
-            endEffector.runLeft(leftSlowed);
-            endEffector.runRight(rightSlowed);
+            endEffector.runFrontSpeed(EndEffectorConstants.FRONT_RIGHT_SPEED*multiplier);
         }, endEffector).finallyDo(
                 () -> {
                     endEffector.stopFront();
                 });
     }
 
-    public static Command runBackCommand(EndEffector endEffector) {
+    public static Command runBackCommand(EndEffector endEffector, double multiplier) {
+
         return Commands.run(() -> {
-            endEffector.runBack();
+            endEffector.runBackSpeed(EndEffectorConstants.BACK_SPEED*multiplier);
         }, endEffector).finallyDo(() -> {
             endEffector.stopBack();
         });
     }
     
-    public static Command runFrontAndBack(EndEffector endEffector) {
-        return Commands.sequence(runBackCommand(endEffector), runFrontMotors(endEffector, false, false));
+    public static Command runFrontAndBack(EndEffector endEffector, double multiplier) {
+        return Commands.run(() -> {
+            endEffector.runBackSpeed(0.25*multiplier);
+            endEffector.runFrontSpeed(0.25*multiplier);
+        }, endEffector).finallyDo(() -> {
+            endEffector.stopBack();
+            endEffector.stopFront();
+        });
     }
 }

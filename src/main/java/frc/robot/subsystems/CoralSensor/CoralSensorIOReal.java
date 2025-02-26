@@ -14,7 +14,7 @@ public class CoralSensorIOReal implements CoralSensorIO {
     private final Rev2mDistanceSensor sensor;
 
     public CoralSensorIOReal() {
-        sensor = new Rev2mDistanceSensor(Port.kOnboard);
+        sensor = new Rev2mDistanceSensor(Port.kMXP);
         sensor.setAutomaticMode(true);
         sensor.setRangeProfile(RangeProfile.kHighAccuracy);
     }

@@ -34,6 +34,7 @@ public class Robot extends LoggedRobot {
   public void robotInit() {
     // Record metadata
     Logger.recordMetadata("ProjectName", "MyProject");
+    Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
 
     switch (Constants.currentMode) {
       case REAL:

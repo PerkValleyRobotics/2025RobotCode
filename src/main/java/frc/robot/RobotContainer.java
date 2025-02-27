@@ -199,6 +199,13 @@ public class RobotContainer {
             () -> -driverController.getLeftY()/2, 
             () -> -driverController.getLeftX()/2, 
             () -> -driverController.getRightX()/2));
+
+
+    driverController.leftTrigger(0.25).whileTrue(DriveCommands.FPSDrive(
+            drive, 
+            () -> Math.cos(drive.getPose().getRotation())*(-1*driverController.getLeftTrigger()), 
+            () -> Math.cos(drive.getPose().getRotation())*(-1*driverController.getLeftTrigger()), 
+            () -> 0));
     // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     driverController
         .x()

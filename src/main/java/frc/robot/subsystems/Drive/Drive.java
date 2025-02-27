@@ -89,7 +89,7 @@ public class Drive extends SubsystemBase {
           new PPHolonomicDriveController(
               new PIDConstants(5.0, 0, 0),
               new PIDConstants(5.0, 0, 0)),
-          RobotConfig.fromGUISettings(),
+          DriveConstants.ppConfig,
           () -> {
             var alliance = DriverStation.getAlliance();
             if (alliance.isPresent()) {

@@ -29,7 +29,8 @@ public class DriveCommands {
   private static final double FF_RAMP_RATE = 0.1; // Volts/sec
 
   /** Creates a new DriveCommands. */
-  public DriveCommands() {}
+  public DriveCommands() {
+  }
 
   public static Translation2d getLinierVelocityFromJoysticks(double x, double y) {
     // Apply Deadban
@@ -78,6 +79,30 @@ public class DriveCommands {
         drive);
   }
 
+  public static Command RelativeDrive(
+      Drive drive,
+      DoubleSupplier xSupplier,
+      DoubleSupplier ySupplier,
+      DoubleSupplier omegaSupplier) {
+    return Commands.run(
+        () -> {
+          // Get linear velocity
+          Translation2d linearVelocity = getLinierVelocityFromJoysticks(xSupplier.getAsDouble(),
+              ySupplier.getAsDouble());
+
+          // Apply rotation deadband
+          double omega = MathUtil.applyDeadband(omegaSupplier.getAsDouble(), DEADBAND);
+
+          // Retain the original sign of omega
+          omega = Math.copySign(omega * omega, omega);
+
+          drive.runVelocity(
+              new ChassisSpeeds(linearVelocity.getX() * drive.getMaxLinerSpeedMetersPerSec(),
+                  linearVelocity.getY() * drive.getMaxLinerSpeedMetersPerSec(), omega * drive.getMaxAngularSpeedRadPerSec()));
+        },
+        drive);
+  }
+
   public static Command feedforwardCharacterization(Drive drive) {
     List<Double> velocitySamples = new LinkedList<>();
     List<Double> voltageSamples = new LinkedList<>();
@@ -104,13 +129,13 @@ public class DriveCommands {
 
         // Accelerate and gather data
         Commands.run(
-                () -> {
-                  double voltage = timer.get() * FF_RAMP_RATE;
-                  drive.runCharacterization(voltage);
-                  velocitySamples.add(drive.getFFCharacterizationVelocity());
-                  voltageSamples.add(voltage);
-                },
-                drive)
+            () -> {
+              double voltage = timer.get() * FF_RAMP_RATE;
+              drive.runCharacterization(voltage);
+              velocitySamples.add(drive.getFFCharacterizationVelocity());
+              voltageSamples.add(voltage);
+            },
+            drive)
 
             // When cancelled, calculate and print results
             .finallyDo(

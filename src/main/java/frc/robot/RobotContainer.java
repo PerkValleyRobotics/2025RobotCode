@@ -6,8 +6,11 @@ package frc.robot;
 
 import static frc.robot.subsystems.Vision.VisionConstants.*;
 
+import java.time.InstantSource;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -34,12 +37,13 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DeAlgifierCommands;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.ElevatorCommands;
+import frc.robot.commands.ElevatorGotoHeightCommand;
 import frc.robot.commands.EndEffectorCommands;
 import frc.robot.commands.ManualElevatorCommand;
-import frc.robot.subsystems.CoralSensor.CoralSensor;
-import frc.robot.subsystems.CoralSensor.CoralSensorIO;
-import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
-import frc.robot.subsystems.CoralSensor.CoralSensorIOSim;
+// import frc.robot.subsystems.CoralSensor.CoralSensor;
+// import frc.robot.subsystems.CoralSensor.CoralSensorIO;
+// import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
+// import frc.robot.subsystems.CoralSensor.CoralSensorIOSim;
 import frc.robot.subsystems.DeAlgifier.DeAlgifier;
 import frc.robot.subsystems.DeAlgifier.DeAlgifierIO;
 import frc.robot.subsystems.DeAlgifier.DeAlgifierIOSparkMax;
@@ -153,6 +157,18 @@ public class RobotContainer {
         });
         break;
     }
+    
+    // elevator auton
+    NamedCommands.registerCommand("GoToL1", new InstantCommand(elevator::gotoL1));
+    NamedCommands.registerCommand("GoToL2", new InstantCommand(elevator::gotoL2));
+    NamedCommands.registerCommand("GoToL3", new InstantCommand(elevator::gotoL3));
+    NamedCommands.registerCommand("GoToL4", new InstantCommand(elevator::gotoL4));
+    NamedCommands.registerCommand("RunFrontAndBack", EndEffectorCommands.runFrontAndBack(endEffector, 1));
+    NamedCommands.registerCommand("RunBackMotor", EndEffectorCommands.runBackCommand(endEffector, 1));
+
+    
+    
+
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     configureBindings();

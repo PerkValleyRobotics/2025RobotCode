@@ -28,12 +28,12 @@ public class DeAlgifier extends SubsystemBase {
     }
 
     public void incrementSetpoint() {
-        setpoint += 0.1;
+        setpoint += 0.01;
         gotoPos(setpoint);
     }
 
     public void decrementSetpoint() {
-        setpoint -= 0.1;
+        setpoint -= 0.01;
         gotoPos(setpoint);
     }
 
@@ -59,4 +59,15 @@ public class DeAlgifier extends SubsystemBase {
         io.setWheelSpeed(0);
     }
 
+    public void setblahblah() {
+        io.setdealgeasped(.75);
+    }
+
+    public void out() {
+        gotoPos(-0.4);
+    }
+
+    public void in() {
+        gotoPos(0);
+    }
 }

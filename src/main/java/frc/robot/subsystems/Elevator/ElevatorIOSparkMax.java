@@ -120,8 +120,8 @@ public class ElevatorIOSparkMax implements ElevatorIO {
     @Override
     public void setPosition(double position) {
         if (leftEncoder.getPosition() < position)
-            controller.setReference(position, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot0);
+            controller.setReference(position, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot0);
         else
-            controller.setReference(position, SparkBase.ControlType.kMAXMotionPositionControl, ClosedLoopSlot.kSlot1);
+            controller.setReference(position, SparkBase.ControlType.kPosition, ClosedLoopSlot.kSlot1);
     }
 }

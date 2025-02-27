@@ -23,4 +23,6 @@ public interface DeAlgifierIO {
     public default void setPivotPosition(double position) {}
 
     public default void setWheelSpeed(double speed) {}
+
+    public default void setdealgeasped(double speed) {}
 }

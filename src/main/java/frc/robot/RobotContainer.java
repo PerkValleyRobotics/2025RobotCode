@@ -175,13 +175,17 @@ public class RobotContainer {
 
   private void configureBindings() {
 
+    //reef auto drive binds
     Command driveToNearestReefSideCommandLeft = new DriveToNearestReefSideCommand(drive,
         true);
     Command driveToNearestReefSideCommandRight = new DriveToNearestReefSideCommand(drive,
         false);
     driverController.leftBumper().onTrue(driveToNearestReefSideCommandLeft);
-
     driverController.rightBumper().onTrue(driveToNearestReefSideCommandRight);
+    //hp station auto drive binds
+    Command driveToHPStationCommand = new DriveToNearestReefSideCommand(drive);
+    driverController.a().onTrue(driveToHPStationCommand)
+    //stop auto drive when move joysticks
     joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
         .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));
 
@@ -216,6 +220,8 @@ public class RobotContainer {
               new Pose2d(new Translation2d(), new Rotation2d())),
             drive)
             .ignoringDisable(true));
+
+    
 
     // driverController
     //     .x()

@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.DriveToHPStationCommand;
 import frc.robot.commands.DriveToNearestReefSideCommand;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -183,8 +184,8 @@ public class RobotContainer {
     driverController.leftBumper().onTrue(driveToNearestReefSideCommandLeft);
     driverController.rightBumper().onTrue(driveToNearestReefSideCommandRight);
     //hp station auto drive binds
-    Command driveToHPStationCommand = new DriveToNearestReefSideCommand(drive);
-    driverController.a().onTrue(driveToHPStationCommand)
+    Command driveToHPStationCommand = new DriveToHPStationCommand(drive);
+    driverController.a().onTrue(driveToHPStationCommand);
     //stop auto drive when move joysticks
     joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
         .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));

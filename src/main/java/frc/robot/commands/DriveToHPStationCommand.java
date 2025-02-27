@@ -25,11 +25,11 @@ import frc.robot.AprilTagPositions;
 import frc.robot.subsystems.Drive.Drive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class DriveToNearestReefSideCommand extends Command {
+public class DriveToHPStationCommand extends Command {
   private Command fullPath;
   private Drive drive;
 
-  /** Creates a new DriveToNearestReefSideCommand. */
+  /** Creates a new DriveToHPStationCommand. */
   public DriveToHPStationCommand(Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;

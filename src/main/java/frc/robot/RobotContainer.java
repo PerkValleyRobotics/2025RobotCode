@@ -188,7 +188,8 @@ public class RobotContainer {
     driverController.a().onTrue(driveToHPStationCommand);
     // stop auto drive when move joysticks
     joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
-        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));
+        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false)))
+        .alongWith(new InstantCommand(() -> driveToHPStationCommand.end(false))));
 
     drive.setDefaultCommand(
         DriveCommands.FPSDrive(
@@ -273,26 +274,23 @@ public class RobotContainer {
 
     // // dealgifier binds
     operatorController
-            .pov(90)
-            .whileTrue(
-              new InstantCommand(deAlgifier::incrementSetpoint)
-            );
+        .pov(90)
+        .whileTrue(
+            new InstantCommand(deAlgifier::incrementSetpoint));
 
     operatorController
-            .pov(270)
-            .whileTrue(
-              new InstantCommand(deAlgifier::decrementSetpoint)
-            );
-
-    
+        .pov(270)
+        .whileTrue(
+            new InstantCommand(deAlgifier::decrementSetpoint));
 
     // operatorController
-    //         .pov(270)
-    //         .whileTrue(
-    //           new RepeatCommand(new InstantCommand(deAlgifier::decrementSetpoint))
-    //         );
+    // .pov(270)
+    // .whileTrue(
+    // new RepeatCommand(new InstantCommand(deAlgifier::decrementSetpoint))
+    // );
 
-    //operatorController.pov(270).whileTrue(new InstantCommand(deAlgifier::setblahblah));
+    // operatorController.pov(270).whileTrue(new
+    // InstantCommand(deAlgifier::setblahblah));
     // operatorController.b().toggleOnTrue(DeAlgifierCommands.toggleDealgifierCommand(deAlgifier));
 
     // operatorController
@@ -327,10 +325,10 @@ public class RobotContainer {
 
   private boolean isJoystickMoved() {
     // Check if there's significant joystick movement
-    return Math.abs(driverController.getLeftY()) > 0.5 ||
-        Math.abs(driverController.getLeftX()) > 0.5 ||
-        Math.abs(driverController.getRightX()) > 0.5 ||
-        Math.abs(driverController.getRightY()) > 0.5;
+    return Math.abs(driverController.getLeftY()) > 0.2 ||
+        Math.abs(driverController.getLeftX()) > 0.2 ||
+        Math.abs(driverController.getRightX()) > 0.2 ||
+        Math.abs(driverController.getRightY()) > 0.2;
     // return driverController.axisMagnitudeGreaterThan(0, 0.5).getAsBoolean();
   }
 }

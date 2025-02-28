@@ -112,6 +112,8 @@ public class DriveToHPStationCommand extends Command {
         closestPose = pose;
       }
     }
+    //rotate because intake is at back of the robot
+    closestPose = closestPose.rotateBy(new Rotation2d(Units.degreesToRadians(90)));
 
     Pose2d inFrontOfAprilTag = translateCoord(closestPose, closestPose.getRotation().getDegrees(),
         -Units.inchesToMeters(23.773));

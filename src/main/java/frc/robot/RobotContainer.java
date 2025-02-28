@@ -272,6 +272,27 @@ public class RobotContainer {
     // 2)).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false));
 
     // // dealgifier binds
+    operatorController
+            .pov(90)
+            .whileTrue(
+              new InstantCommand(deAlgifier::incrementSetpoint)
+            );
+
+    operatorController
+            .pov(270)
+            .whileTrue(
+              new InstantCommand(deAlgifier::decrementSetpoint)
+            );
+
+    
+
+    // operatorController
+    //         .pov(270)
+    //         .whileTrue(
+    //           new RepeatCommand(new InstantCommand(deAlgifier::decrementSetpoint))
+    //         );
+
+    //operatorController.pov(270).whileTrue(new InstantCommand(deAlgifier::setblahblah));
     // operatorController.b().toggleOnTrue(DeAlgifierCommands.toggleDealgifierCommand(deAlgifier));
 
     // operatorController

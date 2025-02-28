@@ -18,6 +18,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -40,8 +41,16 @@ public class DriveToHPStationCommand extends Command {
   @Override
   public void initialize() {
     Pose2d closestHPStationAprilTagPose = getClosestHPStationAprilTagPose();
+
+    Pose2d inFrontAwayPose = rotatePose(
+        translateCoord(closestHPStationAprilTagPose, closestHPStationAprilTagPose.getRotation().getDegrees(), -0.5),
+        180);
+    Pose2d inFrontFullPose = rotatePose(
+        closestHPStationAprilTagPose,
+        180);
+
     Command pathfindPath = AutoBuilder.pathfindToPose(
-      translateCoord(closestHPStationAprilTagPose, closestHPStationAprilTagPose.getRotation().getDegrees(), -0.5),
+        inFrontAwayPose,
         new PathConstraints(
             3.0, 4.0,
             Units.degreesToRadians(540), Units.degreesToRadians(720)));
@@ -50,12 +59,11 @@ public class DriveToHPStationCommand extends Command {
       // Load the path you want to follow using its name in the GUI
       PathPlannerPath pathToFront = new PathPlannerPath(
           PathPlannerPath.waypointsFromPoses(
-            translateCoord(closestHPStationAprilTagPose, closestHPStationAprilTagPose.getRotation().getDegrees(), -0.5),
-              closestHPStationAprilTagPose),
+              inFrontAwayPose,
+              inFrontFullPose),
           new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI),
-          null, 
-          new GoalEndState(0.0, closestHPStationAprilTagPose.getRotation())
-      );
+          null,
+          new GoalEndState(0.0, inFrontFullPose.getRotation()));
       pathToFront.preventFlipping = true;
       fullPath = pathfindPath.andThen(AutoBuilder.followPath(pathToFront));
       fullPath.schedule();
@@ -95,7 +103,6 @@ public class DriveToHPStationCommand extends Command {
     Pose2d currentPose = drive.getPose();
     Pose2d closestPose = new Pose2d();
     double closestDistance = Double.MAX_VALUE;
-    Integer aprilTagNum = -1;
 
     for (Map.Entry<Integer, Pose2d> entry : aprilTagsToAlignTo.entrySet()) {
       Pose2d pose = entry.getValue();
@@ -103,7 +110,6 @@ public class DriveToHPStationCommand extends Command {
       if (distance < closestDistance) {
         closestDistance = distance;
         closestPose = pose;
-        aprilTagNum = entry.getKey();
       }
     }
 
@@ -122,5 +128,10 @@ public class DriveToHPStationCommand extends Command {
 
   private double findDistanceBetween(Pose2d pose1, Pose2d pose2) {
     return Math.sqrt(Math.pow((pose2.getX() - pose1.getX()), 2) + Math.pow((pose2.getY() - pose1.getY()), 2));
+  }
+
+  private Pose2d rotatePose(Pose2d originalPose, double deg) {
+    return new Pose2d(originalPose.getX(), originalPose.getY(),
+        new Rotation2d(Units.degreesToRadians(originalPose.getRotation().getDegrees() - deg)));
   }
 }

@@ -18,6 +18,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -25,26 +26,31 @@ import frc.robot.AprilTagPositions;
 import frc.robot.subsystems.Drive.Drive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class DriveToNearestReefSideCommand extends Command {
+public class DriveToHPStationCommand extends Command {
   private Command fullPath;
   private Drive drive;
-  private boolean isLeftBumper = false;
 
-  /** Creates a new DriveToNearestReefSideCommand. */
-  public DriveToNearestReefSideCommand(Drive drive, boolean isLeftBumper) {
+  /** Creates a new DriveToHPStationCommand. */
+  public DriveToHPStationCommand(Drive drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.drive = drive;
-    this.isLeftBumper = isLeftBumper;
-
     addRequirements(drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose2d closestAprilTagPose = getClosestReefAprilTagPose();
+    Pose2d closestHPStationAprilTagPose = getClosestHPStationAprilTagPose();
+
+    Pose2d inFrontAwayPose = rotatePose(
+        translateCoord(closestHPStationAprilTagPose, closestHPStationAprilTagPose.getRotation().getDegrees(), -1.5),
+        180);
+    Pose2d inFrontFullPose = rotatePose(
+        closestHPStationAprilTagPose,
+        180);
+
     Command pathfindPath = AutoBuilder.pathfindToPose(
-      translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -1.5),
+        inFrontAwayPose,
         new PathConstraints(
             2.5, 3.5,
             Units.degreesToRadians(540), Units.degreesToRadians(720)));
@@ -53,12 +59,11 @@ public class DriveToNearestReefSideCommand extends Command {
       // Load the path you want to follow using its name in the GUI
       PathPlannerPath pathToFront = new PathPlannerPath(
           PathPlannerPath.waypointsFromPoses(
-            translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -1.5),
-              closestAprilTagPose),
-          new PathConstraints(2, 2, 2 * Math.PI, 4 * Math.PI),
-          null, 
-          new GoalEndState(0.0, closestAprilTagPose.getRotation())
-      );
+              inFrontAwayPose,
+              inFrontFullPose),
+          new PathConstraints(2.5, 2.0, 2 * Math.PI, 4 * Math.PI),
+          null,
+          new GoalEndState(0.0, inFrontFullPose.getRotation()));
       pathToFront.preventFlipping = true;
       fullPath = pathfindPath.andThen(AutoBuilder.followPath(pathToFront));
       fullPath.schedule();
@@ -69,8 +74,7 @@ public class DriveToNearestReefSideCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
@@ -86,19 +90,18 @@ public class DriveToNearestReefSideCommand extends Command {
     return false;
   }
 
-  private Pose2d getClosestReefAprilTagPose() {
-    HashMap<Integer, Pose2d> aprilTagsToAlignTo = AprilTagPositions.WELDED_BLUE_CORAL_APRIL_TAG_POSITIONS;
+  private Pose2d getClosestHPStationAprilTagPose() {
+    HashMap<Integer, Pose2d> aprilTagsToAlignTo = AprilTagPositions.WELDED_BLUE_HP_STATION_APRIL_TAG_POSITIONS;
     Optional<DriverStation.Alliance> alliance = DriverStation.getAlliance();
     if (alliance.isPresent()) {
       if (alliance.get() == DriverStation.Alliance.Red) {
-        aprilTagsToAlignTo = AprilTagPositions.WELDED_RED_CORAL_APRIL_TAG_POSITIONS;
+        aprilTagsToAlignTo = AprilTagPositions.WELDED_RED_HP_STATION_APRIL_TAG_POSITIONS;
       }
     }
 
     Pose2d currentPose = drive.getPose();
     Pose2d closestPose = new Pose2d();
     double closestDistance = Double.MAX_VALUE;
-    Integer aprilTagNum = -1;
 
     for (Map.Entry<Integer, Pose2d> entry : aprilTagsToAlignTo.entrySet()) {
       Pose2d pose = entry.getValue();
@@ -106,29 +109,17 @@ public class DriveToNearestReefSideCommand extends Command {
       if (distance < closestDistance) {
         closestDistance = distance;
         closestPose = pose;
-        aprilTagNum = entry.getKey();
       }
     }
+    // rotate because intake is at back of the robot
+    // closestPose = rotatePose(closestPose, 180);
 
     Pose2d inFrontOfAprilTag = translateCoord(closestPose, closestPose.getRotation().getDegrees(),
-        -Units.inchesToMeters(15.773));
+        -Units.inchesToMeters(23.773));
 
-    Pose2d leftOrRightOfAprilTag;
-    if (isLeftBumper) {
-      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.1540265-0.0254);
-    } else {
-      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.1540265+0.0254);
-    }
+    System.out.println(inFrontOfAprilTag);
 
-    if (List.of(11, 10, 9, 22, 21, 20).contains(aprilTagNum)) {
-      if (isLeftBumper) {
-        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.1540265+0.0254);
-      } else {
-        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.1540265-0.0254);
-      }
-    }
-
-    return leftOrRightOfAprilTag;
+    return inFrontOfAprilTag;
   }
 
   private Pose2d translateCoord(Pose2d originalPose, double degreesRotate, double distance) {
@@ -140,5 +131,10 @@ public class DriveToNearestReefSideCommand extends Command {
 
   private double findDistanceBetween(Pose2d pose1, Pose2d pose2) {
     return Math.sqrt(Math.pow((pose2.getX() - pose1.getX()), 2) + Math.pow((pose2.getY() - pose1.getY()), 2));
+  }
+
+  private Pose2d rotatePose(Pose2d originalPose, double deg) {
+    return new Pose2d(originalPose.getX(), originalPose.getY(),
+        new Rotation2d(Units.degreesToRadians(originalPose.getRotation().getDegrees() - deg)));
   }
 }

@@ -27,8 +27,10 @@ public class EndEffectorCommands {
 
         return Commands.run(() -> {
             endEffector.runBackSpeed(EndEffectorConstants.BACK_SPEED*multiplier);
+            endEffector.runFrontSpeed(-.05);
         }, endEffector).finallyDo(() -> {
             endEffector.stopBack();
+            endEffector.stopFront(); //TODO: fix naming
         });
     }
     

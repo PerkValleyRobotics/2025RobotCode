@@ -46,7 +46,10 @@ public class DeAlgifierIOSparkMax implements DeAlgifierIO {
                                 .idleMode(IdleMode.kBrake)
                                 .smartCurrentLimit(DeAlgifierConstants.ALGAE_PIVOT_CURRENT_LIMIT)
                                 .voltageCompensation(12)
-                                .inverted(false);
+                                .inverted(false)
+                                .softLimit
+                                .reverseSoftLimit(0)
+                                .forwardSoftLimit(-.4);
                 pivotConfig.encoder
                                 .positionConversionFactor(DeAlgifierConstants.PIVOT_POSITION_CONVERSION_FACTOR)
                                 .uvwMeasurementPeriod(10)
@@ -66,7 +69,7 @@ public class DeAlgifierIOSparkMax implements DeAlgifierIO {
 
                 wheelConfig
                                 .idleMode(IdleMode.kCoast)
-                                .smartCurrentLimit(DeAlgifierConstants.ALGAE_PIVOT_CURRENT_LIMIT)
+                                .smartCurrentLimit(DeAlgifierConstants.ALGAE_PIVOT_CURRENT_LIMIT) // TODO: fix constant name
                                 .voltageCompensation(12.0)
                                 .inverted(false);
                 wheelConfig.encoder

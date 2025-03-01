@@ -19,16 +19,19 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
+import frc.robot.commands.DriveToHPStationCommand;
 import frc.robot.commands.DriveToNearestReefSideCommand;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DeAlgifierCommands;
@@ -127,6 +130,10 @@ public class RobotContainer {
         });
         deAlgifier = new DeAlgifier(new DeAlgifierIO() {
         });
+        endEffector = new EndEffector(new EndEffectorIO() {
+        });
+        deAlgifier = new DeAlgifier(new DeAlgifierIO() {
+        });
         break;
 
       default:
@@ -175,15 +182,22 @@ public class RobotContainer {
 
   private void configureBindings() {
 
+    // reef auto drive binds
+    // reef auto drive binds
     Command driveToNearestReefSideCommandLeft = new DriveToNearestReefSideCommand(drive,
         true);
     Command driveToNearestReefSideCommandRight = new DriveToNearestReefSideCommand(drive,
         false);
     driverController.leftBumper().onTrue(driveToNearestReefSideCommandLeft);
-
     driverController.rightBumper().onTrue(driveToNearestReefSideCommandRight);
+    // hp station auto drive binds
+    // hp station auto drive binds
+    Command driveToHPStationCommand = new DriveToHPStationCommand(drive);
+    driverController.a().onTrue(driveToHPStationCommand);
+    // stop auto drive when move joysticks
     joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
-        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));
+        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false)))
+        .alongWith(new InstantCommand(() -> driveToHPStationCommand.end(false))));
 
     drive.setDefaultCommand(
         DriveCommands.FPSDrive(
@@ -225,18 +239,18 @@ public class RobotContainer {
                 drive)
                 .ignoringDisable(true));
     driverController
-        .b()
+      .b()
         .onTrue(
-            Commands.runOnce(
-                () -> drive.setPose(
-                    new Pose2d(new Translation2d(), new Rotation2d())),
-                drive)
-                .ignoringDisable(true));
+          Commands.runOnce(
+            () -> drive.setPose(
+              new Pose2d(new Translation2d(), new Rotation2d())),
+            drive)
+            .ignoringDisable(true));
 
     // driverController
-    // .x()
-    // .whileTrue(
-    // DriveCommands.feedforwardCharacterization(drive));
+    //     .x()
+    //     .whileTrue(
+    //       DriveCommands.feedforwardCharacterization(drive));
 
     // Elevator setpoints
     operatorController
@@ -246,43 +260,70 @@ public class RobotContainer {
     operatorController
         .b()
         .onTrue(
-            new InstantCommand(elevator::gotoL1));
+          new InstantCommand(elevator::gotoL1)
+        );
     operatorController
         .x()
         .onTrue(
-            new InstantCommand(elevator::gotoL2));
+          new InstantCommand(elevator::gotoL2)
+        );
     operatorController
         .y()
         .onTrue(
-            new InstantCommand(elevator::gotoL3));
+          new InstantCommand(elevator::gotoL3)
+        );
 
     // Manual elevator control
     operatorController
-        .pov(0)
-        .whileTrue(
-            new RepeatCommand(new InstantCommand(elevator::incrementSetpoint)));
-
+      .pov(0)
+      .whileTrue(
+        new RepeatCommand(new InstantCommand(elevator::incrementSetpoint))
+      );
+    
     operatorController
-        .pov(180)
-        .whileTrue(
-            new RepeatCommand(new InstantCommand(elevator::decrementSetpoint)));
+      .pov(180)
+      .whileTrue(
+        new RepeatCommand(new InstantCommand(elevator::decrementSetpoint))
+      );
 
     // End effector binds
     operatorController.leftBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
     operatorController.rightBumper().whileTrue(EndEffectorCommands.runBackCommand(endEffector, 1));
-    // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
-    // false, false, 1));
+    // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false, 1));
 
-    operatorController.leftBumper().and(operatorController.back())
-        .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
-    operatorController.rightBumper().and(operatorController.back())
-        .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -1));
-    // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
-    // false, false, -1));
-    // operatorController.a().and(() -> !(coralSensor.getDistance() <
-    // 2)).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false));
+    operatorController.leftBumper().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
+    operatorController.rightBumper().and(operatorController.back()).whileTrue(EndEffectorCommands.runBackCommand(endEffector, -1));
+    // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false, -1));
+    // operatorController.a().and(() -> !(coralSensor.getDistance() < 2)).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false));
 
     // // dealgifier binds
+    // operatorController
+    //     .pov(90)
+    //     .whileTrue(
+    //         DeAlgifierCommands.toggleDealgifierCommand(deAlgifier));
+
+    // operatorController
+    // .pov(270)
+    // .whileTrue(
+    // new InstantCommand(deAlgifier::in));
+
+    operatorController
+        .pov(90)
+        .onTrue(
+            new SequentialCommandGroup(new InstantCommand(deAlgifier::out), new InstantCommand(deAlgifier::runWheel)));
+    operatorController
+        .pov(270)
+        .onTrue(
+            new SequentialCommandGroup(new InstantCommand(deAlgifier::in), new InstantCommand(deAlgifier::stopWheel)));
+
+    // operatorController
+    // .pov(270)
+    // .whileTrue(
+    // new RepeatCommand(new InstantCommand(deAlgifier::decrementSetpoint))
+    // );
+
+    // operatorController.pov(270).whileTrue(new
+    // InstantCommand(deAlgifier::setblahblah));
     // operatorController.b().toggleOnTrue(DeAlgifierCommands.toggleDealgifierCommand(deAlgifier));
 
     // operatorController
@@ -317,10 +358,10 @@ public class RobotContainer {
 
   private boolean isJoystickMoved() {
     // Check if there's significant joystick movement
-    return Math.abs(driverController.getLeftY()) > 0.5 ||
-        Math.abs(driverController.getLeftX()) > 0.5 ||
-        Math.abs(driverController.getRightX()) > 0.5 ||
-        Math.abs(driverController.getRightY()) > 0.5;
+    return Math.abs(driverController.getLeftY()) > 0.2 ||
+        Math.abs(driverController.getLeftX()) > 0.2 ||
+        Math.abs(driverController.getRightX()) > 0.2 ||
+        Math.abs(driverController.getRightY()) > 0.2;
     // return driverController.axisMagnitudeGreaterThan(0, 0.5).getAsBoolean();
   }
 }

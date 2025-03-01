@@ -23,6 +23,8 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.VisionIO.PoseObservationType;
 
+import static frc.robot.IsAutoAligning.*;
+
 public class Vision extends SubsystemBase {
   private final VisionConsumer consumer;
   private final VisionIO[] io;
@@ -97,10 +99,10 @@ public class Vision extends SubsystemBase {
             || observation.pose().getX() > aprilTagLayout.getFieldLength()
             || observation.pose().getY() < 0.0
             || observation.pose().getY() > aprilTagLayout.getFieldWidth();
-        
-        // Add pose to log 
+
+        // Add pose to log
         robotPoses.add(observation.pose());
-        if(rejectPose) {
+        if (rejectPose) {
           robotPosesRejected.add(observation.pose());
         } else {
           robotPosesAccepted.add(observation.pose());
@@ -112,24 +114,25 @@ public class Vision extends SubsystemBase {
         }
 
         // Calculate statndard deviation
-        double stdDevFactor =
-          Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
+        double stdDevFactor = Math.pow(observation.averageTagDistance(), 2.0) / observation.tagCount();
         double linearStdDev = linearStdDevBaseline * stdDevFactor;
         double angularStdDev = angularStdDevBaseline * stdDevFactor;
         if (observation.type() == PoseObservationType.MEGATAG_2) {
           linearStdDev *= linearStdDevMegatag2Factor;
           angularStdDev *= angularStdDevMegatag2Factor;
         }
-        if(cameraIndex < cameraStdDevFactors.length) {
+        if (cameraIndex < cameraStdDevFactors.length) {
           linearStdDev *= cameraStdDevFactors[cameraIndex];
           angularStdDev *= cameraStdDevFactors[cameraIndex];
         }
 
         // Send vision observation
-        consumer.accept(
-          observation.pose().toPose2d(),
-          observation.timestamp(), 
-          VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+        // if (!isAutoAligning) {
+          consumer.accept(
+              observation.pose().toPose2d(),
+              observation.timestamp(),
+              VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
+        // }
       }
 
       // Log camera data

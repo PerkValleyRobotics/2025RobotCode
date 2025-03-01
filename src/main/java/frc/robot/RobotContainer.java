@@ -6,8 +6,11 @@ package frc.robot;
 
 import static frc.robot.subsystems.Vision.VisionConstants.*;
 
+import java.util.function.BooleanSupplier;
+
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -88,6 +91,8 @@ public class RobotContainer {
 
   private final LoggedDashboardChooser<Command> autoChooser;
 
+  private BooleanSupplier isAutoAligning = () -> false;
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -126,10 +131,6 @@ public class RobotContainer {
         elevator = new Elevator(
             new ElevatorIOSim());
 
-        endEffector = new EndEffector(new EndEffectorIO() {
-        });
-        deAlgifier = new DeAlgifier(new DeAlgifierIO() {
-        });
         endEffector = new EndEffector(new EndEffectorIO() {
         });
         deAlgifier = new DeAlgifier(new DeAlgifierIO() {
@@ -192,19 +193,19 @@ public class RobotContainer {
     driverController.rightBumper().onTrue(driveToNearestReefSideCommandRight);
     // hp station auto drive binds
     // hp station auto drive binds
-    Command driveToHPStationCommand = new DriveToHPStationCommand(drive);
-    driverController.a().onTrue(driveToHPStationCommand);
+    // Command driveToHPStationCommand = new DriveToHPStationCommand(drive);
+    // driverController.a().onTrue(driveToHPStationCommand);
     // stop auto drive when move joysticks
     joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
-        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false)))
-        .alongWith(new InstantCommand(() -> driveToHPStationCommand.end(false))));
+        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));
+        // .alongWith(new InstantCommand(() -> driveToHPStationCommand.end(false))));
 
     drive.setDefaultCommand(
         DriveCommands.FPSDrive(
             drive,
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX()));
+            () -> -driverController.getRightX()).finallyDo(()->{new InstantCommand(() -> drive.stop());}));
     driverController
         .y()
         .whileTrue(
@@ -230,14 +231,14 @@ public class RobotContainer {
     // ChassisSpeeds(driverController.getLeftTriggerAxis(), 0,
     // Units.degreesToRadians(90))))));
     // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
-    driverController
-        .x()
-        .onTrue(
-            Commands.runOnce(
-                () -> drive.setPose(
-                    new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-                drive)
-                .ignoringDisable(true));
+    // driverController
+    //     .x()
+    //     .onTrue(
+    //         Commands.runOnce(
+    //             () -> drive.setPose(
+    //                 new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+    //             drive)
+    //             .ignoringDisable(true));
     driverController
       .b()
         .onTrue(
@@ -247,10 +248,10 @@ public class RobotContainer {
             drive)
             .ignoringDisable(true));
 
-    // driverController
-    //     .x()
-    //     .whileTrue(
-    //       DriveCommands.feedforwardCharacterization(drive));
+    driverController
+        .x()
+        .whileTrue(
+          DriveCommands.feedforwardCharacterization(drive));
 
     // Elevator setpoints
     operatorController
@@ -308,11 +309,11 @@ public class RobotContainer {
     // new InstantCommand(deAlgifier::in));
 
     operatorController
-        .pov(90)
+        .pov(270)
         .onTrue(
             new SequentialCommandGroup(new InstantCommand(deAlgifier::out), new InstantCommand(deAlgifier::runWheel)));
     operatorController
-        .pov(270)
+        .pov(90)
         .onTrue(
             new SequentialCommandGroup(new InstantCommand(deAlgifier::in), new InstantCommand(deAlgifier::stopWheel)));
 

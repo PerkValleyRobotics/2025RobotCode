@@ -9,7 +9,7 @@ public class EndEffectorConstants {
 
     public static final double SPIN_FACTOR = 0.5;
 
-    public static final double FRONT_RIGHT_SPEED = 0.35;
-    public static final double FRONT_LEFT_SPEED = -0.35;
+    public static final double FRONT_RIGHT_SPEED = 0.5;
+    public static final double FRONT_LEFT_SPEED = -0.5;
     public static final double BACK_SPEED = 0.5;
 }

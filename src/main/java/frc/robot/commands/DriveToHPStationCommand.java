@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import static frc.robot.IsAutoAligning.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class DriveToHPStationCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    isAutoAligning = true;
     Pose2d closestHPStationAprilTagPose = getClosestHPStationAprilTagPose();
 
     Pose2d inFrontAwayPose = rotatePose(
@@ -74,7 +76,8 @@ public class DriveToHPStationCommand extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -82,6 +85,7 @@ public class DriveToHPStationCommand extends Command {
     if (fullPath != null) {
       fullPath.cancel();
     }
+    isAutoAligning = false;
   }
 
   // Returns true when the command should end.

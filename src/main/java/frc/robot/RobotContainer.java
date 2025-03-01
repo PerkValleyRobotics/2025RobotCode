@@ -130,10 +130,6 @@ public class RobotContainer {
         });
         deAlgifier = new DeAlgifier(new DeAlgifierIO() {
         });
-        endEffector = new EndEffector(new EndEffectorIO() {
-        });
-        deAlgifier = new DeAlgifier(new DeAlgifierIO() {
-        });
         break;
 
       default:
@@ -213,11 +209,6 @@ public class RobotContainer {
                 () -> -driverController.getLeftY() / 2,
                 () -> -driverController.getLeftX() / 2,
                 () -> -driverController.getRightX() / 2));
-            DriveCommands.FPSDrive(
-                drive,
-                () -> -driverController.getLeftY() / 2,
-                () -> -driverController.getLeftX() / 2,
-                () -> -driverController.getRightX() / 2));
     // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     driverController
         .x()
@@ -230,11 +221,6 @@ public class RobotContainer {
     driverController
         .b()
         .onTrue(
-            Commands.runOnce(
-                () -> drive.setPose(
-                    new Pose2d(new Translation2d(), new Rotation2d())),
-                drive)
-                .ignoringDisable(true));
             Commands.runOnce(
                 () -> drive.setPose(
                     new Pose2d(new Translation2d(), new Rotation2d())),
@@ -255,21 +241,17 @@ public class RobotContainer {
         .a()
         .onTrue(
             new InstantCommand(elevator::home));
-            new InstantCommand(elevator::home));
     operatorController
         .b()
         .onTrue(
-            new InstantCommand(elevator::gotoL1));
             new InstantCommand(elevator::gotoL1));
     operatorController
         .x()
         .onTrue(
             new InstantCommand(elevator::gotoL2));
-            new InstantCommand(elevator::gotoL2));
     operatorController
         .y()
         .onTrue(
-            new InstantCommand(elevator::gotoL3));
             new InstantCommand(elevator::gotoL3));
 
     // Manual elevator control
@@ -278,14 +260,7 @@ public class RobotContainer {
         .whileTrue(
             new RepeatCommand(new InstantCommand(elevator::incrementSetpoint)));
 
-        .pov(0)
-        .whileTrue(
-            new RepeatCommand(new InstantCommand(elevator::incrementSetpoint)));
-
     operatorController
-        .pov(180)
-        .whileTrue(
-            new RepeatCommand(new InstantCommand(elevator::decrementSetpoint)));
         .pov(180)
         .whileTrue(
             new RepeatCommand(new InstantCommand(elevator::decrementSetpoint)));

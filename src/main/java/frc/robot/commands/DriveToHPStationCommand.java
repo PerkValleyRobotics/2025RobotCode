@@ -43,7 +43,7 @@ public class DriveToHPStationCommand extends Command {
     Pose2d closestHPStationAprilTagPose = getClosestHPStationAprilTagPose();
 
     Pose2d inFrontAwayPose = rotatePose(
-        translateCoord(closestHPStationAprilTagPose, closestHPStationAprilTagPose.getRotation().getDegrees(), -0.5),
+        translateCoord(closestHPStationAprilTagPose, closestHPStationAprilTagPose.getRotation().getDegrees(), -1.5),
         180);
     Pose2d inFrontFullPose = rotatePose(
         closestHPStationAprilTagPose,
@@ -52,7 +52,7 @@ public class DriveToHPStationCommand extends Command {
     Command pathfindPath = AutoBuilder.pathfindToPose(
         inFrontAwayPose,
         new PathConstraints(
-            3.0, 4.0,
+            2.5, 3.5,
             Units.degreesToRadians(540), Units.degreesToRadians(720)));
 
     try {
@@ -61,7 +61,7 @@ public class DriveToHPStationCommand extends Command {
           PathPlannerPath.waypointsFromPoses(
               inFrontAwayPose,
               inFrontFullPose),
-          new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI),
+          new PathConstraints(2.5, 2.0, 2 * Math.PI, 4 * Math.PI),
           null,
           new GoalEndState(0.0, inFrontFullPose.getRotation()));
       pathToFront.preventFlipping = true;

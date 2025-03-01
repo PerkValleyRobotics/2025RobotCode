@@ -44,18 +44,18 @@ public class DriveToNearestReefSideCommand extends Command {
   public void initialize() {
     Pose2d closestAprilTagPose = getClosestReefAprilTagPose();
     Command pathfindPath = AutoBuilder.pathfindToPose(
-      translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -0.5),
+      translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -1.5),
         new PathConstraints(
-            3.0, 4.0,
+            2.5, 3.5,
             Units.degreesToRadians(540), Units.degreesToRadians(720)));
 
     try {
       // Load the path you want to follow using its name in the GUI
       PathPlannerPath pathToFront = new PathPlannerPath(
           PathPlannerPath.waypointsFromPoses(
-            translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -0.5),
+            translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -1.5),
               closestAprilTagPose),
-          new PathConstraints(3.0, 3.0, 2 * Math.PI, 4 * Math.PI),
+          new PathConstraints(2, 2, 2 * Math.PI, 4 * Math.PI),
           null, 
           new GoalEndState(0.0, closestAprilTagPose.getRotation())
       );
@@ -115,16 +115,16 @@ public class DriveToNearestReefSideCommand extends Command {
 
     Pose2d leftOrRightOfAprilTag;
     if (isLeftBumper) {
-      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.1432265);
+      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.1540265-0.0254);
     } else {
-      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.1432265);
+      leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.1540265+0.0254);
     }
 
     if (List.of(11, 10, 9, 22, 21, 20).contains(aprilTagNum)) {
       if (isLeftBumper) {
-        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.1432265);
+        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, -0.1540265+0.0254);
       } else {
-        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.1432265);
+        leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90, 0.1540265-0.0254);
       }
     }
 

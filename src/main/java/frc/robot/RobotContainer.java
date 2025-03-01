@@ -130,6 +130,10 @@ public class RobotContainer {
         });
         deAlgifier = new DeAlgifier(new DeAlgifierIO() {
         });
+        endEffector = new EndEffector(new EndEffectorIO() {
+        });
+        deAlgifier = new DeAlgifier(new DeAlgifierIO() {
+        });
         break;
 
       default:
@@ -179,6 +183,7 @@ public class RobotContainer {
   private void configureBindings() {
 
     // reef auto drive binds
+    // reef auto drive binds
     Command driveToNearestReefSideCommandLeft = new DriveToNearestReefSideCommand(drive,
         true);
     Command driveToNearestReefSideCommandRight = new DriveToNearestReefSideCommand(drive,
@@ -186,11 +191,13 @@ public class RobotContainer {
     driverController.leftBumper().onTrue(driveToNearestReefSideCommandLeft);
     driverController.rightBumper().onTrue(driveToNearestReefSideCommandRight);
     // hp station auto drive binds
+    // hp station auto drive binds
     Command driveToHPStationCommand = new DriveToHPStationCommand(drive);
     driverController.a().onTrue(driveToHPStationCommand);
     // stop auto drive when move joysticks
     joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
-        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));
+        .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false)))
+        .alongWith(new InstantCommand(() -> driveToHPStationCommand.end(false))));
 
     drive.setDefaultCommand(
         DriveCommands.FPSDrive(
@@ -201,6 +208,11 @@ public class RobotContainer {
     driverController
         .y()
         .whileTrue(
+            DriveCommands.FPSDrive(
+                drive,
+                () -> -driverController.getLeftY() / 2,
+                () -> -driverController.getLeftX() / 2,
+                () -> -driverController.getRightX() / 2));
             DriveCommands.FPSDrive(
                 drive,
                 () -> -driverController.getLeftY() / 2,
@@ -223,28 +235,41 @@ public class RobotContainer {
                     new Pose2d(new Translation2d(), new Rotation2d())),
                 drive)
                 .ignoringDisable(true));
+            Commands.runOnce(
+                () -> drive.setPose(
+                    new Pose2d(new Translation2d(), new Rotation2d())),
+                drive)
+                .ignoringDisable(true));
 
     // driverController
     // .x()
     // .whileTrue(
     // DriveCommands.feedforwardCharacterization(drive));
+    // .x()
+    // .whileTrue(
+    // DriveCommands.feedforwardCharacterization(drive));
 
+    // Elevator setpoints
     // Elevator setpoints
     operatorController
         .a()
         .onTrue(
             new InstantCommand(elevator::home));
+            new InstantCommand(elevator::home));
     operatorController
         .b()
         .onTrue(
+            new InstantCommand(elevator::gotoL1));
             new InstantCommand(elevator::gotoL1));
     operatorController
         .x()
         .onTrue(
             new InstantCommand(elevator::gotoL2));
+            new InstantCommand(elevator::gotoL2));
     operatorController
         .y()
         .onTrue(
+            new InstantCommand(elevator::gotoL3));
             new InstantCommand(elevator::gotoL3));
 
     // Manual elevator control
@@ -253,17 +278,35 @@ public class RobotContainer {
         .whileTrue(
             new RepeatCommand(new InstantCommand(elevator::incrementSetpoint)));
 
+        .pov(0)
+        .whileTrue(
+            new RepeatCommand(new InstantCommand(elevator::incrementSetpoint)));
+
     operatorController
+        .pov(180)
+        .whileTrue(
+            new RepeatCommand(new InstantCommand(elevator::decrementSetpoint)));
         .pov(180)
         .whileTrue(
             new RepeatCommand(new InstantCommand(elevator::decrementSetpoint)));
 
     // End effector binds
+    // End effector binds
     operatorController.leftBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
     operatorController.rightBumper().whileTrue(EndEffectorCommands.runBackCommand(endEffector, 1));
     // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
     // false, false, 1));
+    // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
+    // false, false, 1));
 
+    operatorController.leftBumper().and(operatorController.back())
+        .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
+    operatorController.rightBumper().and(operatorController.back())
+        .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -1));
+    // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
+    // false, false, -1));
+    // operatorController.a().and(() -> !(coralSensor.getDistance() <
+    // 2)).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false));
     operatorController.leftBumper().and(operatorController.back())
         .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
     operatorController.rightBumper().and(operatorController.back())
@@ -335,10 +378,10 @@ public class RobotContainer {
 
   private boolean isJoystickMoved() {
     // Check if there's significant joystick movement
-    return Math.abs(driverController.getLeftY()) > 0.5 ||
-        Math.abs(driverController.getLeftX()) > 0.5 ||
-        Math.abs(driverController.getRightX()) > 0.5 ||
-        Math.abs(driverController.getRightY()) > 0.5;
+    return Math.abs(driverController.getLeftY()) > 0.2 ||
+        Math.abs(driverController.getLeftX()) > 0.2 ||
+        Math.abs(driverController.getRightX()) > 0.2 ||
+        Math.abs(driverController.getRightY()) > 0.2;
     // return driverController.axisMagnitudeGreaterThan(0, 0.5).getAsBoolean();
   }
 }

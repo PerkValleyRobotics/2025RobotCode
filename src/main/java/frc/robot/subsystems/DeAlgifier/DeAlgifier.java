@@ -49,22 +49,21 @@ public class DeAlgifier extends SubsystemBase {
     // wheel functions
     public void runWheel(boolean spinFactor) {
         if (spinFactor)
-            io.setWheelSpeed(DeAlgifierConstants.WHEEL_SPEED / DeAlgifierConstants.WHEEL_SPEED_FACTOR);
-        else
             io.setWheelSpeed(DeAlgifierConstants.WHEEL_SPEED);
+        else
+            io.setWheelSpeed(-DeAlgifierConstants.WHEEL_SPEED);
+    }
+
+    public void runWheel() {
+        runWheel(false);
     }
 
     public void stopWheel() {
         io.setWheelSpeed(0);
-        io.setWheelSpeed(0);
-    }
-
-    public void setblahblah() {
-        io.setdealgeasped(.75);
     }
 
     public void out() {
-        gotoPos(-0.4);
+        gotoPos(-0.25);
     }
 
     public void in() {

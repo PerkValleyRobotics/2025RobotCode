@@ -69,7 +69,7 @@ public class DeAlgifierIOSparkMax implements DeAlgifierIO {
 
                 wheelConfig
                                 .idleMode(IdleMode.kCoast)
-                                .smartCurrentLimit(DeAlgifierConstants.ALGAE_PIVOT_CURRENT_LIMIT)
+                                .smartCurrentLimit(DeAlgifierConstants.ALGAE_PIVOT_CURRENT_LIMIT) // TODO: fix constant name
                                 .voltageCompensation(12.0)
                                 .inverted(false);
                 wheelConfig.encoder
@@ -124,11 +124,6 @@ public class DeAlgifierIOSparkMax implements DeAlgifierIO {
         public void setWheelSpeed(double speed)
         {
                 deAlgifierWheelSparkMax.set(speed);
-        }
-
-        @Override
-        public void setdealgeasped(double speed) {
-                deAlgifierArmPivotSparkMax.set(speed);
         }
 
 }

@@ -19,14 +19,11 @@ public class DeAlgifierCommands {
         return Commands.runOnce(
                 () -> {
                     deAlgifier.runWheel(true);
-                    deAlgifier.gotoPos(DeAlgifierConstants.PIVOT_TARGET_LOCATION
-                    );
-                }).finallyDo(
+                    deAlgifier.out();
+                }, deAlgifier).finallyDo(
                         () -> {
                             deAlgifier.stopWheel();
-                            deAlgifier.gotoPos(0);
+                            deAlgifier.in();
                         });
-
     }
-
 }

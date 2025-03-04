@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4864754098360655,
-        "y": 7.16577868852459
+        "x": 5.873975409836065,
+        "y": 5.978995901639344
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7364754098360655,
-        "y": 7.16577868852459
+        "x": 6.186828829489088,
+        "y": 6.042942804111681
       },
       "isLocked": false,
-      "linkedName": "CoralStation"
+      "linkedName": "SideJI"
     },
     {
       "anchor": {
-        "x": 3.560348360655738,
-        "y": 5.661
+        "x": 5.3235,
+        "y": 5.077999999999999
       },
       "prevControl": {
-        "x": 3.3231776067575374,
-        "y": 5.581942846652822
+        "x": 5.087462200961518,
+        "y": 4.995621863185251
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SideKL"
+      "linkedName": "ReefI"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.25511870305778
+    "rotation": -124.11447294534112
   },
   "reversed": false,
   "folder": "Scoring Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.354350835379655
+    "rotation": -127.0424747730829
   },
   "useDefaultConstraints": true
 }

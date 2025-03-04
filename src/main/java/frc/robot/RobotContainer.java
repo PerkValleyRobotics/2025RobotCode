@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -103,6 +104,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    boolean COMPETITION_MODE = true;
+
     switch (Constants.currentMode) {
       case REAL:
         // coralSensor = new CoralSensor(new CoralSensorIOReal());
@@ -167,20 +171,24 @@ public class RobotContainer {
         });
         break;
     }
-    
+
     // elevator auton
     NamedCommands.registerCommand("GoToHome", new InstantCommand(elevator::home));
     NamedCommands.registerCommand("GoToL1", new InstantCommand(elevator::gotoL1));
     NamedCommands.registerCommand("GoToL2", new InstantCommand(elevator::gotoL2));
     NamedCommands.registerCommand("GoToL3", new InstantCommand(elevator::gotoL3));
     NamedCommands.registerCommand("GoToL4", new InstantCommand(elevator::gotoL4));
-    NamedCommands.registerCommand("RunFrontAndBack", EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.45));
+    NamedCommands.registerCommand("RunFrontAndBack",
+        EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.45));
     NamedCommands.registerCommand("RunBackMotor", EndEffectorCommands.runBackCommand(endEffector, 1).withTimeout(1));
-    NamedCommands.registerCommand("StartAndStopDetection", new InstantCommand(() -> isDetectionAllowed = true).withTimeout(.2).withTimeout(.2).finallyDo(()->new InstantCommand(() -> isDetectionAllowed = false)));
-    
+    NamedCommands.registerCommand("StartAndStopDetection", new InstantCommand(() -> isDetectionAllowed = true)
+        .withTimeout(.2).withTimeout(.2).finallyDo(() -> new InstantCommand(() -> isDetectionAllowed = false)));
 
+    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooserWithOptionsModifier(
+        (stream) -> COMPETITION_MODE
+            ? stream.filter(auto -> auto.getName().startsWith("(comp)"))
+            : stream));
 
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     configureBindings();
   }
 
@@ -216,14 +224,16 @@ public class RobotContainer {
     // stop auto drive when move joysticks
     joystickMoveTrigger.whileTrue(new InstantCommand(() -> driveToNearestReefSideCommandLeft.end(false))
         .alongWith(new InstantCommand(() -> driveToNearestReefSideCommandRight.end(false))));
-        // .alongWith(new InstantCommand(() -> driveToHPStationCommand.end(false))));
+    // .alongWith(new InstantCommand(() -> driveToHPStationCommand.end(false))));
 
     drive.setDefaultCommand(
         DriveCommands.FPSDrive(
             drive,
             () -> -driverController.getLeftY(),
             () -> -driverController.getLeftX(),
-            () -> -driverController.getRightX()).finallyDo(()->{new InstantCommand(() -> drive.stop());}));
+            () -> -driverController.getRightX()).finallyDo(() -> {
+              new InstantCommand(() -> drive.stop());
+            }));
     driverController
         .y()
         .whileTrue(
@@ -237,12 +247,12 @@ public class RobotContainer {
     driverController.leftTrigger(0.25).whileTrue(DriveCommands.RelativeDrive(
         drive,
         () -> 0,
-        () -> driverController.getLeftTriggerAxis()*0.5,
+        () -> driverController.getLeftTriggerAxis() * 0.5,
         () -> 0));
     driverController.rightTrigger(0.25).whileTrue(DriveCommands.RelativeDrive(
         drive,
         () -> 0,
-        () -> -driverController.getRightTriggerAxis()*0.5,
+        () -> -driverController.getRightTriggerAxis() * 0.5,
         () -> 0));
     // driverController.leftTrigger(0.25).whileTrue(new InstantCommand(() ->
     // drive.runVelocity(ChassisSpeeds.fromFieldRelativeSpeeds(new
@@ -250,26 +260,26 @@ public class RobotContainer {
     // Units.degreesToRadians(90))))));
     // m_driverController.x().onTrue(Commands.runOnce(drive::stopWithX, drive));
     // driverController
-    //     .x()
-    //     .onTrue(
-    //         Commands.runOnce(
-    //             () -> drive.setPose(
-    //                 new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
-    //             drive)
-    //             .ignoringDisable(true));
+    // .x()
+    // .onTrue(
+    // Commands.runOnce(
+    // () -> drive.setPose(
+    // new Pose2d(drive.getPose().getTranslation(), new Rotation2d())),
+    // drive)
+    // .ignoringDisable(true));
     driverController
-      .b()
+        .b()
         .onTrue(
-          Commands.runOnce(
-            () -> drive.setPose(
-              new Pose2d(new Translation2d(), new Rotation2d())),
-            drive)
-            .ignoringDisable(true));
+            Commands.runOnce(
+                () -> drive.setPose(
+                    new Pose2d(new Translation2d(), new Rotation2d())),
+                drive)
+                .ignoringDisable(true));
 
     driverController
         .x()
         .whileTrue(
-          DriveCommands.feedforwardCharacterization(drive));
+            DriveCommands.feedforwardCharacterization(drive));
 
     // Elevator setpoints
     operatorController
@@ -279,47 +289,49 @@ public class RobotContainer {
     operatorController
         .b()
         .onTrue(
-          new InstantCommand(elevator::gotoL1)
-        );
+            new InstantCommand(elevator::gotoL1));
     operatorController
         .x()
         .onTrue(
-          new InstantCommand(elevator::gotoL2)
-        );
+            new InstantCommand(elevator::gotoL2));
     operatorController
         .y()
         .onTrue(
-          new InstantCommand(elevator::gotoL3)
-        );
+            new InstantCommand(elevator::gotoL3));
 
     // Manual elevator control
     // operatorController
-    //   .pov(0)
-    //   .whileTrue(
-    //     new RepeatCommand(new InstantCommand(elevator::incrementSetpoint))
-    //   );
-    
+    // .pov(0)
+    // .whileTrue(
+    // new RepeatCommand(new InstantCommand(elevator::incrementSetpoint))
+    // );
+
     // operatorController
-    //   .pov(180)
-    //   .whileTrue(
-    //     new RepeatCommand(new InstantCommand(elevator::decrementSetpoint))
-    //   );
+    // .pov(180)
+    // .whileTrue(
+    // new RepeatCommand(new InstantCommand(elevator::decrementSetpoint))
+    // );
 
     // End effector binds
     operatorController.leftBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
     operatorController.rightBumper().whileTrue(EndEffectorCommands.runBackCommand(endEffector, 1));
-    // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false, 1));
+    // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
+    // false, false, 1));
 
-    operatorController.leftBumper().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
-    operatorController.rightBumper().and(operatorController.back()).whileTrue(EndEffectorCommands.runBackCommand(endEffector, -1));
-    // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false, -1));
-    // operatorController.a().and(() -> !(coralSensor.getDistance() < 2)).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false));
+    operatorController.leftBumper().and(operatorController.back())
+        .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
+    operatorController.rightBumper().and(operatorController.back())
+        .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -1));
+    // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
+    // false, false, -1));
+    // operatorController.a().and(() -> !(coralSensor.getDistance() <
+    // 2)).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false));
 
     // // dealgifier binds
     // operatorController
-    //     .pov(90)
-    //     .whileTrue(
-    //         DeAlgifierCommands.toggleDealgifierCommand(deAlgifier));
+    // .pov(90)
+    // .whileTrue(
+    // DeAlgifierCommands.toggleDealgifierCommand(deAlgifier));
 
     // operatorController
     // .pov(270)

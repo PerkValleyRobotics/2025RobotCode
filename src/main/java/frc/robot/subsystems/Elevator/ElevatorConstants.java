@@ -21,9 +21,9 @@ public class ElevatorConstants {
     public static final double ELEVATOR_DOWN_FF = 0.0;
 
     // Pid Constants
-    public static final double ELEVATOR_UP_P = 20;
+    public static final double ELEVATOR_UP_P = 18;
     public static final double ELEVATOR_UP_I = 0.0;//0.00075;
-    public static final double ELEVATOR_UP_D = 9;
+    public static final double ELEVATOR_UP_D = 6;
     public static final double ELEVATOR_UP_FF = 0.0;
 
     // public static final double ELEVATOR_MAX_ACCELERATION = 4200;
@@ -33,6 +33,6 @@ public class ElevatorConstants {
     public static final double L0_HEIGHT = 0.02;
     public static final double L1_HEIGHT = 0.5;
     public static final double L2_HEIGHT = 1.8238;
-    public static final double L3_HEIGHT = 3.1380;
+    public static final double L3_HEIGHT = 3.145;
     public static final double L4_HEIGHT = 0.0;
 }

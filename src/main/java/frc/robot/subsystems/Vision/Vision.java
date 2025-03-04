@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.VisionIO.PoseObservationType;
 
-import static frc.robot.IsAutoAligning.*;
+import static frc.robot.IsDetectionAllowed.*;
 
 public class Vision extends SubsystemBase {
   private final VisionConsumer consumer;
@@ -127,12 +127,12 @@ public class Vision extends SubsystemBase {
         }
 
         // Send vision observation
-        // if (!isAutoAligning) {
+        if (isDetectionAllowed) {
           consumer.accept(
               observation.pose().toPose2d(),
               observation.timestamp(),
               VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
-        // }
+        }
       }
 
       // Log camera data

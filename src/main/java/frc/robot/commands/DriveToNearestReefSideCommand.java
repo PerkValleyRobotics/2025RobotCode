@@ -27,9 +27,6 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.AprilTagPositions;
 import frc.robot.subsystems.Drive.Drive;
 
-
-import static frc.robot.IsAutoAligning.*;
-
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class DriveToNearestReefSideCommand extends Command {
   private Command fullPath;
@@ -48,7 +45,6 @@ public class DriveToNearestReefSideCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    isAutoAligning = true;
     Pose2d closestAprilTagPose = getClosestReefAprilTagPose();
     Command pathfindPath = AutoBuilder.pathfindToPose(
       translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -1.5),
@@ -88,7 +84,6 @@ public class DriveToNearestReefSideCommand extends Command {
     if (fullPath != null) {
       fullPath.cancel();
     }
-    isAutoAligning = true;
   }
 
   // Returns true when the command should end.

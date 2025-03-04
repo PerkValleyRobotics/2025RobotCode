@@ -9,6 +9,8 @@ import static frc.robot.subsystems.Vision.VisionConstants.*;
 import java.util.function.BooleanSupplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
+
+import com.fasterxml.jackson.databind.node.IntNode;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -68,6 +70,8 @@ import frc.robot.subsystems.Vision.Vision;
 import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 import frc.robot.subsystems.Vision.VisionIOPhotonVisionSim;
+
+import static frc.robot.IsDetectionAllowed.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -165,14 +169,14 @@ public class RobotContainer {
     }
     
     // elevator auton
+    NamedCommands.registerCommand("GoToHome", new InstantCommand(elevator::home));
     NamedCommands.registerCommand("GoToL1", new InstantCommand(elevator::gotoL1));
     NamedCommands.registerCommand("GoToL2", new InstantCommand(elevator::gotoL2));
     NamedCommands.registerCommand("GoToL3", new InstantCommand(elevator::gotoL3));
     NamedCommands.registerCommand("GoToL4", new InstantCommand(elevator::gotoL4));
-    NamedCommands.registerCommand("RunFrontAndBack", EndEffectorCommands.runFrontAndBack(endEffector, 1));
-    NamedCommands.registerCommand("RunBackMotor", EndEffectorCommands.runBackCommand(endEffector, 1));
-
-    
+    NamedCommands.registerCommand("RunFrontAndBack", EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.45));
+    NamedCommands.registerCommand("RunBackMotor", EndEffectorCommands.runBackCommand(endEffector, 1).withTimeout(1));
+    NamedCommands.registerCommand("StartAndStopDetection", new InstantCommand(() -> isDetectionAllowed = true).withTimeout(.2).withTimeout(.2).finallyDo(()->new InstantCommand(() -> isDetectionAllowed = false)));
     
 
 
@@ -289,17 +293,17 @@ public class RobotContainer {
         );
 
     // Manual elevator control
-    operatorController
-      .pov(0)
-      .whileTrue(
-        new RepeatCommand(new InstantCommand(elevator::incrementSetpoint))
-      );
+    // operatorController
+    //   .pov(0)
+    //   .whileTrue(
+    //     new RepeatCommand(new InstantCommand(elevator::incrementSetpoint))
+    //   );
     
-    operatorController
-      .pov(180)
-      .whileTrue(
-        new RepeatCommand(new InstantCommand(elevator::decrementSetpoint))
-      );
+    // operatorController
+    //   .pov(180)
+    //   .whileTrue(
+    //     new RepeatCommand(new InstantCommand(elevator::decrementSetpoint))
+    //   );
 
     // End effector binds
     operatorController.leftBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));

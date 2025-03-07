@@ -21,6 +21,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.AprilTagPositions;
 import frc.robot.subsystems.Vision.VisionIO.PoseObservationType;
 
 import static frc.robot.IsDetectionAllowed.*;
@@ -100,6 +101,9 @@ public class Vision extends SubsystemBase {
             || observation.pose().getY() < 0.0
             || observation.pose().getY() > aprilTagLayout.getFieldWidth();
 
+        // if (findDistanceBetween(observation.pose().toPose2d(), tagPoses.get(tagPoses.size()-1).toPose2d()) > 2.5) {
+        //   rejectPose = true;
+        // }
         // Add pose to log
         robotPoses.add(observation.pose());
         if (rejectPose) {
@@ -173,5 +177,9 @@ public class Vision extends SubsystemBase {
         Pose2d visionRobotPoseMeters,
         double timestampSeconds,
         Matrix<N3, N1> visionMeasurementStdDevs);
+  }
+
+  private double findDistanceBetween(Pose2d pose1, Pose2d pose2) {
+    return Math.sqrt(Math.pow((pose2.getX() - pose1.getX()), 2) + Math.pow((pose2.getY() - pose1.getY()), 2));
   }
 }

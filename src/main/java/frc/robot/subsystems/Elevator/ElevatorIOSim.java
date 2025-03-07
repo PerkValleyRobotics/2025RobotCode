@@ -86,4 +86,9 @@ public class ElevatorIOSim implements ElevatorIO {
         controller.setSetpoint(setPoint);
         Logger.recordOutput("Elevator/Setpoint", setPoint);
     }
+
+    @Override
+    public double getPosition() {
+        return controller.getSetpoint();
+    }
 }

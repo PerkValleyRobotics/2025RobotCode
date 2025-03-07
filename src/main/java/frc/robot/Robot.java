@@ -14,7 +14,7 @@ import org.littletonrobotics.urcl.URCL;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import frc.robot.commands.ElevatorCommands;
 
 import static frc.robot.IsDetectionAllowed.*;
 
@@ -113,6 +113,7 @@ public class Robot extends LoggedRobot {
     // continue until interrupted by another command, remove
     // this line or comment it out.
     isDetectionAllowed = true;
+    m_robotContainer.elevator.home();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

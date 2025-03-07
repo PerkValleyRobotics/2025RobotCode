@@ -86,7 +86,7 @@ public class RobotContainer {
 
   private final Drive drive;
   private final Vision vision;
-  private final Elevator elevator;
+  public final Elevator elevator;
   // private final CoralSensor coralSensor;
   private final EndEffector endEffector;
   private final DeAlgifier deAlgifier;
@@ -175,10 +175,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("GoToL3", new InstantCommand(elevator::gotoL3));
     NamedCommands.registerCommand("GoToL4", new InstantCommand(elevator::gotoL4));
     NamedCommands.registerCommand("RunFrontAndBack",
-        EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.45));
-    NamedCommands.registerCommand("RunBackMotor", EndEffectorCommands.runBackCommand(endEffector, 1).withTimeout(1));
+        EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.4));
+    NamedCommands.registerCommand("RunBackMotor", EndEffectorCommands.runBackCommand(endEffector, 1).withTimeout(.4));
     NamedCommands.registerCommand("StartAndStopDetection", new InstantCommand(() -> isDetectionAllowed = true)
-        .withTimeout(.2).withTimeout(.2).finallyDo(() -> new InstantCommand(() -> isDetectionAllowed = false)));
+        .withTimeout(.2).finallyDo(() -> new InstantCommand(() -> isDetectionAllowed = false)));
 
     autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
     configureBindings();
@@ -319,6 +319,7 @@ public class RobotContainer {
         .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
     operatorController.rightBumper().and(operatorController.back())
         .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -1));
+    operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -.9));
     // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
     // false, false, -1));
     // operatorController.a().and(() -> !(coralSensor.getDistance() <

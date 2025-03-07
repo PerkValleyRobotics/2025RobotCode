@@ -43,6 +43,9 @@ public class Elevator extends SubsystemBase {
   }
 
   public void gotoPos(double goal) {
+    if (io.getPosition() < 0.01 && goal == 0) {
+      return;
+    }
     if(goal <= L0_HEIGHT) {
       goal = L0_HEIGHT;
     }

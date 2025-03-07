@@ -25,4 +25,6 @@ public interface ElevatorIO {
 
     // Run the motors to the specified position
     public default void setPosition(double position) {}
+
+    public default double getPosition() {return 0;}
 }

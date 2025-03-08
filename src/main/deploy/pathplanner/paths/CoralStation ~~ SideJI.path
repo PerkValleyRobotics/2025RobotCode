@@ -8,27 +8,32 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7364754098360655,
-        "y": 7.16577868852459
+        "x": 2.576448050603954,
+        "y": 6.850705753341055
       },
       "isLocked": false,
       "linkedName": "CoralStation"
     },
     {
       "anchor": {
-        "x": 3.560348360655738,
-        "y": 5.661
+        "x": 5.873975409836065,
+        "y": 5.978995901639344
       },
       "prevControl": {
-        "x": 3.3231776067575374,
-        "y": 5.581942846652822
+        "x": 5.006727100559853,
+        "y": 6.202855136581775
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SideKL"
+      "linkedName": "SideJI"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.25511870305778
+    "rotation": -127.0424747730829
   },
   "reversed": false,
   "folder": "Scoring Paths",

@@ -22,6 +22,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -103,6 +104,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    boolean COMPETITION_MODE = true;
+
     switch (Constants.currentMode) {
       case REAL:
         // coralSensor = new CoralSensor(new CoralSensorIOReal());
@@ -174,13 +178,12 @@ public class RobotContainer {
     NamedCommands.registerCommand("GoToL2", new InstantCommand(elevator::gotoL2));
     NamedCommands.registerCommand("GoToL3", new InstantCommand(elevator::gotoL3));
     NamedCommands.registerCommand("GoToL4", new InstantCommand(elevator::gotoL4));
-    NamedCommands.registerCommand("RunFrontAndBack",
-        EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.4));
-    NamedCommands.registerCommand("RunBackMotor", EndEffectorCommands.runBackCommand(endEffector, 1).withTimeout(.4));
-    NamedCommands.registerCommand("StartAndStopDetection", new InstantCommand(() -> isDetectionAllowed = true)
-        .withTimeout(.2).finallyDo(() -> new InstantCommand(() -> isDetectionAllowed = false)));
+    NamedCommands.registerCommand("RunFrontAndBack", EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.45));
+    NamedCommands.registerCommand("RunBackMotor", EndEffectorCommands.runBackCommand(endEffector, 1).withTimeout(1));
+    NamedCommands.registerCommand("StartAndStopDetection", new InstantCommand(() -> isDetectionAllowed = true).withTimeout(.2).withTimeout(.2).finallyDo(()->new InstantCommand(() -> isDetectionAllowed = false)));
+    
 
-    autoChooser = new LoggedDashboardChooser<>("Auto Choices", AutoBuilder.buildAutoChooser());
+
     configureBindings();
   }
 

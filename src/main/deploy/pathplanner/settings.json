@@ -4,10 +4,13 @@
   "holonomicMode": true,
   "pathFolders": [
     "Loading Paths",
+    "Misc folder",
     "Scoring Paths",
     "Starting Paths"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "Misc"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

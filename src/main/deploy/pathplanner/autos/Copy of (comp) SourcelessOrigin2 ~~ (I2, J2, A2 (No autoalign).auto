@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "StartAndStopDetection"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -61,12 +55,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "StartAndStopDetection"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -89,12 +77,6 @@
           "type": "path",
           "data": {
             "pathName": "CoralStation ~~ SideJI"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartAndStopDetection"
           }
         },
         {
@@ -167,12 +149,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "StartAndStopDetection"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -195,7 +171,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 2.15
+                        "waitTime": 1.27
                       }
                     }
                   ]

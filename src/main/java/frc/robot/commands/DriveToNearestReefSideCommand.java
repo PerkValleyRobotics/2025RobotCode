@@ -130,19 +130,19 @@ public class DriveToNearestReefSideCommand extends Command {
     if (!centerAlign) {
       if (isLeftBumper) {
         leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90,
-            0.1540265 - 0.0254);
+            0.1540265);// - 0.0254);
       } else {
         leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90,
-            -0.1540265 + 0.0254);
+            -0.1540265);// + 0.0254);
       }
 
       if (List.of(11, 10, 9, 22, 21, 20).contains(aprilTagNum)) {
         if (isLeftBumper) {
           leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90,
-              -0.1540265 + 0.0254);
+              -0.1540265);// + 0.0254);
         } else {
           leftOrRightOfAprilTag = translateCoord(inFrontOfAprilTag, closestPose.getRotation().getDegrees() + 90,
-              0.1540265 - 0.0254);
+              0.1540265);// - 0.0254);
         }
       }
     } else {

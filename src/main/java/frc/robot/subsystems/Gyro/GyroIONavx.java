@@ -9,7 +9,7 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.subsystems.Drive.SparkOdometryThread;
 
 public class GyroIONavx implements GyroIO {
-    private final AHRS navx = new AHRS(AHRS.NavXComType.kMXP_SPI, (byte) ODOMETRY_FREQUENCY);
+    private final AHRS navx = new AHRS(AHRS.NavXComType.kUSB1, (byte) ODOMETRY_FREQUENCY);
     private final Queue<Double> yawPositionQueue;
     private final Queue<Double> yawTimestampQueue;
 

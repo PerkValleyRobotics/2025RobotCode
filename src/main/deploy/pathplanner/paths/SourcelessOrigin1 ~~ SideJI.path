@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.079713114754098,
-        "y": 4.77
+        "x": 7.708094262295082,
+        "y": 7.555379098360655
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.518411271381007,
-        "y": 4.5723112997426245
+        "x": 8.14679241892199,
+        "y": 7.35769039810328
       },
       "isLocked": false,
       "linkedName": "SourcelessOrigin1"

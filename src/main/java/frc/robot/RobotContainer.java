@@ -180,9 +180,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("GoToL3", new InstantCommand(elevator::gotoL3));
         NamedCommands.registerCommand("GoToL4", new InstantCommand(elevator::gotoL4));
         NamedCommands.registerCommand("RunFrontAndBack",
-                EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.45));
+                EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.5));
         NamedCommands.registerCommand("RunBackMotor",
-                EndEffectorCommands.runBackCommand(endEffector, 1).withTimeout(1));
+                EndEffectorCommands.runBackCommand(endEffector, .8).withTimeout(1.2).finallyDo(() -> EndEffectorCommands.runFrontAndBack(endEffector, -1).withTimeout(0.05)));
         NamedCommands.registerCommand("StartAndStopDetection", new InstantCommand(() -> isDetectionAllowed = true)
                 .withTimeout(.2).withTimeout(.2).finallyDo(() -> new InstantCommand(() -> isDetectionAllowed = false)));
 
@@ -327,7 +327,7 @@ public class RobotContainer {
         operatorController.leftBumper().and(operatorController.back())
                 .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
         operatorController.rightBumper().and(operatorController.back())
-                .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -1));
+                .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
         operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -.9));
         // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
         // false, false, -1));

@@ -9,7 +9,8 @@
     "Starting Paths"
   ],
   "autoFolders": [
-    "Misc"
+    "Misc",
+    "CompAutons"
   ],
   "defaultMaxVel": 3.5,
   "defaultMaxAccel": 3.0,

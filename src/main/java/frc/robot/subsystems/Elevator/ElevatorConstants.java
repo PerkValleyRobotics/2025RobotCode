@@ -32,7 +32,7 @@ public class ElevatorConstants {
     // Reef Heights
     public static final double L0_HEIGHT = 0.02;
     public static final double L1_HEIGHT = 0.5;
-    public static final double L2_HEIGHT = 1.8238;
-    public static final double L3_HEIGHT = 3.155;
+    public static final double L2_HEIGHT = 1.83;
+    public static final double L3_HEIGHT = 3.165;
     public static final double L4_HEIGHT = 0.0;
 }

@@ -220,6 +220,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "CompAutons",
   "choreoAuto": false
 }

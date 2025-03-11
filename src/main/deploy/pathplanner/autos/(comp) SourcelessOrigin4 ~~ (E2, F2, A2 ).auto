@@ -5,39 +5,25 @@
     "data": {
       "commands": [
         {
+          "type": "path",
+          "data": {
+            "pathName": "SourcelessOrigin4 ~~ SideEF"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartAndStopDetection"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "parallel",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "SourcelessOrigin2 ~~ ReefI"
-                      }
-                    },
-                    {
-                      "type": "sequential",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.7
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "StartAndStopDetection"
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
+                  "pathName": "SideEF ~~ ReefE"
                 }
               },
               {
@@ -87,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ReefI ~~ CoralStation"
+                  "pathName": "ReefE ~~ CoralStation2"
                 }
               }
             ]
@@ -102,7 +88,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CoralStation ~~ SideJI"
+            "pathName": "CoralStation2 ~~ SideEF"
           }
         },
         {
@@ -118,7 +104,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "SideJI ~~ ReefJ"
+                  "pathName": "SideEF ~~ ReefF"
                 }
               },
               {
@@ -139,12 +125,6 @@
                     }
                   ]
                 }
-              },
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": []
-                }
               }
             ]
           }
@@ -162,7 +142,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "ReefJ ~~ CoralStation"
+                  "pathName": "ReefF ~~ CoralStation2"
                 }
               },
               {
@@ -183,7 +163,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CoralStation ~~ SideAB"
+            "pathName": "CoralStation2 ~~ SideAB"
           }
         },
         {

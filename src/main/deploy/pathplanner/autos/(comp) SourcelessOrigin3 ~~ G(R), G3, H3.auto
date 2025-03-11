@@ -1,0 +1,176 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SourcelessOrigin3 ~~ SideGH"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartAndStopDetection"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "SideGH ~~ CenterGH"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "GoToL2"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "RunDeAlgifier"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToHome"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartAndStopDetection"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CenterGH ~~ ReefG"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "GoToL3"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RunFrontAndBack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartAndStopDetection"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ReefG ~~ CoralStation"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "GoToHome"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RunBackMotor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CoralStation ~~ SideGH"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartAndStopDetection"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SideGH ~~ ReefH"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "GoToL3"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "CompAutons",
+  "choreoAuto": false
+}

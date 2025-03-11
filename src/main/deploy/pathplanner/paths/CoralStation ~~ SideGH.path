@@ -3,45 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.73175,
-        "y": 4.0055
+        "x": 1.174795081967213,
+        "y": 7.255686475409835
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.31720081967213,
-        "y": 3.7058073770491804
+        "x": 2.1345132769047224,
+        "y": 6.950098105320699
       },
       "isLocked": false,
-      "linkedName": "SourcelessOrigin3"
+      "linkedName": "CoralStation"
     },
     {
       "anchor": {
-        "x": 3.8720286885296025,
-        "y": 2.5145491803281423
+        "x": 5.499,
+        "y": 5.77025
       },
       "prevControl": {
-        "x": 4.979011235111722,
-        "y": 1.9192849807509638
+        "x": 5.0625082089176665,
+        "y": 6.272834613124782
       },
       "nextControl": {
-        "x": 2.6013319672181274,
-        "y": 3.197848360656012
+        "x": 5.826344691972107,
+        "y": 5.393339348449579
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.16875,
-        "y": 4.181
+        "x": 6.318,
+        "y": 4.0055
       },
       "prevControl": {
-        "x": 2.9609631147591107,
-        "y": 3.221823770492078
+        "x": 6.174088874863513,
+        "y": 5.223836477582537
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefA"
+      "linkedName": "SideGH"
     }
   ],
   "rotationTargets": [],
@@ -58,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 179.02897806892088
   },
   "reversed": false,
-  "folder": "Starting Paths",
+  "folder": "Scoring Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -53.354350835379655
   },
   "useDefaultConstraints": true
 }

@@ -69,18 +69,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "GoToHome"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartAndStopDetection"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
@@ -88,6 +76,18 @@
                 "type": "path",
                 "data": {
                   "pathName": "ReefI ~~ CoralStation"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartAndStopDetection"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "GoToHome"
                 }
               }
             ]
@@ -100,25 +100,39 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "CoralStation ~~ SideJI"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartAndStopDetection"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "parallel",
                 "data": {
-                  "pathName": "SideJI ~~ ReefJ"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "CoralStation ~~ ReefJ"
+                      }
+                    },
+                    {
+                      "type": "sequential",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.7
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "StartAndStopDetection"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -138,12 +152,6 @@
                       }
                     }
                   ]
-                }
-              },
-              {
-                "type": "parallel",
-                "data": {
-                  "commands": []
                 }
               }
             ]
@@ -170,6 +178,12 @@
                 "data": {
                   "name": "GoToHome"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "StartAndStopDetection"
+                }
               }
             ]
           }
@@ -181,27 +195,9 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "CoralStation ~~ SideAB"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartAndStopDetection"
-          }
-        },
-        {
           "type": "parallel",
           "data": {
             "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SideAB ~~ ReefA"
-                }
-              },
               {
                 "type": "sequential",
                 "data": {
@@ -216,6 +212,38 @@
                       "type": "wait",
                       "data": {
                         "waitTime": 1.27
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "parallel",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "CoralStation ~~ ReefA"
+                      }
+                    },
+                    {
+                      "type": "sequential",
+                      "data": {
+                        "commands": [
+                          {
+                            "type": "wait",
+                            "data": {
+                              "waitTime": 0.7
+                            }
+                          },
+                          {
+                            "type": "named",
+                            "data": {
+                              "name": "StartAndStopDetection"
+                            }
+                          }
+                        ]
                       }
                     }
                   ]

@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.40575,
-        "y": 4.6295
+        "x": 6.766500000000001,
+        "y": 4.28825
       },
       "isLocked": false,
       "linkedName": "ReefG"
@@ -44,12 +44,7 @@
       "linkedName": "CoralStation"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0,
-      "rotationDegrees": 0.0
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -69,7 +64,7 @@
   "folder": "Loading Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -178.26429541107166
   },
   "useDefaultConstraints": true
 }

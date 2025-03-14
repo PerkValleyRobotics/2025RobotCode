@@ -1,6 +1,6 @@
 package frc.robot.subsystems.Intake;
 
-import org.littletonrobotics.junction.AutoLog;
+// import org.littletonrobotics.junction.AutoLog;
 
 public interface IntakeIO {
     @AutoLog
@@ -14,7 +14,7 @@ public interface IntakeIO {
 
     public default void updateInputs(IntakeIOInputs inputs) {}
 
-    public default void setPosition(double position) {}
+//     public default void setPosition(double position) {}
 
-    // public default void getPosition() {return 0;}
-}
+//     // public default void getPosition() {return 0;}
+// }

@@ -88,7 +88,7 @@ public class RobotContainer {
         private final Drive drive;
         private final Vision vision;
         public final Elevator elevator;
-        // private final CoralSensor coralSensor;
+        private final CoralSensor coralSensor;
         private final EndEffector endEffector;
         private final DeAlgifier deAlgifier;
 
@@ -335,7 +335,7 @@ public class RobotContainer {
 
                 // End effector binds
                 operatorController.leftBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
-                operatorController.rightBumper().whileTrue(EndEffectorCommands.runBackCommand(endEffector, 1));
+                operatorController.rightBumper().whileTrue(EndEffectorCommands.runSmartIntake(endEffector, coralSensor, 1));
                 // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 // false, false, 1));
 

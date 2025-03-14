@@ -47,6 +47,9 @@ import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.ElevatorGotoHeightCommand;
 import frc.robot.commands.EndEffectorCommands;
 import frc.robot.commands.ManualElevatorCommand;
+import frc.robot.subsystems.CoralSensor.CoralSensor;
+import frc.robot.subsystems.CoralSensor.CoralSensorIO;
+import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
 // import frc.robot.subsystems.CoralSensor.CoralSensor;
 // import frc.robot.subsystems.CoralSensor.CoralSensorIO;
 // import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
@@ -335,7 +338,8 @@ public class RobotContainer {
 
                 // End effector binds
                 operatorController.leftBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
-                operatorController.rightBumper().whileTrue(EndEffectorCommands.runSmartIntake(endEffector, coralSensor, 1));
+                operatorController.rightBumper()
+                                .whileTrue(EndEffectorCommands.runSmartIntake(endEffector, coralSensor, 1));
                 // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 // false, false, 1));
 

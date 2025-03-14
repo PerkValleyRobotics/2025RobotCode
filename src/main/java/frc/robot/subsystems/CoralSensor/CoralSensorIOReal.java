@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.CoralSensor;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 
 /** Add your docs here. */
 public class CoralSensorIOReal implements CoralSensorIO {

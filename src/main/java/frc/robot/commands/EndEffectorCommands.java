@@ -6,6 +6,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.CoralSensor.CoralSensor;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
@@ -14,9 +17,10 @@ public class EndEffectorCommands {
     public EndEffectorCommands() {
     }
 
-    public static Command runFrontMotors(EndEffector endEffector, boolean leftSlowed, boolean rightSlowed, double multiplier) {
+    public static Command runFrontMotors(EndEffector endEffector, boolean leftSlowed, boolean rightSlowed,
+            double multiplier) {
         return Commands.run(() -> {
-            endEffector.runFrontSpeed(EndEffectorConstants.FRONT_RIGHT_SPEED*multiplier);
+            endEffector.runFrontSpeed(EndEffectorConstants.FRONT_RIGHT_SPEED * multiplier);
         }, endEffector).finallyDo(
                 () -> {
                     endEffector.stopFront();
@@ -26,18 +30,18 @@ public class EndEffectorCommands {
     public static Command runBackCommand(EndEffector endEffector, double multiplier) {
 
         return Commands.run(() -> {
-            endEffector.runBackSpeed(EndEffectorConstants.BACK_SPEED*multiplier);
+            endEffector.runBackSpeed(EndEffectorConstants.BACK_SPEED * multiplier);
             endEffector.runFrontSpeed(-.5);
         }, endEffector).finallyDo(() -> {
             endEffector.stopBack();
-            endEffector.stopFront(); //TODO: fix naming
+            endEffector.stopFront(); // TODO: fix naming
         });
     }
-    
+
     public static Command runFrontAndBack(EndEffector endEffector, double multiplier) {
         return Commands.run(() -> {
-            endEffector.runBackSpeed(0.25*multiplier);
-            endEffector.runFrontSpeed(0.25*multiplier);
+            endEffector.runBackSpeed(0.25 * multiplier);
+            endEffector.runFrontSpeed(0.25 * multiplier);
         }, endEffector).finallyDo(() -> {
             endEffector.stopBack();
             endEffector.stopFront();
@@ -45,16 +49,18 @@ public class EndEffectorCommands {
     }
 
     public static Command runSmartIntake(EndEffector endEffector, CoralSensor coralSensor, double multiplier) {
-        return new Trigger(() -> coralSensor.isCoralDetected());
-.whileTrue(Commands.run(() -> {
-            endEffector.runBackSpeed(0.25*multiplier);
-            endEffector.runFrontSpeed(0.25*multiplier);
-        }, endEffector).finallyDo(() -> {
-            endEffector.stopBack();
-            endEffector.stopFront();
-        })).finallyDo(() -> {
-            endEffector.stopBack();
-            endEffector.stopFront();
-        });
+        return Commands.run(() -> {
+            new Trigger(() -> coralSensor.isCoralDetected())
+                    .whileTrue(Commands.run(() -> {
+                        endEffector.runBackSpeed(0.25 * multiplier);
+                        endEffector.runFrontSpeed(0.25 * multiplier);
+                    }, endEffector).finallyDo(() -> {
+                        endEffector.stopBack();
+                        endEffector.stopFront();
+                    })).onFalse(new InstantCommand(() -> {
+                        endEffector.stopBack();
+                        endEffector.stopFront();
+                    }));
+        }, endEffector);
     }
 }

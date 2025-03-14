@@ -4,16 +4,16 @@
 
 package frc.robot.subsystems.CoralSensor;
 
-import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class CoralSensor extends SubsystemBase {
-  private CoralSensorIOInputs io;
+  private CoralSensorIO io;
   private final CoralSensorIOInputsAutoLogged inputs = new CoralSensorIOInputsAutoLogged();
+
   /** Creates a new CoralSensor. */
-  public CoralSensor(CoralSensorIOInputs io) {
+  public CoralSensor(CoralSensorIO io) {
     this.io = io;
   }
 

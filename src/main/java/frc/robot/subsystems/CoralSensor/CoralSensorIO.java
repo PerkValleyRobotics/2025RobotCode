@@ -11,5 +11,7 @@ public interface CoralSensorIO {
     public static class CoralSensorIOInputs {
         public boolean state = false;
     }
-    public default void updateInputs(CoralSensorIOInputs inputs) {}
+
+    public default void updateInputs(CoralSensorIOInputs inputs) {
+    }
 }

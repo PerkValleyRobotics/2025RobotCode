@@ -1,18 +1,18 @@
-package frc.robot.subsystems.Insteak;
+package frc.robot.subsystems.Intake;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public class InsteakIO {
+public interface IntakeIO {
     @AutoLog
-    public static class InsteakIOInputs {
+    public static class IntakeIOInputs {
         public double positionRads = 0.0;
-        
+
         public boolean connected = false;
         public double appliedVolts = 0.0;
         public double currentAmps = 0.0;
     }
 
-    public default void updateInputs(InsteakIOInputs inputs) {}
+    public default void updateInputs(IntakeIOInputs inputs) {}
 
     public default void setPosition(double position) {}
 

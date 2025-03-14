@@ -1,19 +1,19 @@
-package frc.robot.subsystems.Insteak;
+package frc.robot.subsystems.Intake;
 
-import static frc.robot.subsystems.Insteak.InsteakConstants.*;
+import static frc.robot.subsystems.Intake.IntakeConstants.*;
 
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Insteak extends SubsystemBase {
-    private InsteakIO io;
-    private final InsteakIOInputsAutoLogged inputs = new InsteakIOInputsAutoLogged();
+public class Intake extends SubsystemBase {
+    private IntakeIO io;
+    private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
     private double setpoint;
 
-    public Insteak(InsteakIO io) {
+    public Intake(IntakeIO io) {
         this.io = io;
     }
 

@@ -34,6 +34,10 @@ public class DriveToNearestReefSideCommand extends Command {
   private boolean isLeftBumper = false;
   private boolean centerAlign = false;
 
+  private final PathConstraints drivetrainConstraints = new PathConstraints(
+      2, 1.5,
+      Units.degreesToRadians(540), Units.degreesToRadians(720));
+
   /** Creates a new DriveToNearestReefSideCommand. */
   public DriveToNearestReefSideCommand(Drive drive, boolean isLeftBumper, boolean centerAlign) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -47,38 +51,37 @@ public class DriveToNearestReefSideCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    Pose2d closestAprilTagPose = getClosestReefAprilTagPose();
+    Pose2d closestAprilTagPose = getClosestReefAprilTagPose(); // where we want to be at the end
+
     Command pathfindPath = AutoBuilder.pathfindToPose(
         translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -1.5),
-        new PathConstraints(
-            2, 1.5,
-            Units.degreesToRadians(540), Units.degreesToRadians(720)));
-    if (findDistanceBetween(drive.getPose(), closestAprilTagPose) < 1.5) {
-      pathfindPath = new PrintCommand("skipped pathfind");
+        drivetrainConstraints);
+    if (findDistanceBetween(drive.getPose(), closestAprilTagPose) < 0.5) {
+      pathfindPath = Commands.defer(() -> generateGoToPath(drive.getPose(),
+          translateCoord(drive.getPose(), drive.getPose().getRotation().getDegrees(), -0.5)), Set.of(drive));
+    } else if (findDistanceBetween(drive.getPose(), closestAprilTagPose) < 1.5) {
+      pathfindPath = new PrintCommand("sigma on the wall");
+
     }
     try {
-      // Load the path you want to follow using its name in the GUI
-
       fullPath = pathfindPath.andThen(Commands
-          .defer(() -> AutoBuilder.followPath(getPathToFront(drive.getPose(), closestAprilTagPose)), Set.of(drive)));
+          .defer(() -> generateGoToPath(drive.getPose(), closestAprilTagPose), Set.of(drive)));
       fullPath.schedule();
     } catch (Exception e) {
       DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
     }
   }
 
-  private PathPlannerPath getPathToFront(Pose2d currentPose, Pose2d closestAprilTagPose) {
+  private Command generateGoToPath(Pose2d currentPose, Pose2d closestAprilTagPose) {
     PathPlannerPath pathToFront = new PathPlannerPath(
         PathPlannerPath.waypointsFromPoses(
-            // translateCoord(closestAprilTagPose,
-            // closestAprilTagPose.getRotation().getDegrees(), -1.5),
             currentPose,
             closestAprilTagPose),
-        new PathConstraints(2, 1.5, 2 * Math.PI, 4 * Math.PI),
+        drivetrainConstraints,
         null,
         new GoalEndState(0.0, closestAprilTagPose.getRotation()));
     pathToFront.preventFlipping = true;
-    return pathToFront;
+    return AutoBuilder.followPath(pathToFront);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

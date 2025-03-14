@@ -109,7 +109,6 @@ public class RobotContainer {
 
                 switch (Constants.currentMode) {
                         case REAL:
-                                // coralSensor = new CoralSensor(new CoralSensorIOReal());
                                 drive = new Drive(
                                                 new GyroIONavx(),
                                                 new ModuleIOSparkMax(0),
@@ -123,6 +122,8 @@ public class RobotContainer {
 
                                 endEffector = new EndEffector(new EndEffectorIOSparkMax());
                                 deAlgifier = new DeAlgifier(new DeAlgifierIOSparkMax());
+
+                                coralSensor = new CoralSensor(new CoralSensorIOReal());
 
                                 break;
 
@@ -146,6 +147,9 @@ public class RobotContainer {
                                 });
                                 deAlgifier = new DeAlgifier(new DeAlgifierIO() {
                                 });
+
+                                coralSensor = new CoralSensor(new CoralSensorIO() {
+                                });
                                 break;
 
                         default:
@@ -164,11 +168,11 @@ public class RobotContainer {
                                 });
                                 elevator = new Elevator(new ElevatorIO() {
                                 });
-                                // coralSensor = new CoralSensor(new CoralSensorIO() {
-                                // });
                                 endEffector = new EndEffector(new EndEffectorIO() {
                                 });
                                 deAlgifier = new DeAlgifier(new DeAlgifierIO() {
+                                });
+                                coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
                                 break;
                 }

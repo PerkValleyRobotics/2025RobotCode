@@ -44,5 +44,17 @@ public class EndEffectorCommands {
         });
     }
 
-    
+    public static Command runSmartIntake(EndEffector endEffector, CoralSensor coralSensor, double multiplier) {
+        return new Trigger(() -> coralSensor.isCoralDetected());
+.whileTrue(Commands.run(() -> {
+            endEffector.runBackSpeed(0.25*multiplier);
+            endEffector.runFrontSpeed(0.25*multiplier);
+        }, endEffector).finallyDo(() -> {
+            endEffector.stopBack();
+            endEffector.stopFront();
+        })).finallyDo(() -> {
+            endEffector.stopBack();
+            endEffector.stopFront();
+        });
+    }
 }

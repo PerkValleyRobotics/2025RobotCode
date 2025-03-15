@@ -6,6 +6,7 @@ package frc.robot.subsystems.Vision;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static frc.robot.subsystems.Vision.VisionConstants.*;
 
@@ -19,7 +20,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.AprilTagPositions;
 import frc.robot.subsystems.Vision.VisionIO.PoseObservationType;
@@ -101,9 +104,18 @@ public class Vision extends SubsystemBase {
             || observation.pose().getY() < 0.0
             || observation.pose().getY() > aprilTagLayout.getFieldWidth();
 
-        // if (findDistanceBetween(observation.pose().toPose2d(), tagPoses.get(tagPoses.size()-1).toPose2d()) > 2.5) {
-        //   rejectPose = true;
-        // }
+        Boolean autoRunning = DriverStation.isAutonomousEnabled();
+        double distance = Math.abs(findDistanceBetween(observation.pose().toPose2d(),
+            tagPoses.get(tagPoses.size() - 1).toPose2d()));
+        if (distance > 2 && autoRunning) {
+          rejectPose = true;
+          isDetectionAllowed = false;
+        } else if (distance > 3 && !autoRunning) {
+          rejectPose = true;
+          isDetectionAllowed = false;
+        } else {
+          isDetectionAllowed = true;
+        }
         // Add pose to log
         robotPoses.add(observation.pose());
         if (rejectPose) {

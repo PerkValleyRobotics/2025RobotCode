@@ -6,6 +6,7 @@ package frc.robot;
 
 import static frc.robot.subsystems.Vision.VisionConstants.*;
 
+import java.util.List;
 import java.util.function.BooleanSupplier;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -23,6 +24,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -97,8 +99,9 @@ public class RobotContainer {
         private final CommandXboxController operatorController = new CommandXboxController(1);
 
         private final LoggedDashboardChooser<Command> autoChooser;
+        private final SendableChooser<Command> processorFlipChooser = new SendableChooser<>();
 
-        private BooleanSupplier isAutoAligning = () -> false;
+        private boolean mirrorAuton = false;
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -196,6 +199,12 @@ public class RobotContainer {
                                 AutoBuilder.buildAutoChooserWithOptionsModifier(
                                                 (stream) -> COMPETITION_MODE ? stream.filter(
                                                                 auto -> auto.getName().startsWith("(comp)")) : stream));
+
+                processorFlipChooser.setDefaultOption("Stay On Non-Processor",
+                                new InstantCommand(() -> mirrorAuton = false));
+                processorFlipChooser.addOption("Flip To Processor", new InstantCommand(() -> mirrorAuton = true));
+
+                SmartDashboard.putData("processorFlipChooser", processorFlipChooser);
 
                 configureBindings();
         }
@@ -404,7 +413,12 @@ public class RobotContainer {
          */
         public Command getAutonomousCommand() {
                 // An example command will be run in autonomous
-                return autoChooser.get();
+                Command cmd = autoChooser.get();
+                PathPlannerAuto auto = (PathPlannerAuto) cmd;
+
+                processorFlipChooser.getSelected().schedule();
+
+                return new PathPlannerAuto(auto.getName(), mirrorAuton);
         }
 
         private boolean isJoystickMoved() {

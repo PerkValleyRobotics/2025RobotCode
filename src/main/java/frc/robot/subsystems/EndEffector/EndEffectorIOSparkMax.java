@@ -29,11 +29,11 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class EndEffectorIOSparkMax implements EndEffectorIO {
         private final SparkBase frontRightSparkMax;
-        private final SparkBase frontLeftSparkMax;
+        // private final SparkBase frontLeftSparkMax;
         private final SparkBase backSparkMax;
 
         private final RelativeEncoder frontRightEncoder;
-        private final RelativeEncoder frontLeftEncoder;
+        // private final RelativeEncoder frontLeftEncoder;
         private final RelativeEncoder backEncoder;
 
         private final Debouncer frontRightConnectedDebounce = new Debouncer(0.05);
@@ -42,11 +42,12 @@ public class EndEffectorIOSparkMax implements EndEffectorIO {
 
         public EndEffectorIOSparkMax() {
                 frontRightSparkMax = new SparkMax(FRONT_RIGHT_SPARKMAX_ID, MotorType.kBrushless);
-                frontLeftSparkMax = new SparkMax(FRONT_LEFT_SPARKMAX_ID, MotorType.kBrushless);
+                // frontLeftSparkMax = new SparkMax(FRONT_LEFT_SPARKMAX_ID,
+                // MotorType.kBrushless);
                 backSparkMax = new SparkMax(BACK_SPARKMAX_ID, MotorType.kBrushless);
 
                 frontRightEncoder = frontRightSparkMax.getEncoder();
-                frontLeftEncoder = frontLeftSparkMax.getEncoder();
+                // frontLeftEncoder = frontLeftSparkMax.getEncoder();
                 backEncoder = backSparkMax.getEncoder();
 
                 SparkMaxConfig config = new SparkMaxConfig();
@@ -65,11 +66,11 @@ public class EndEffectorIOSparkMax implements EndEffectorIO {
                                 () -> frontRightSparkMax.configure(config, ResetMode.kResetSafeParameters,
                                                 PersistMode.kPersistParameters));
 
-                tryUntilOK(
-                                frontLeftSparkMax,
-                                5,
-                                () -> frontLeftSparkMax.configure(config, ResetMode.kResetSafeParameters,
-                                                PersistMode.kPersistParameters));
+                // tryUntilOK(
+                // frontLeftSparkMax,
+                // 5,
+                // () -> frontLeftSparkMax.configure(config, ResetMode.kResetSafeParameters,
+                // PersistMode.kPersistParameters));
 
                 tryUntilOK(
                                 backSparkMax,
@@ -90,13 +91,14 @@ public class EndEffectorIOSparkMax implements EndEffectorIO {
                 inputs.frontRightConnected = frontRightConnectedDebounce.calculate(!sparkStickyFault);
 
                 // Update front left motor
-                ifOk(frontLeftSparkMax,
-                                new DoubleSupplier[] { frontLeftSparkMax::getAppliedOutput,
-                                                frontLeftSparkMax::getBusVoltage },
-                                (values) -> inputs.frontLeftAppliedVolts = values[0] * values[1]);
-                ifOk(frontLeftSparkMax, frontLeftSparkMax::getOutputCurrent,
-                                (value) -> inputs.frontLeftCurrentAmps = value);
-                inputs.frontRightConnected = frontLeftConnectedDebounce.calculate(!sparkStickyFault);
+                // ifOk(frontLeftSparkMax,
+                // new DoubleSupplier[] { frontLeftSparkMax::getAppliedOutput,
+                // frontLeftSparkMax::getBusVoltage },
+                // (values) -> inputs.frontLeftAppliedVolts = values[0] * values[1]);
+                // ifOk(frontLeftSparkMax, frontLeftSparkMax::getOutputCurrent,
+                // (value) -> inputs.frontLeftCurrentAmps = value);
+                // inputs.frontRightConnected =
+                // frontLeftConnectedDebounce.calculate(!sparkStickyFault);
 
                 // Update back motor
                 ifOk(backSparkMax,
@@ -115,7 +117,7 @@ public class EndEffectorIOSparkMax implements EndEffectorIO {
         @Override
         // Set the speed of the front left motor
         public void setFrontLeftSpeed(double speed) {
-                frontLeftSparkMax.set(speed);
+                // frontLeftSparkMax.set(speed);
         }
 
         @Override

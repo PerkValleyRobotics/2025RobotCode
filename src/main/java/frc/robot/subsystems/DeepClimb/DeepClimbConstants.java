@@ -1,7 +1,7 @@
 package frc.robot.subsystems.DeepClimb;
 
 public class DeepClimbConstants {
-    public static final int DEEPCLIMB_ID = 26;
+    public static final int DEEPCLIMB_ID = 37;
 
     public static final double DEEPCLIMB_P = 0.0;
     public static final double DEEPCLIMB_I = 0.0;

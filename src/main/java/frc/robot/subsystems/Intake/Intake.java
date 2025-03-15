@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         io.updateInputs(inputs);
-        Logger.processInputs("EndEffector", inputs);
+        Logger.processInputs("Intake", inputs);
 
         io.setPosition(setpoint);
     }
@@ -33,7 +33,7 @@ public class Intake extends SubsystemBase {
         setpoint = HOME_SETPOINT;
     }
 
-    @AutoLogOutput(key = "Insteak/Setpoint")
+    @AutoLogOutput(key = "Intake/Setpoint")
     public double getCurrentSetpoint() {
         return setpoint;
     }

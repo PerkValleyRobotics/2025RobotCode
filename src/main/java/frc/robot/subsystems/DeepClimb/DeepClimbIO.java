@@ -12,9 +12,9 @@ public interface DeepClimbIO {
         public double currentAmps = 0.0;
     }
 
-    public default void updateInputs(DeepClimbIOInputs inputs) {}
+    public default void updateInputs(DeepClimbIOInputs inputs) {
+    }
 
-    public default void setPosition(double position) {}
+    public default void setPosition(double position) {
+    }
 }
-
-

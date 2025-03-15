@@ -8,7 +8,7 @@ public class IntakeConstants {
 
     // Pid Constants
     public static final double INTAKE_P = 0;
-    public static final double INTAKE_I = 0;//0.00075;
+    public static final double INTAKE_I = 0;// 0.00075;
     public static final double INTAKE_D = 0;
     public static final double INTAKE_FF = 0.0;
 }

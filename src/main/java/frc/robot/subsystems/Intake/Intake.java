@@ -11,28 +11,30 @@ public class Intake extends SubsystemBase {
     private IntakeIO io;
     private final IntakeIOInputsAutoLogged inputs = new IntakeIOInputsAutoLogged();
 
-private double setpoint;
+    private double setpoint;
 
     public Intake(IntakeIO io) {
         this.io = io;
     }
 
-@Override
-public void periodic() {
-io.updateInputs(inputs);
-Logger.processInputs("EndEffector", inputs);
-}
+    @Override
+    public void periodic() {
+        io.updateInputs(inputs);
+        Logger.processInputs("EndEffector", inputs);
 
-public void goBack() {
-setpoint = CLIMB_SETPOINT;
-}
+        io.setPosition(setpoint);
+    }
 
-public void goHome() {
-setpoint = HOME_SETPOINT;
-}
+    public void goBack() {
+        setpoint = CLIMB_SETPOINT;
+    }
 
-@AutoLogOutput(key = "Insteak/Setpoint")
-public double getCurrentSetpoint() {
-return setpoint;
-}
+    public void goHome() {
+        setpoint = HOME_SETPOINT;
+    }
+
+    @AutoLogOutput(key = "Insteak/Setpoint")
+    public double getCurrentSetpoint() {
+        return setpoint;
+    }
 }

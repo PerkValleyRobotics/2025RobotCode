@@ -12,9 +12,11 @@ public interface IntakeIO {
         public double currentAmps = 0.0;
     }
 
-    public default void updateInputs(IntakeIOInputs inputs) {}
+    public default void updateInputs(IntakeIOInputs inputs) {
+    }
 
-    public default void setPosition(double position) {}
+    public default void setPosition(double position) {
+    }
 
     // public default void getPosition() {return 0;}
 }

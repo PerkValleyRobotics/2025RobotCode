@@ -1,0 +1,55 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SourcelessOrigin3 ~~ SideGH"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartAndStopDetection"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SideGH ~~ ReefH"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefH ~~ FarsideGH"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "FarsideGH ~~ ReefG"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToL3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RunFrontAndBack"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "CompAutons",
+  "choreoAuto": false
+}

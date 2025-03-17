@@ -8,36 +8,52 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.249171768755372,
-        "y": 2.942058650697363
+        "x": 5.3174664552147135,
+        "y": 3.0696101326551295
       },
       "isLocked": false,
       "linkedName": "ReefE"
     },
     {
       "anchor": {
-        "x": 3.4417500000000003,
-        "y": 2.3675
+        "x": 3.5483606557377048,
+        "y": 2.5625
       },
       "prevControl": {
-        "x": 4.146338044212154,
-        "y": 2.0459611774326847
+        "x": 4.285798694889873,
+        "y": 2.2688435726825578
       },
       "nextControl": {
-        "x": 2.375619102320578,
-        "y": 2.8540289389430202
+        "x": 2.501417223690349,
+        "y": 2.979405084272508
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.174795081967213,
-        "y": 7.255686475409835
+        "x": 2.535,
+        "y": 5.98475
       },
       "prevControl": {
-        "x": 1.4817851152247856,
-        "y": 6.841249773319174
+        "x": 3.0355218118527167,
+        "y": 4.740576014637531
+      },
+      "nextControl": {
+        "x": 2.433828529508948,
+        "y": 6.236237365115815
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.4864754098360655,
+        "y": 7.16577868852459
+      },
+      "prevControl": {
+        "x": 1.7910639200902514,
+        "y": 6.796488201020242
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +65,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,

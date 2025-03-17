@@ -45,15 +45,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "GoToL2"
+                        "waitTime": 0.57
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.27
+                        "name": "GoToL2"
                       }
                     }
                   ]
@@ -126,15 +126,15 @@
                 "data": {
                   "commands": [
                     {
-                      "type": "named",
+                      "type": "wait",
                       "data": {
-                        "name": "GoToL2"
+                        "waitTime": 1.0
                       }
                     },
                     {
-                      "type": "wait",
+                      "type": "named",
                       "data": {
-                        "waitTime": 1.27
+                        "name": "GoToL2"
                       }
                     }
                   ]

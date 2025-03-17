@@ -4,15 +4,16 @@
   "holonomicMode": true,
   "pathFolders": [
     "Loading Paths",
+<<<<<<< Updated upstream
+=======
     "Misc folder",
+    "DeAlgifying Paths",
+>>>>>>> Stashed changes
     "Scoring Paths",
     "Starting Paths"
   ],
-  "autoFolders": [
-    "Misc",
-    "CompAutons"
-  ],
-  "defaultMaxVel": 3.5,
+  "autoFolders": [],
+  "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,

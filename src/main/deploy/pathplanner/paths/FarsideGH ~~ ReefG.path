@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.708094262295082,
-        "y": 7.555379098360655
+        "x": 5.859749999999999,
+        "y": 3.485553278688525
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.600468309222112,
-        "y": 7.411609188510688
+        "x": 5.837890688070048,
+        "y": 3.963415547140814
       },
       "isLocked": false,
-      "linkedName": "SourcelessOrigin1"
+      "linkedName": "FarsideGH"
     },
     {
       "anchor": {
-        "x": 5.859749999999999,
-        "y": 4.1907499999999995
+        "x": 5.840250000000001,
+        "y": 3.8592499999999994
       },
       "prevControl": {
-        "x": 5.449534553469751,
-        "y": 4.173078822886397
+        "x": 5.863431305888897,
+        "y": 3.394828259726717
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefH"
+      "linkedName": "ReefG"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.06080905426438
+    "rotation": -178.26429541107169
   },
   "reversed": false,
-  "folder": "Starting Paths",
+  "folder": "DeAlgifying Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -178.26429541107169
   },
   "useDefaultConstraints": true
 }

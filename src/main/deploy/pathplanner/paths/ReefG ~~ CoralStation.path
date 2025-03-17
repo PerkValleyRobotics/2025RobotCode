@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.766500000000001,
-        "y": 4.28825
+        "x": 6.40575,
+        "y": 4.6295
       },
       "isLocked": false,
       "linkedName": "ReefG"
@@ -32,24 +32,29 @@
     },
     {
       "anchor": {
-        "x": 1.174795081967213,
-        "y": 7.255686475409835
+        "x": 1.4864754098360655,
+        "y": 7.16577868852459
       },
       "prevControl": {
-        "x": 0.803405206986664,
-        "y": 7.3228474321177055
+        "x": 1.1150855348555164,
+        "y": 7.23293964523246
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "CoralStation"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0,
+      "rotationDegrees": 0.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
+    "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -64,7 +69,7 @@
   "folder": "Loading Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -178.26429541107166
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

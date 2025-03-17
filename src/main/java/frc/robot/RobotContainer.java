@@ -347,14 +347,14 @@ public class RobotContainer {
                 // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 // false, false, 1));
 
-                operatorController.leftBumper().and(operatorController.back())
-                                .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
-                operatorController.rightBumper().and(operatorController.back())
-                                .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
-                operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -.9));
+                // operatorController.leftBumper().and(operatorController.back())
+                //                 .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
+                // operatorController.rightBumper().and(operatorController.back())
+                                // .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
+                operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, .9));
 
 
-                
+
                 operatorController.button(8).whileTrue(new InstantCommand(() -> intake.goBack())); // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 operatorController.button(8).and(operatorController.back())
                                 .whileTrue(new InstantCommand(() -> intake.goHome()));

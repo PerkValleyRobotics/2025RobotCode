@@ -18,9 +18,11 @@
     {
       "name": "WPIlibUnitTests",
       "workingDirectory": "${workspaceFolder}/build/jni/release",
-      "vmargs": [ "-Djava.library.path=${workspaceFolder}/build/jni/release" ],
+      "vmargs": [
+        "-Djava.library.path=${workspaceFolder}/build/jni/release"
+      ],
       "env": {
-        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release" ,
+        "LD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release",
         "DYLD_LIBRARY_PATH": "${workspaceFolder}/build/jni/release"
       }
     },
@@ -57,5 +59,41 @@
     "edu.wpi.first.math.**.proto.*",
     "edu.wpi.first.math.**.struct.*",
   ],
-  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable"
+  "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
+  "editor.tokenColorCustomizations": {
+    "comments": "#00000000",
+    "textMateRules": [
+      {
+        "scope": [
+          "hidecomments",
+          "comment",
+          "comment.block",
+          "comment.line",
+          "comment.line.double-slash",
+          "variable.other.jsdoc",
+          "storage.type.class.jsdoc",
+          "punctuation.definition.block.tag.jsdoc",
+          "punctuation.definition.bracket.curly.begin.jsdoc",
+          "punctuation.definition.bracket.curly.end.jsdoc",
+          "entity.name.type.instance.jsdoc",
+          "comment.block.documentation.ts",
+          "comment.block.documentation.js",
+          "comment.block.documentation.cs",
+          "comment.block.documentation.cs entity.other.attribute-name.localname.cs",
+          "comment.block.documentation.cs entity.other.attribute-name.cs",
+          "comment.block.documentation.cs punctuation.definition.tag.cs",
+          "comment.block.documentation.cs punctuation.definition.string.begin.cs",
+          "comment.block.documentation.cs punctuation.definition.string.end.cs",
+          "comment.block.documentation.cs punctuation.definition.bracket.curly.begin.cs",
+          "comment.block.documentation.cs punctuation.definition.bracket.curly.end.cs",
+          "comment.block.documentation.cs punctuation.definition.block.tag.cs",
+          "comment.block.documentation.cs string.quoted.double.cs",
+          "comment.block.documentation.cs entity.name.tag.localname.cs"
+        ],
+        "settings": {
+          "foreground": "#00000000"
+        }
+      }
+    ]
+  }
 }

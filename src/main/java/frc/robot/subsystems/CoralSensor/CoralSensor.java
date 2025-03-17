@@ -17,6 +17,11 @@ public class CoralSensor extends SubsystemBase {
     this.io = io;
   }
 
+  /**
+   * Updates the input values from the sensor and logs them to the DS.
+   * <p>
+   * This method is called once per scheduler run.
+   */
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -25,6 +30,6 @@ public class CoralSensor extends SubsystemBase {
   }
 
   public boolean isCoralDetected() {
-    return !inputs.state;
+    return inputs.state;
   }
 }

@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 /** Add your docs here. */
 public class CoralSensorIOReal implements CoralSensorIO {
     private final DigitalInput sensor;
-    private final int SENSOR_PORT = 0;
+    private final int SENSOR_PORT = 1;
 
     public CoralSensorIOReal() {
         sensor = new DigitalInput(SENSOR_PORT);

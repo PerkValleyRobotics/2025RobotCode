@@ -50,10 +50,6 @@ import frc.robot.commands.ManualElevatorCommand;
 import frc.robot.subsystems.CoralSensor.CoralSensor;
 import frc.robot.subsystems.CoralSensor.CoralSensorIO;
 import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
-// import frc.robot.subsystems.CoralSensor.CoralSensor;
-// import frc.robot.subsystems.CoralSensor.CoralSensorIO;
-// import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
-// import frc.robot.subsystems.CoralSensor.CoralSensorIOSim;
 import frc.robot.subsystems.DeAlgifier.DeAlgifier;
 import frc.robot.subsystems.DeAlgifier.DeAlgifierIO;
 import frc.robot.subsystems.DeAlgifier.DeAlgifierIOSparkMax;
@@ -155,6 +151,7 @@ public class RobotContainer {
                                 });
 
                                 intake = new Intake(new IntakeIO() {
+                                });
                                 coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
                                 break;
@@ -181,6 +178,7 @@ public class RobotContainer {
                                 });
 
                                 intake = new Intake(new IntakeIO() {
+                                });
                                 coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
                                 break;
@@ -343,19 +341,18 @@ public class RobotContainer {
                 // );
 
                 // End effector binds
-                operatorController.leftBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
+                operatorController.leftBumper().and(() -> coralSensor.isCoralDetected())
+                                .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
                 operatorController.rightBumper()
-                                .whileTrue(EndEffectorCommands.runSmartIntake(endEffector, coralSensor, 1));
+                                .whileTrue(EndEffectorCommands.runBackCommand(endEffector, 1));
                 // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 // false, false, 1));
 
                 // operatorController.leftBumper().and(operatorController.back())
-                //                 .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
+                // .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
                 // operatorController.rightBumper().and(operatorController.back())
-                                // .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
+                // .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
                 operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, .9));
-
-
 
                 operatorController.button(8).whileTrue(new InstantCommand(() -> intake.goBack())); // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 operatorController.button(8).and(operatorController.back())

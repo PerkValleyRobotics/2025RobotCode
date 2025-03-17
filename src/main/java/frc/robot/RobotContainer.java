@@ -341,7 +341,7 @@ public class RobotContainer {
                 // );
 
                 // End effector binds
-                operatorController.leftBumper().and(() -> coralSensor.isCoralDetected())
+                operatorController.leftBumper().and(() -> !coralSensor.isCoralDetected())
                                 .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
                 operatorController.rightBumper()
                                 .whileTrue(EndEffectorCommands.runBackCommand(endEffector, 1));

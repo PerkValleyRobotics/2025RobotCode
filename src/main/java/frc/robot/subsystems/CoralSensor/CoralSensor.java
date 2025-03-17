@@ -30,6 +30,6 @@ public class CoralSensor extends SubsystemBase {
   }
 
   public boolean isCoralDetected() {
-    return inputs.state;
+    return !inputs.state;
   }
 }

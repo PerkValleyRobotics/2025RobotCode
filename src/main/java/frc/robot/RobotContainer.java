@@ -47,6 +47,9 @@ import frc.robot.commands.ElevatorCommands;
 import frc.robot.commands.ElevatorGotoHeightCommand;
 import frc.robot.commands.EndEffectorCommands;
 import frc.robot.commands.ManualElevatorCommand;
+import frc.robot.subsystems.CoralSensor.CoralSensor;
+import frc.robot.subsystems.CoralSensor.CoralSensorIO;
+import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
 // import frc.robot.subsystems.CoralSensor.CoralSensor;
 // import frc.robot.subsystems.CoralSensor.CoralSensorIO;
 // import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
@@ -91,7 +94,7 @@ public class RobotContainer {
         private final Drive drive;
         private final Vision vision;
         public final Elevator elevator;
-        // private final CoralSensor coralSensor;
+        private final CoralSensor coralSensor;
         private final EndEffector endEffector;
         private final DeAlgifier deAlgifier;
         private final Intake intake;
@@ -102,8 +105,6 @@ public class RobotContainer {
 
         private final LoggedDashboardChooser<Command> autoChooser;
 
-        private BooleanSupplier isAutoAligning = () -> false;
-
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
@@ -113,7 +114,6 @@ public class RobotContainer {
 
                 switch (Constants.currentMode) {
                         case REAL:
-                                // coralSensor = new CoralSensor(new CoralSensorIOReal());
                                 drive = new Drive(
                                                 new GyroIONavx(),
                                                 new ModuleIOSparkMax(0),
@@ -129,6 +129,7 @@ public class RobotContainer {
                                 deAlgifier = new DeAlgifier(new DeAlgifierIOSparkMax());
 
                                 intake = new Intake(new IntakeIOSparkMax());
+                                coralSensor = new CoralSensor(new CoralSensorIOReal());
 
                                 break;
 
@@ -154,6 +155,7 @@ public class RobotContainer {
                                 });
 
                                 intake = new Intake(new IntakeIO() {
+                                coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
                                 break;
 
@@ -173,14 +175,13 @@ public class RobotContainer {
                                 });
                                 elevator = new Elevator(new ElevatorIO() {
                                 });
-                                // coralSensor = new CoralSensor(new CoralSensorIO() {
-                                // });
                                 endEffector = new EndEffector(new EndEffectorIO() {
                                 });
                                 deAlgifier = new DeAlgifier(new DeAlgifierIO() {
                                 });
 
                                 intake = new Intake(new IntakeIO() {
+                                coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
                                 break;
                 }
@@ -343,7 +344,8 @@ public class RobotContainer {
 
                 // End effector binds
                 operatorController.leftBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
-                operatorController.rightBumper().whileTrue(EndEffectorCommands.runBackCommand(endEffector, 1));
+                operatorController.rightBumper()
+                                .whileTrue(EndEffectorCommands.runSmartIntake(endEffector, coralSensor, 1));
                 // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 // false, false, 1));
 

@@ -100,6 +100,7 @@ public class RobotContainer {
         private final CommandXboxController operatorController = new CommandXboxController(1);
 
         private final LoggedDashboardChooser<Command> autoChooser;
+        private boolean isDetectionAllowed = true;
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -119,13 +120,16 @@ public class RobotContainer {
                                 vision = new Vision(
                                                 drive::addVisionMeasurement,
                                                 new VisionIOLimelight("limelight-front", drive::getRotation));
-                                elevator = new Elevator(new ElevatorIOSparkMax());
 
                                 endEffector = new EndEffector(new EndEffectorIOSparkMax());
                                 deAlgifier = new DeAlgifier(new DeAlgifierIOSparkMax());
 
-                                intake = new Intake(new IntakeIOSparkMax());
+
                                 coralSensor = new CoralSensor(new CoralSensorIOReal());
+
+                                elevator = new Elevator(new ElevatorIOSparkMax(), coralSensor, deAlgifier);
+
+                                intake = new Intake(new IntakeIOSparkMax());
 
                                 break;
 
@@ -142,18 +146,17 @@ public class RobotContainer {
                                                 drive::addVisionMeasurement,
                                                 new VisionIOPhotonVisionSim("limelight", robotToCamera,
                                                                 drive::getPose));
-                                elevator = new Elevator(
-                                                new ElevatorIOSim());
 
                                 endEffector = new EndEffector(new EndEffectorIO() {
                                 });
                                 deAlgifier = new DeAlgifier(new DeAlgifierIO() {
                                 });
-
                                 intake = new Intake(new IntakeIO() {
                                 });
                                 coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
+                                elevator = new Elevator(
+                                                new ElevatorIOSim(), coralSensor, deAlgifier);
                                 break;
 
                         default:
@@ -170,17 +173,21 @@ public class RobotContainer {
                                                 });
                                 vision = new Vision(drive::addVisionMeasurement, new VisionIO() {
                                 });
-                                elevator = new Elevator(new ElevatorIO() {
-                                });
                                 endEffector = new EndEffector(new EndEffectorIO() {
                                 });
                                 deAlgifier = new DeAlgifier(new DeAlgifierIO() {
                                 });
 
-                                intake = new Intake(new IntakeIO() {
-                                });
+
                                 coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
+                                elevator = new Elevator(new ElevatorIO() {
+                                }, coralSensor, deAlgifier);
+
+
+                                intake = new Intake(new IntakeIO() {
+                                });
+
                                 break;
                 }
 
@@ -341,22 +348,27 @@ public class RobotContainer {
                 // );
 
                 // End effector binds
-                operatorController.leftBumper().and(() -> !coralSensor.isCoralDetected())
-                                .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 1));
-                operatorController.rightBumper()
-                                .whileTrue(EndEffectorCommands.runBackCommand(endEffector, 1));
+                operatorController.rightBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 4));
+                operatorController.leftBumper().and(() -> coralSensor.isOverrided() ? true : !coralSensor.isCoralDetected())
+                                .whileTrue(EndEffectorCommands.runBackCommand(endEffector, 0.5));
                 // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 // false, false, 1));
 
                 // operatorController.leftBumper().and(operatorController.back())
                 // .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
                 // operatorController.rightBumper().and(operatorController.back())
-                // .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
-                operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, .9));
 
-                operatorController.button(8).whileTrue(new InstantCommand(() -> intake.goBack())); // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
-                operatorController.button(8).and(operatorController.back())
-                                .whileTrue(new InstantCommand(() -> intake.goHome()));
+                                // .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
+                operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -0.75));
+
+
+
+                // operatorController.button(8).whileTrue(new InstantCommand(() -> intake.goBack())); // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
+                // operatorController.button(8).and(operatorController.back())
+                //                 .whileTrue(new InstantCommand(() -> intake.goHome()));
+
+                operatorController.button(8).onTrue(new InstantCommand(() -> coralSensor.overrideSensor()));
+
                 // false, false, -1));
                 // operatorController.a().and(() -> !(coralSensor.getDistance() <
                 // 2)).whileTrue(EndEffectorCommands.runFrontMotors(endEffector, false, false));

@@ -12,6 +12,8 @@ public class CoralSensor extends SubsystemBase {
   private CoralSensorIO io;
   private final CoralSensorIOInputsAutoLogged inputs = new CoralSensorIOInputsAutoLogged();
 
+  private boolean override = false;
+
   /** Creates a new CoralSensor. */
   public CoralSensor(CoralSensorIO io) {
     this.io = io;
@@ -31,5 +33,13 @@ public class CoralSensor extends SubsystemBase {
 
   public boolean isCoralDetected() {
     return !inputs.state;
+  }
+
+  public boolean isOverrided() {
+    return override;
+  }
+
+  public void overrideSensor() {
+    override = true;
   }
 }

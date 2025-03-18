@@ -41,7 +41,7 @@ public class EndEffectorCommands {
     public static Command runFrontAndBack(EndEffector endEffector, double multiplier) {
         return Commands.run(() -> {
             endEffector.runBackSpeed(0.25 * multiplier);
-            endEffector.runFrontSpeed(0.25 * multiplier);
+            endEffector.runFrontSpeed(-.25 * multiplier);
         }, endEffector).finallyDo(() -> {
             endEffector.stopBack();
             endEffector.stopFront();

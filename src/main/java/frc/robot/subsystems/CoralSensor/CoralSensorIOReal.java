@@ -1,12 +1,8 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems.CoralSensor;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 
-/** Add your docs here. */
 public class CoralSensorIOReal implements CoralSensorIO {
     private final DigitalInput sensor;
     private final int SENSOR_PORT = 1;
@@ -16,6 +12,18 @@ public class CoralSensorIOReal implements CoralSensorIO {
     }
 
     public void updateInputs(CoralSensorIOInputs inputs) {
+        // boolean currentState = sensor.get();
+        // double currentTime = Timer.getFPGATimestamp();
+
+        // if (currentState != lastValidState) {
+        //     lastStateChangeTime = currentTime; // Reset timer when state changes
+        // }
+
+        // if ((currentTime - lastStateChangeTime) >= STABLE_DURATION) {
+        //     lastValidState = currentState; // Accept the new state after it remains stable
+        // }
+
+        // inputs.state = lastValidState;
         inputs.state = sensor.get();
     }
 }

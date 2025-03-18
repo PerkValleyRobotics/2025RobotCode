@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.CoralSensor.CoralSensor;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
@@ -41,26 +40,10 @@ public class EndEffectorCommands {
     public static Command runFrontAndBack(EndEffector endEffector, double multiplier) {
         return Commands.run(() -> {
             endEffector.runBackSpeed(0.25 * multiplier);
-            endEffector.runFrontSpeed(0.25 * multiplier);
+            endEffector.runFrontSpeed(-.25 * multiplier);
         }, endEffector).finallyDo(() -> {
             endEffector.stopBack();
             endEffector.stopFront();
         });
-    }
-
-    public static Command runSmartIntake(EndEffector endEffector, CoralSensor coralSensor, double multiplier) {
-        return Commands.run(() -> {
-            new Trigger(() -> coralSensor.isCoralDetected())
-                    .whileTrue(Commands.run(() -> {
-                        endEffector.runBackSpeed(0.25 * multiplier);
-                        endEffector.runFrontSpeed(0.25 * multiplier);
-                    }, endEffector).finallyDo(() -> {
-                        endEffector.stopBack();
-                        endEffector.stopFront();
-                    })).onFalse(new InstantCommand(() -> {
-                        endEffector.stopBack();
-                        endEffector.stopFront();
-                    }));
-        }, endEffector);
     }
 }

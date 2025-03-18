@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.483401639344262,
+        "y": 5.595389344262295
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.723155737704918,
+        "y": 5.727254098360657
+      },
+      "isLocked": false,
+      "linkedName": "FarsideKL"
+    },
+    {
+      "anchor": {
+        "x": 3.9319672131147545,
+        "y": 5.283709016393443
+      },
+      "prevControl": {
+        "x": 3.696521844086195,
+        "y": 5.199652617451986
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "ReefK"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -58.70696100407983
+  },
+  "reversed": false,
+  "folder": "DeAlgifying Paths",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -60.81013793288426
+  },
+  "useDefaultConstraints": true
+}

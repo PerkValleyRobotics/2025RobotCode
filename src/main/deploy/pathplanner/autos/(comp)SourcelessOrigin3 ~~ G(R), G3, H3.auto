@@ -65,6 +65,68 @@
           "data": {
             "name": "RunFrontAndBack"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefG ~~ CoralStation"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RunBackMotor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CoralStation ~~ SideGH"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartAndStopDetection"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "GoToL3"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SideGH ~~ ReefH"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RunFrontAndBack"
+          }
         }
       ]
     }

@@ -15,10 +15,13 @@ public class Elevator extends SubsystemBase {
   private ElevatorIO io;
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
+  private CoralSensor coralSensor;
+
   private double setpoint;
   /** Creates a new Elevator. */
-  public Elevator(ElevatorIO io) {
+  public Elevator(ElevatorIO io, CoralSensor coralSensor) {
     this.io = io;
+    this.coralSensor = coralSensor;
   }
 
   @Override
@@ -57,23 +60,43 @@ public class Elevator extends SubsystemBase {
   }
 
   public void gotoL1() {
-    setpoint = L1_HEIGHT;
-    gotoPos(setpoint);
+    checkForSensor(() -> {
+      setpoint = L1_HEIGHT;
+      gotoPos(setpoint);
+    };);
   }
 
   public void gotoL2() {
-    setpoint = L2_HEIGHT;
-    gotoPos(setpoint);
+    checkForSensor(() -> {
+      setpoint = L2_HEIGHT;
+      gotoPos(setpoint);
+    };);
   }
 
   public void gotoL3() {
-    setpoint = L3_HEIGHT;
-    gotoPos(setpoint);
+    checkForSensor(() -> {
+      setpoint = L3_HEIGHT;
+      gotoPos(setpoint);
+    };);
   }
 
   public void gotoL4() {
-    setpoint = L4_HEIGHT;
-    gotoPos(setpoint);
+    checkForSensor(() -> {
+      setpoint = L4_HEIGHT;
+      gotoPos(setpoint);
+    };);
+  }
+
+  public void checkForSensor(Runnable action) {
+    if (!coralSensor.isOverrided()) {
+      if (coralSensor.isCoralDetected()) {
+        setpoint = L4_HEIGHT;
+        gotoPos(setpoint);
+      }
+    } else {
+        setpoint = L4_HEIGHT;
+        gotoPos(setpoint);
+    }
   }
 
   public double getClosedLoopError() {

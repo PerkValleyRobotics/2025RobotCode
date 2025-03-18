@@ -1,10 +1,10 @@
-package frc.robot.subsystems.DeepClimb;
+package frc.robot.subsystems.Intake;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface DeepClimbIO {
+public interface IntakeIO {
     @AutoLog
-    public static class DeepClimbIOInputs {
+    public static class IntakeIOInputs {
         public double positionRads = 0.0;
 
         public boolean connected = false;
@@ -12,9 +12,11 @@ public interface DeepClimbIO {
         public double currentAmps = 0.0;
     }
 
-    public default void updateInputs(DeepClimbIOInputs inputs) {
+    public default void updateInputs(IntakeIOInputs inputs) {
     }
 
     public default void setPosition(double position) {
     }
+
+    // public default void getPosition() {return 0;}
 }

@@ -17,17 +17,18 @@ public class CoralSensorIOReal implements CoralSensorIO {
     }
 
     public void updateInputs(CoralSensorIOInputs inputs) {
-        boolean currentState = sensor.get();
-        double currentTime = Timer.getFPGATimestamp();
+        // boolean currentState = sensor.get();
+        // double currentTime = Timer.getFPGATimestamp();
 
-        if (currentState != lastValidState) {
-            lastStateChangeTime = currentTime; // Reset timer when state changes
-        }
+        // if (currentState != lastValidState) {
+        //     lastStateChangeTime = currentTime; // Reset timer when state changes
+        // }
 
-        if ((currentTime - lastStateChangeTime) >= STABLE_DURATION) {
-            lastValidState = currentState; // Accept the new state after it remains stable
-        }
+        // if ((currentTime - lastStateChangeTime) >= STABLE_DURATION) {
+        //     lastValidState = currentState; // Accept the new state after it remains stable
+        // }
 
-        inputs.state = lastValidState;
+        // inputs.state = lastValidState;
+        inputs.state = sensor.get();
     }
 }

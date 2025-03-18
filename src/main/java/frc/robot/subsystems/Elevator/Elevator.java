@@ -25,6 +25,7 @@ public class Elevator extends SubsystemBase {
   private boolean wasCoralDetected = false;
 
   private double setpoint;
+
   /** Creates a new Elevator. */
   public Elevator(ElevatorIO io, CoralSensor coralSensor, DeAlgifier deAlgifier) {
     this.io = io;
@@ -37,30 +38,30 @@ public class Elevator extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
 
-    if (!coralSensor.isOverrided()) {
-      if (coralSensor.isCoralDetected() || (deAlgifier.getCurrentSetpoint() == -0.24)) {
-        wasCoralDetected = true;
-        coralLostTimer.stop();
-        coralLostTimer.reset();
-      } else {
-        if (wasCoralDetected) {
-          wasCoralDetected = false;
-          coralLostTimer.restart(); // Start timing when coral is lost
-        }
-        if (coralLostTimer.hasElapsed(1.0)) { // Check if 1 second has passed
-          this.home();
-        }
-      }
-    }
+    // if (!coralSensor.isOverrided()) {
+    // if (coralSensor.isCoralDetected() || (deAlgifier.getCurrentSetpoint() ==
+    // -0.24)) {
+    // wasCoralDetected = true;
+    // coralLostTimer.stop();
+    // coralLostTimer.reset();
+    // } else {
+    // if (wasCoralDetected) {
+    // wasCoralDetected = false;
+    // coralLostTimer.restart(); // Start timing when coral is lost
+    // }
+    // if (coralLostTimer.hasElapsed(1.0)) { // Check if 1 second has passed
+    // this.home();
+    // }
+    // }
+    // }
   }
 
-
-  public void incrementSetpoint(){
+  public void incrementSetpoint() {
     setpoint += .005;
     gotoPos(setpoint);
   }
-  
-  public void decrementSetpoint(){
+
+  public void decrementSetpoint() {
     setpoint -= .005;
     gotoPos(setpoint);
   }
@@ -74,10 +75,10 @@ public class Elevator extends SubsystemBase {
     if (io.getPosition() < 0.01 && goal == 0) {
       return;
     }
-    if(goal <= L0_HEIGHT) {
+    if (goal <= L0_HEIGHT) {
       goal = L0_HEIGHT;
     }
-    if(goal >= 4.3) {
+    if (goal >= 4.3) {
       goal = 4.3;
     }
     io.setPosition(goal);
@@ -114,7 +115,7 @@ public class Elevator extends SubsystemBase {
 
   public void checkForSensor(Runnable action) {
     if (!coralSensor.isOverrided()) {
-      if (coralSensor.isCoralDetected()) {
+      if (coralSensor.isCoralDetected() || (deAlgifier.getCurrentSetpoint() == -0.24)) {
         action.run();
       }
     } else {
@@ -125,7 +126,7 @@ public class Elevator extends SubsystemBase {
   public double getClosedLoopError() {
     return Math.abs(setpoint - inputs.positionRads);
   }
-  
+
   @AutoLogOutput(key = "Elevator/Setpoint")
   public double getCurrentSetpoint() {
     return setpoint;

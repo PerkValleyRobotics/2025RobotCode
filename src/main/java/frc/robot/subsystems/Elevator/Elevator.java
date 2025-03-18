@@ -23,7 +23,7 @@ public class Elevator extends SubsystemBase {
 
   private double setpoint;
   /** Creates a new Elevator. */
-  public Elevator(ElevatorIO io, CoralSensor coralSensor) {
+  public Elevator(ElevatorIO io, CoralSensor coralSensor, DeAlgifier deAlgifier) {
     this.io = io;
     this.coralSensor = coralSensor;
     this.deAlgifier = deAlgifier;

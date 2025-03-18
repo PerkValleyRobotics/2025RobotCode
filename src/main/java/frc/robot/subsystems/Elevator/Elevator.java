@@ -17,6 +17,9 @@ public class Elevator extends SubsystemBase {
 
   private CoralSensor coralSensor;
 
+  private final Timer coralLostTimer = new Timer(); // Timer to track when coral is lost
+  private boolean wasCoralDetected = false;
+
   private double setpoint;
   /** Creates a new Elevator. */
   public Elevator(ElevatorIO io, CoralSensor coralSensor) {
@@ -29,8 +32,20 @@ public class Elevator extends SubsystemBase {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
 
-    if (!coralSensor.isOverrided() && !coralSensor.isCoralDetected()) {
-        this.home();
+    if (!coralSensor.isOverrided()) {
+      if (coralSensor.isCoralDetected()) {
+        wasCoralDetected = true;
+        coralLostTimer.stop();
+        coralLostTimer.reset();
+      } else {
+        if (wasCoralDetected) {
+          wasCoralDetected = false;
+          coralLostTimer.restart(); // Start timing when coral is lost
+        }
+        if (coralLostTimer.hasElapsed(1.0)) { // Check if 1 second has passed
+          this.home();
+        }
+      }
     }
   }
 

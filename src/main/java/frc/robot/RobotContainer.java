@@ -121,12 +121,13 @@ public class RobotContainer {
                                 vision = new Vision(
                                                 drive::addVisionMeasurement,
                                                 new VisionIOLimelight("limelight-front", drive::getRotation));
-                                elevator = new Elevator(new ElevatorIOSparkMax());
 
                                 endEffector = new EndEffector(new EndEffectorIOSparkMax());
                                 deAlgifier = new DeAlgifier(new DeAlgifierIOSparkMax());
 
                                 coralSensor = new CoralSensor(new CoralSensorIOReal());
+
+                                elevator = new Elevator(new ElevatorIOSparkMax(), coralSensor, deAlgifier);
 
                                 break;
 
@@ -144,7 +145,7 @@ public class RobotContainer {
                                                 new VisionIOPhotonVisionSim("limelight", robotToCamera,
                                                                 drive::getPose));
                                 elevator = new Elevator(
-                                                new ElevatorIOSim());
+                                                new ElevatorIOSim(), coralSensor, deAlgifier);
 
                                 endEffector = new EndEffector(new EndEffectorIO() {
                                 });
@@ -169,14 +170,14 @@ public class RobotContainer {
                                                 });
                                 vision = new Vision(drive::addVisionMeasurement, new VisionIO() {
                                 });
-                                elevator = new Elevator(new ElevatorIO() {
-                                });
                                 endEffector = new EndEffector(new EndEffectorIO() {
                                 });
                                 deAlgifier = new DeAlgifier(new DeAlgifierIO() {
                                 });
                                 coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
+                                elevator = new Elevator(new ElevatorIO() {
+                                }, coralSensor, deAlgifier);
                                 break;
                 }
 

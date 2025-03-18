@@ -28,6 +28,10 @@ public class Elevator extends SubsystemBase {
   public void periodic() {
     io.updateInputs(inputs);
     Logger.processInputs("Elevator", inputs);
+
+    if (!coralSensor.isOverrided() && !coralSensor.isCoralDetected()) {
+        this.home();
+    }
   }
 
 

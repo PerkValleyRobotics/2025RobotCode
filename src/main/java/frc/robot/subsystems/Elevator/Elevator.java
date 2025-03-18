@@ -46,7 +46,8 @@ public class Elevator extends SubsystemBase {
   }
 
   public void home() {
-    gotoPos(L0_HEIGHT);
+    setpoint = L0_HEIGHT;
+    gotoPos(setpoint);
   }
 
   public void gotoPos(double goal) {

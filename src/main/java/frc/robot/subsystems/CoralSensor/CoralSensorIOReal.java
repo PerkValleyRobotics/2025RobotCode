@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class CoralSensorIOReal implements CoralSensorIO {
     private final DigitalInput sensor;
-    private final int SENSOR_PORT = 0;
+    private final int SENSOR_PORT = 1;
     private boolean lastValidState;
     private double lastStateChangeTime;
     private static final double STABLE_DURATION = 0.15; // 100ms debounce time

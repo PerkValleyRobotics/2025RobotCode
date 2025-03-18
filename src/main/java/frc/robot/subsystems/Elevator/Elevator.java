@@ -9,7 +9,10 @@ import static frc.robot.subsystems.Elevator.ElevatorConstants.*;
 import org.littletonrobotics.junction.AutoLogOutput;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.CoralSensor.CoralSensor;
+import frc.robot.subsystems.DeAlgifier.DeAlgifier;
 
 public class Elevator extends SubsystemBase {
   private ElevatorIO io;
@@ -85,28 +88,28 @@ public class Elevator extends SubsystemBase {
     checkForSensor(() -> {
       setpoint = L1_HEIGHT;
       gotoPos(setpoint);
-    };);
+    });
   }
 
   public void gotoL2() {
     checkForSensor(() -> {
       setpoint = L2_HEIGHT;
       gotoPos(setpoint);
-    };);
+    });
   }
 
   public void gotoL3() {
     checkForSensor(() -> {
       setpoint = L3_HEIGHT;
       gotoPos(setpoint);
-    };);
+    });
   }
 
   public void gotoL4() {
     checkForSensor(() -> {
       setpoint = L4_HEIGHT;
       gotoPos(setpoint);
-    };);
+    });
   }
 
   public void checkForSensor(Runnable action) {

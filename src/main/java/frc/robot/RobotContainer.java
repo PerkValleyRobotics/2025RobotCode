@@ -144,16 +144,15 @@ public class RobotContainer {
                                                 drive::addVisionMeasurement,
                                                 new VisionIOPhotonVisionSim("limelight", robotToCamera,
                                                                 drive::getPose));
-                                elevator = new Elevator(
-                                                new ElevatorIOSim(), coralSensor, deAlgifier);
 
                                 endEffector = new EndEffector(new EndEffectorIO() {
                                 });
                                 deAlgifier = new DeAlgifier(new DeAlgifierIO() {
                                 });
-
                                 coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
+                                elevator = new Elevator(
+                                                new ElevatorIOSim(), coralSensor, deAlgifier);
                                 break;
 
                         default:

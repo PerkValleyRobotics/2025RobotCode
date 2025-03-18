@@ -90,12 +90,10 @@ public class Elevator extends SubsystemBase {
   public void checkForSensor(Runnable action) {
     if (!coralSensor.isOverrided()) {
       if (coralSensor.isCoralDetected()) {
-        setpoint = L4_HEIGHT;
-        gotoPos(setpoint);
+        action.run();
       }
     } else {
-        setpoint = L4_HEIGHT;
-        gotoPos(setpoint);
+      action.run();
     }
   }
 

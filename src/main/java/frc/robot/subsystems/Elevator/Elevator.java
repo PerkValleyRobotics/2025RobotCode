@@ -16,6 +16,7 @@ public class Elevator extends SubsystemBase {
   private final ElevatorIOInputsAutoLogged inputs = new ElevatorIOInputsAutoLogged();
 
   private CoralSensor coralSensor;
+  private DeAlgifier deAlgifier;
 
   private final Timer coralLostTimer = new Timer(); // Timer to track when coral is lost
   private boolean wasCoralDetected = false;
@@ -25,6 +26,7 @@ public class Elevator extends SubsystemBase {
   public Elevator(ElevatorIO io, CoralSensor coralSensor) {
     this.io = io;
     this.coralSensor = coralSensor;
+    this.deAlgifier = deAlgifier;
   }
 
   @Override
@@ -33,7 +35,7 @@ public class Elevator extends SubsystemBase {
     Logger.processInputs("Elevator", inputs);
 
     if (!coralSensor.isOverrided()) {
-      if (coralSensor.isCoralDetected()) {
+      if (coralSensor.isCoralDetected() || (deAlgifier.getCurrentSetpoint() == -0.24)) {
         wasCoralDetected = true;
         coralLostTimer.stop();
         coralLostTimer.reset();

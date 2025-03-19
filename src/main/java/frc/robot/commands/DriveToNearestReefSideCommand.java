@@ -35,7 +35,7 @@ public class DriveToNearestReefSideCommand extends Command {
   private boolean centerAlign = false;
 
   private final PathConstraints drivetrainConstraints = new PathConstraints(
-      1.75, 1.75,
+      1.5, 4,
       Units.degreesToRadians(540), Units.degreesToRadians(720));
 
   /** Creates a new DriveToNearestReefSideCommand. */

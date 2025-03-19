@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SideGH ~~ ReefG"
+            "pathName": "SideGH ~~ ReefH"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ReefG ~~ FarsideGH"
+            "pathName": "ReefH ~~ FarsideGH"
           }
         },
         {
@@ -35,29 +35,40 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "FarsideGH ~~ ReefG"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "GoToL3"
-                      }
-                    }
-                  ]
+                  "pathName": "FarsideGH ~~ SideGH"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartAndStopDetection"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SideGH ~~ ReefH"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToL3"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {

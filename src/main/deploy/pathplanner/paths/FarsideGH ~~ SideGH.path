@@ -3,37 +3,32 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.174795081967213,
-        "y": 7.255686475409835
+        "x": 5.742110655737705,
+        "y": 3.215829918032787
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.008429520883503,
-        "y": 6.702808710497724
+        "x": 5.957187482196507,
+        "y": 3.3432738614762103
       },
       "isLocked": false,
-      "linkedName": "CoralStation"
+      "linkedName": "FarsideGH"
     },
     {
       "anchor": {
-        "x": 5.742110655737705,
-        "y": 4.198821721311475
+        "x": 6.318,
+        "y": 4.0055
       },
       "prevControl": {
-        "x": 6.990110655737707,
-        "y": 5.164071721311474
+        "x": 6.603467213114752,
+        "y": 4.135286885245902
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefH"
+      "linkedName": "SideGH"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -102.55430897461079
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.06080905426438
+    "rotation": 179.02897806892088
   },
   "reversed": false,
   "folder": "Scoring Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.354350835379655
+    "rotation": -178.26429541107169
   },
   "useDefaultConstraints": true
 }

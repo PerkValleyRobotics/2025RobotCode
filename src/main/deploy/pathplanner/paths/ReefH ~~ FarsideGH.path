@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.840250000000001,
-        "y": 4.600409836065573
+        "x": 5.742110655737705,
+        "y": 4.198821721311475
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.055326826458803,
-        "y": 4.7278537795089965
+        "x": 5.7150574461880925,
+        "y": 3.925533314198063
       },
       "isLocked": false,
-      "linkedName": "FarsideGH"
+      "linkedName": "ReefH"
     },
     {
       "anchor": {
-        "x": 5.840250000000001,
-        "y": 3.8592499999999994
+        "x": 5.742110655737705,
+        "y": 3.215829918032787
       },
       "prevControl": {
-        "x": 6.125717213114753,
-        "y": 3.9890368852459024
+        "x": 5.752152425977521,
+        "y": 3.4829160320300456
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "ReefG"
+      "linkedName": "FarsideGH"
     }
   ],
   "rotationTargets": [],
@@ -45,10 +45,10 @@
     "rotation": -178.26429541107169
   },
   "reversed": false,
-  "folder": "Scoring Paths",
+  "folder": "DeAlgifying Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -178.26429541107169
+    "rotation": -179.06080905426438
   },
   "useDefaultConstraints": true
 }

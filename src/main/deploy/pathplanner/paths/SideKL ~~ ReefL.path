@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.809931049009856,
-        "y": 5.675438894484387
+        "x": 3.568808621822269,
+        "y": 5.910856806953491
       },
       "isLocked": false,
       "linkedName": "SideKL"
     },
     {
       "anchor": {
-        "x": 3.6464999999999996,
-        "y": 5.097499999999999
+        "x": 3.6757500000000003,
+        "y": 5.0584999999999996
       },
       "prevControl": {
-        "x": 3.3018733038886907,
-        "y": 5.3208031596913345
+        "x": 3.561994580607318,
+        "y": 5.345507157737639
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

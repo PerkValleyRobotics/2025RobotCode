@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.318,
-        "y": 4.0055
+        "x": 6.161680327868852,
+        "y": 4.066956967213113
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.587037091325937,
-        "y": 3.996361885681226
+        "x": 6.426414202160122,
+        "y": 4.028656204969008
       },
       "isLocked": false,
       "linkedName": "SideGH"
     },
     {
       "anchor": {
-        "x": 5.742110655737705,
-        "y": 4.198821721311475
+        "x": 5.802049180327868,
+        "y": 4.282735655737705
       },
       "prevControl": {
-        "x": 5.4381514250882095,
-        "y": 4.258146957712597
+        "x": 5.511688169975292,
+        "y": 4.393143284843334
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

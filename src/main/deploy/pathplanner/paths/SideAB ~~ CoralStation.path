@@ -3,49 +3,47 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.943954918032787,
-        "y": 2.742315573770493
+        "x": 2.301,
+        "y": 4.0249999999999995
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.067668759312802,
-        "y": 2.3543515626184286
+        "x": 2.525604029390647,
+        "y": 3.9152137076794857
       },
       "isLocked": false,
-      "linkedName": "ReefD"
+      "linkedName": "SideAB"
     },
     {
       "anchor": {
-        "x": 2.73,
-        "y": 5.195
+        "x": 1.174795081967213,
+        "y": 7.255686475409835
       },
       "prevControl": {
-        "x": 2.3735655737704917,
-        "y": 2.766290983606557
-      },
-      "nextControl": {
-        "x": 2.7663008565749405,
-        "y": 5.442350455451219
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 1.4864754098360655,
-        "y": 7.16577868852459
-      },
-      "prevControl": {
-        "x": 1.575218724993919,
-        "y": 6.932059575025514
+        "x": 1.2017201188401911,
+        "y": 6.8511421376121495
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "CoralStation"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0.7310592459605034,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.0,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -64,7 +62,7 @@
   "folder": "Loading Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 58.67130713219583
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

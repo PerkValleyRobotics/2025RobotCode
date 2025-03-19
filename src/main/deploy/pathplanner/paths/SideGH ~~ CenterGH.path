@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.318,
-        "y": 4.0055
+        "x": 6.161680327868852,
+        "y": 4.066956967213113
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.685058102917589,
-        "y": 4.008083357694849
+        "x": 6.528738430786441,
+        "y": 4.069540324907963
       },
       "isLocked": false,
       "linkedName": "SideGH"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

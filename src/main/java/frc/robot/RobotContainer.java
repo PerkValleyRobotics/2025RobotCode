@@ -4,49 +4,28 @@
 
 package frc.robot;
 
-import static frc.robot.subsystems.Vision.VisionConstants.*;
-
-import java.util.function.BooleanSupplier;
+import static frc.robot.subsystems.Vision.VisionConstants.robotToCamera;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import com.fasterxml.jackson.databind.node.IntNode;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveCommands;
-import frc.robot.commands.DriveToHPStationCommand;
-import frc.robot.commands.DriveToNearestReefSideCommand;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DeAlgifierCommands;
 import frc.robot.commands.DriveCommands;
-import frc.robot.commands.ElevatorCommands;
-import frc.robot.commands.ElevatorGotoHeightCommand;
+import frc.robot.commands.DriveToNearestReefSideCommand;
 import frc.robot.commands.EndEffectorCommands;
-import frc.robot.commands.ManualElevatorCommand;
 import frc.robot.subsystems.CoralSensor.CoralSensor;
 import frc.robot.subsystems.CoralSensor.CoralSensorIO;
 import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
@@ -74,8 +53,6 @@ import frc.robot.subsystems.Vision.VisionIO;
 import frc.robot.subsystems.Vision.VisionIOLimelight;
 import frc.robot.subsystems.Vision.VisionIOPhotonVisionSim;
 
-import static frc.robot.IsDetectionAllowed.*;
-
 /**
  * This class is where the bulk of the robot should be declared. Since
  * Command-based is a
@@ -100,14 +77,17 @@ public class RobotContainer {
         private final CommandXboxController operatorController = new CommandXboxController(1);
 
         private final LoggedDashboardChooser<Command> autoChooser;
+        private final SendableChooser<Command> processorFlipChooser = new SendableChooser<>();
+
         private boolean isDetectionAllowed = true;
+        private boolean mirrorAuton = false;
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
 
-                boolean COMPETITION_MODE = true;
+                boolean COMPETITION_MODE = false;
 
                 switch (Constants.currentMode) {
                         case REAL:
@@ -123,7 +103,6 @@ public class RobotContainer {
 
                                 endEffector = new EndEffector(new EndEffectorIOSparkMax());
                                 deAlgifier = new DeAlgifier(new DeAlgifierIOSparkMax());
-
 
                                 coralSensor = new CoralSensor(new CoralSensorIOReal());
 
@@ -178,12 +157,10 @@ public class RobotContainer {
                                 deAlgifier = new DeAlgifier(new DeAlgifierIO() {
                                 });
 
-
                                 coralSensor = new CoralSensor(new CoralSensorIO() {
                                 });
                                 elevator = new Elevator(new ElevatorIO() {
                                 }, coralSensor, deAlgifier);
-
 
                                 intake = new Intake(new IntakeIO() {
                                 });
@@ -198,10 +175,10 @@ public class RobotContainer {
                 NamedCommands.registerCommand("GoToL3", new InstantCommand(elevator::gotoL3));
                 NamedCommands.registerCommand("GoToL4", new InstantCommand(elevator::gotoL4));
                 NamedCommands.registerCommand("RunFrontAndBack",
-                                EndEffectorCommands.runFrontAndBack(endEffector, 1).withTimeout(.5));
+                                EndEffectorCommands.runFrontAndBack(endEffector, 4).withTimeout(.5));
                 NamedCommands.registerCommand("RunBackMotor",
                                 EndEffectorCommands.runBackCommand(endEffector, .8).withTimeout(1.2)
-                                                .finallyDo(() -> EndEffectorCommands.runFrontAndBack(endEffector, -1)
+                                                .finallyDo(() -> EndEffectorCommands.runFrontAndBack(endEffector, 2)
                                                                 .withTimeout(0.05)));
                 NamedCommands.registerCommand("StartAndStopDetection",
                                 new InstantCommand(() -> isDetectionAllowed = true)
@@ -215,6 +192,11 @@ public class RobotContainer {
                                                 (stream) -> COMPETITION_MODE ? stream.filter(
                                                                 auto -> auto.getName().startsWith("(comp)")) : stream));
 
+                processorFlipChooser.setDefaultOption("Stay On Non-Processor",
+                                new InstantCommand(() -> mirrorAuton = false));
+                processorFlipChooser.addOption("Flip To Processor", new InstantCommand(() -> mirrorAuton = true));
+
+                SmartDashboard.putData("processorFlipChooser", processorFlipChooser);
                 configureBindings();
         }
 
@@ -349,7 +331,8 @@ public class RobotContainer {
 
                 // End effector binds
                 operatorController.rightBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 4));
-                operatorController.leftBumper().and(() -> coralSensor.isOverrided() ? true : !coralSensor.isCoralDetected())
+                operatorController.leftBumper()
+                                .and(() -> coralSensor.isOverrided() ? true : !coralSensor.isCoralDetected())
                                 .whileTrue(EndEffectorCommands.runBackCommand(endEffector, 0.5));
                 // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 // false, false, 1));
@@ -358,14 +341,14 @@ public class RobotContainer {
                 // .whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
                 // operatorController.rightBumper().and(operatorController.back())
 
-                                // .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
-                operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -0.75));
+                // .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
+                operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1.5));
 
-
-
-                // operatorController.button(8).whileTrue(new InstantCommand(() -> intake.goBack())); // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
+                // operatorController.button(8).whileTrue(new InstantCommand(() ->
+                // intake.goBack())); //
+                // operatorController.a().and(operatorController.back()).whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 // operatorController.button(8).and(operatorController.back())
-                //                 .whileTrue(new InstantCommand(() -> intake.goHome()));
+                // .whileTrue(new InstantCommand(() -> intake.goHome()));
 
                 operatorController.button(8).onTrue(new InstantCommand(() -> coralSensor.overrideSensor()));
 
@@ -432,7 +415,12 @@ public class RobotContainer {
          */
         public Command getAutonomousCommand() {
                 // An example command will be run in autonomous
-                return autoChooser.get();
+                Command cmd = autoChooser.get();
+                PathPlannerAuto auto = (PathPlannerAuto) cmd;
+
+                processorFlipChooser.getSelected().schedule();
+
+                return new PathPlannerAuto(auto.getName(), mirrorAuton);
         }
 
         private boolean isJoystickMoved() {

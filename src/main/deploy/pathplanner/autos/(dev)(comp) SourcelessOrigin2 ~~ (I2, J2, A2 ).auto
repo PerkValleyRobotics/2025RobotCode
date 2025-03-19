@@ -25,7 +25,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 0.7
+                              "waitTime": 1.7
                             }
                           },
                           {
@@ -268,6 +268,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "CompAutons",
+  "folder": null,
   "choreoAuto": false
 }

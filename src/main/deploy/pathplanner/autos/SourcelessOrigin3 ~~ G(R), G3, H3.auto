@@ -171,6 +171,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "CompAutons",
+  "folder": "Misc",
   "choreoAuto": false
 }

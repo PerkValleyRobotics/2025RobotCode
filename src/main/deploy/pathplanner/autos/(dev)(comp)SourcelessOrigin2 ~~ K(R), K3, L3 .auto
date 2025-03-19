@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SourcelessOrigin3 ~~ SideGH"
+            "pathName": "SourcelessOrigin2 ~~ SideKL"
           }
         },
         {
@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SideGH ~~ ReefG"
+            "pathName": "Side KL ~~ ReefL"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ReefG ~~ FarsideGH"
+            "pathName": "ReefL ~~ FarsideKL"
           }
         },
         {
@@ -33,19 +33,13 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "FarsideGH ~~ SideGH"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 0.5
                       }
                     },
                     {
@@ -55,6 +49,12 @@
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "FarsideKL ~~ ReefK"
                 }
               }
             ]
@@ -67,9 +67,35 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "ReefG ~~ CoralStation"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "ReefK ~~ CoralStation"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.2
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "StartAndStopDetection"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -81,7 +107,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CoralStation ~~ SideGH"
+            "pathName": "CoralStation ~~ SideKL"
           }
         },
         {
@@ -91,35 +117,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 1.0
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "GoToL3"
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "SideGH ~~ ReefH"
-                }
-              }
-            ]
+            "pathName": "SideKL ~~ ReefL"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToL3"
           }
         },
         {
@@ -132,6 +138,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "CompAutons",
+  "folder": null,
   "choreoAuto": false
 }

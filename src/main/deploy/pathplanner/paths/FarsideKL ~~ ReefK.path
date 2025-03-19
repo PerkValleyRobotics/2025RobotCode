@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.483401639344262,
-        "y": 5.595389344262295
+        "x": 4.6690000000000005,
+        "y": 5.663
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.723155737704918,
-        "y": 5.727254098360657
+        "x": 4.908754098360657,
+        "y": 5.794864754098362
       },
       "isLocked": false,
       "linkedName": "FarsideKL"
     },
     {
       "anchor": {
-        "x": 3.9319672131147545,
-        "y": 5.283709016393443
+        "x": 3.8707500000000006,
+        "y": 5.26325
       },
       "prevControl": {
-        "x": 3.696521844086195,
-        "y": 5.199652617451986
+        "x": 3.635304630971441,
+        "y": 5.179193601058543
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

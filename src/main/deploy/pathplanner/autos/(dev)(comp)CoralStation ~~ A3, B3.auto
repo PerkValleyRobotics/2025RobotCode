@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SourcelessOrigin3 ~~ SideGH"
+            "pathName": "CoralStation ~~ SideAB"
           }
         },
         {
@@ -19,38 +19,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SideGH ~~ ReefH"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ReefH ~~ FarsideGH"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "FarsideGH ~~ SideGH"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "StartAndStopDetection"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "SideGH ~~ ReefH"
+            "pathName": "SideAB ~~ ReefA"
           }
         },
         {
@@ -60,15 +29,57 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "RunFrontAndBack"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "ReefA ~~ SideAB"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "RunFrontAndBack"
+            "name": "StartAndStopDetection"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SideAB ~~ CoralStation"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "RunBackMotor"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CoralStation ~~ SideAB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartAndStopDetection"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "SideAB ~~ ReefB"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "GoToL3"
           }
         }
       ]

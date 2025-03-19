@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.957187482196507,
-        "y": 3.3432738614762103
+        "x": 5.8497734931685805,
+        "y": 3.441459511473747
       },
       "isLocked": false,
       "linkedName": "FarsideGH"
     },
     {
       "anchor": {
-        "x": 6.318,
-        "y": 4.0055
+        "x": 6.161680327868852,
+        "y": 4.066956967213113
       },
       "prevControl": {
-        "x": 6.603467213114752,
-        "y": 4.135286885245902
+        "x": 6.05254808033763,
+        "y": 3.8420344193243254
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

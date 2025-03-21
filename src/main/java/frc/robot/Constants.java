@@ -15,6 +15,7 @@ package frc.robot;
 public final class Constants {
   public static final Mode simMode = Mode.SIM;
   public static final Mode currentMode = Robot.isReal() ? Mode.REAL : simMode;
+  // We should have put isDetectionAllowed here
 
 
   public static enum Mode {

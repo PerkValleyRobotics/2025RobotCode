@@ -33,6 +33,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "CompAutons",
+  "folder": null,
   "choreoAuto": false
 }

@@ -20,6 +20,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.AprilTagPositions;
 import frc.robot.subsystems.Vision.VisionIO.PoseObservationType;
@@ -57,6 +58,7 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("isDetectionAllowed", isDetectionAllowed);
     for (int i = 0; i < io.length; i++) {
       io[i].updateInputs(inputs[i]);
       Logger.processInputs("Vision/Camera" + Integer.toString(i), inputs[i]);
@@ -130,13 +132,14 @@ public class Vision extends SubsystemBase {
           angularStdDev *= cameraStdDevFactors[cameraIndex];
         }
 
+
         // Send vision observation
-        if (isDetectionAllowed) {
+        // if (isDetectionAllowed) {
           consumer.accept(
               observation.pose().toPose2d(),
               observation.timestamp(),
               VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev));
-        }
+        // }
       }
 
       // Log camera data

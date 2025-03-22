@@ -17,31 +17,6 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "SideGH ~~ ReefH"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ReefH ~~ FarsideGH"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "FarsideGH ~~ SideGH"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "StartAndStopDetection"
@@ -75,6 +50,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "CompAutons",
+  "folder": null,
   "choreoAuto": false
 }

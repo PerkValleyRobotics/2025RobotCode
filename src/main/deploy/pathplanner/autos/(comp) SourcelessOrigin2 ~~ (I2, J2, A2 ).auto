@@ -17,15 +17,35 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "SideJI ~~ ReefI"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "GoToL2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "SideJI ~~ ReefI"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "GoToL2"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.27
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -100,7 +120,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 1.27
                       }
                     }
                   ]
@@ -181,7 +201,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.0
+                        "waitTime": 1.27
                       }
                     }
                   ]

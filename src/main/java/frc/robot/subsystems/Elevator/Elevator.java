@@ -114,8 +114,12 @@ public class Elevator extends SubsystemBase {
   }
 
   public void checkForSensor(Runnable action) {
+    System.out.println(deAlgifier.getCurrentSetpoint());
     if (!coralSensor.isOverrided()) {
-      if (coralSensor.isCoralDetected() || (deAlgifier.getCurrentSetpoint() == -0.24)) {
+      if (coralSensor.isCoralDetected()) {
+        action.run();
+      } else if (deAlgifier.getCurrentSetpoint() < -.1
+      ){
         action.run();
       }
     } else {

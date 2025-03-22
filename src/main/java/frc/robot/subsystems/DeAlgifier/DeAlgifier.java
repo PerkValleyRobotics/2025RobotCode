@@ -63,7 +63,8 @@ public class DeAlgifier extends SubsystemBase {
     }
 
     public void out() {
-        gotoPos(-0.24);
+        // gotoPos(-0.24);
+        gotoPos(-.31);
     }
 
     public void in() {

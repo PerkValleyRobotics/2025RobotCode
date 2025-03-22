@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import static frc.robot.IsDetectionAllowed.isDetectionAllowed;
 import static frc.robot.subsystems.Vision.VisionConstants.robotToCamera;
 
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -77,17 +78,17 @@ public class RobotContainer {
         private final CommandXboxController operatorController = new CommandXboxController(1);
 
         private final LoggedDashboardChooser<Command> autoChooser;
-        private final SendableChooser<Command> processorFlipChooser = new SendableChooser<>();
+        //private final SendableChooser<Command> processorFlipChooser = new SendableChooser<>();
 
-        private boolean isDetectionAllowed = true;
-        private boolean mirrorAuton = false;
+        // private boolean isDetectionAllowed = true;
+        //private boolean mirrorAuton = false;
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
 
-                boolean COMPETITION_MODE = false;
+                boolean COMPETITION_MODE = true;
 
                 switch (Constants.currentMode) {
                         case REAL:
@@ -175,10 +176,10 @@ public class RobotContainer {
                 NamedCommands.registerCommand("GoToL3", new InstantCommand(elevator::gotoL3));
                 NamedCommands.registerCommand("GoToL4", new InstantCommand(elevator::gotoL4));
                 NamedCommands.registerCommand("RunFrontAndBack",
-                                EndEffectorCommands.runFrontAndBack(endEffector, 4).withTimeout(.5));
+                                EndEffectorCommands.runFrontAndBack(endEffector, 3).withTimeout(.5));
                 NamedCommands.registerCommand("RunBackMotor",
                                 EndEffectorCommands.runBackCommand(endEffector, .8).withTimeout(1.2)
-                                                .finallyDo(() -> EndEffectorCommands.runFrontAndBack(endEffector, 2)
+                                                .finallyDo(() -> EndEffectorCommands.runFrontAndBack(endEffector, 1.75)
                                                                 .withTimeout(0.05)));
                 NamedCommands.registerCommand("StartAndStopDetection",
                                 new InstantCommand(() -> isDetectionAllowed = true)
@@ -192,11 +193,11 @@ public class RobotContainer {
                                                 (stream) -> COMPETITION_MODE ? stream.filter(
                                                                 auto -> auto.getName().startsWith("(comp)")) : stream));
 
-                processorFlipChooser.setDefaultOption("Stay On Non-Processor",
-                                new InstantCommand(() -> mirrorAuton = false));
-                processorFlipChooser.addOption("Flip To Processor", new InstantCommand(() -> mirrorAuton = true));
+                //processorFlipChooser.setDefaultOption("Stay On Non-Processor",
+                                //new InstantCommand(() -> mirrorAuton = false));
+                //processorFlipChooser.addOption("Flip To Processor", new InstantCommand(() -> mirrorAuton = true));
 
-                SmartDashboard.putData("processorFlipChooser", processorFlipChooser);
+                //SmartDashboard.putData("processorFlipChooser", processorFlipChooser);
                 configureBindings();
         }
 
@@ -330,10 +331,10 @@ public class RobotContainer {
                 // );
 
                 // End effector binds
-                operatorController.rightBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 4));
+                operatorController.rightBumper().whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, 3));
                 operatorController.leftBumper()
                                 .and(() -> coralSensor.isOverrided() ? true : !coralSensor.isCoralDetected())
-                                .whileTrue(EndEffectorCommands.runBackCommand(endEffector, 0.5));
+                                .whileTrue(EndEffectorCommands.runBackCommand(endEffector, .75));
                 // operatorController.a().whileTrue(EndEffectorCommands.runFrontMotors(endEffector,
                 // false, false, 1));
 
@@ -342,7 +343,7 @@ public class RobotContainer {
                 // operatorController.rightBumper().and(operatorController.back())
 
                 // .whileTrue(EndEffectorCommands.runBackCommand(endEffector, -.5));
-                operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1.5));
+                operatorController.pov(180).whileTrue(EndEffectorCommands.runFrontAndBack(endEffector, -1));
 
                 // operatorController.button(8).whileTrue(new InstantCommand(() ->
                 // intake.goBack())); //
@@ -415,12 +416,13 @@ public class RobotContainer {
          */
         public Command getAutonomousCommand() {
                 // An example command will be run in autonomous
-                Command cmd = autoChooser.get();
-                PathPlannerAuto auto = (PathPlannerAuto) cmd;
+                //Command cmd = autoChooser.get();
+                //PathPlannerAuto auto = (PathPlannerAuto) cmd;
 
-                processorFlipChooser.getSelected().schedule();
+                //processorFlipChooser.getSelected().schedule();
 
-                return new PathPlannerAuto(auto.getName(), mirrorAuton);
+                //return new PathPlannerAuto(auto.getName(), mirrorAuton);
+                return autoChooser.get();
         }
 
         private boolean isJoystickMoved() {

@@ -171,6 +171,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Misc",
+  "folder": null,
   "choreoAuto": false
 }

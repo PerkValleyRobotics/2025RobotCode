@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 public class CoralSensorIOReal implements CoralSensorIO {
     private final DigitalInput sensor;
-    private final int SENSOR_PORT = 1;
+    private final int SENSOR_PORT = 2;
 
     public CoralSensorIOReal() {
         sensor = new DigitalInput(SENSOR_PORT);

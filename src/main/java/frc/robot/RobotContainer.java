@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveToNearestReefSideCommand;
 import frc.robot.commands.EndEffectorCommands;
+import frc.robot.commands.RotateToReefCommand;
 import frc.robot.subsystems.CoralSensor.CoralSensor;
 import frc.robot.subsystems.CoralSensor.CoralSensorIO;
 import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
@@ -250,6 +251,7 @@ public class RobotContainer {
                                                 () -> -driverController.getRightX()).finallyDo(() -> {
                                                         new InstantCommand(() -> drive.stop());
                                                 }));
+                driverController.a().whileTrue(new RotateToReefCommand(drive));
                 driverController
                                 .y()
                                 .whileTrue(

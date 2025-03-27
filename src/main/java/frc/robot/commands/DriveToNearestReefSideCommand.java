@@ -52,23 +52,26 @@ public class DriveToNearestReefSideCommand extends Command {
   @Override
   public void initialize() {
     Pose2d closestAprilTagPose = getClosestReefAprilTagPose(); // where we want to be at the end
+    double distFromAprilTag = findDistanceBetween(drive.getPose(), closestAprilTagPose);
 
-    Command pathfindPath = AutoBuilder.pathfindToPose(
-        translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -1.5),
+    Command backedUpPath = AutoBuilder.pathfindToPose(
+        translateCoord(closestAprilTagPose, closestAprilTagPose.getRotation().getDegrees(), -0.762),
         drivetrainConstraints);
-    if (findDistanceBetween(drive.getPose(), closestAprilTagPose) < 0.5) {
-      pathfindPath = Commands.defer(() -> generateGoToPath(drive.getPose(),
-          translateCoord(drive.getPose(), drive.getPose().getRotation().getDegrees(), -0.5)), Set.of(drive));
-    } else if (findDistanceBetween(drive.getPose(), closestAprilTagPose) < 1.5) {
-      pathfindPath = new PrintCommand("sigma on the wall");
 
+    Command goToFinalPos = Commands.defer(() -> generateGoToPath(drive.getPose(),
+        closestAprilTagPose), Set.of(drive));
+
+    if (distFromAprilTag <= 0.762) {
+      fullPath = new RotateToReefCommand(drive).withTimeout(0.4).andThen(backedUpPath).andThen(goToFinalPos);
+    } else if (distFromAprilTag > 0.762 && distFromAprilTag <= 2) {
+      fullPath = new RotateToReefCommand(drive).withTimeout(0.4).andThen(goToFinalPos);
+    } else {
+      fullPath = new RotateToReefCommand(drive).withTimeout(0.4).andThen(backedUpPath).andThen(goToFinalPos);
     }
     try {
-      fullPath = pathfindPath.andThen(Commands
-          .defer(() -> generateGoToPath(drive.getPose(), closestAprilTagPose), Set.of(drive)));
       fullPath.schedule();
     } catch (Exception e) {
-      DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+      DriverStation.reportError("yell at vihaan!: " + e.getMessage(), e.getStackTrace());
     }
   }
 

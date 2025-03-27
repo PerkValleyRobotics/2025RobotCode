@@ -28,6 +28,8 @@ public class RotateToReefCommand extends Command {
   public static final double CAMERA_TO_ROBOT_CENTER_X = 0.0; // forward x m
   public static final double CAMERA_TO_ROBOT_CENTER_Y = 0.0; // x m out from the left of the robot center
 
+  private boolean doneRotating = false;
+
   /** Creates a new RotateToReefCommand. */
   public RotateToReefCommand(Drive drive) {
     this.drive = drive;
@@ -38,6 +40,8 @@ public class RotateToReefCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    autoRotatePID.setTolerance(Math.toRadians(2.5));
+    autoRotatePID.enableContinuousInput(-Math.PI, Math.PI);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -68,8 +72,13 @@ public class RotateToReefCommand extends Command {
       targetAngle = 0;
     }
 
-    if (Math.abs(drive.getRotation().getDegrees() - Math.toDegrees(targetAngle)) <= Math.toRadians(5)) {
-      this.cancel();
+    if (Math.abs(drive.getRotation().getDegrees() - Math.toDegrees(targetAngle)) <= Math.toRadians(10)) {
+      doneRotating = true;
+      // System.out.println(
+      // "yiuyoiulyyoyiuyoiulyyoyiuyoiulyyoyiuyoiulyyoyiuyoiulyyoyiuyoiulyyoyiuyoiulyyoyiuyoiulyyoyiuyoiulyyo");
+      // this.cancel();
+      // System.out.println("overhereoverhereoverhereoverhereoverhereoverhereoverhere");
+      // return;
     }
 
     autoRotatePID.setSetpoint(targetAngle);
@@ -102,7 +111,7 @@ public class RotateToReefCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return doneRotating;
   }
 
   private static double findDistanceBetween(Pose2d pose1, Pose2d pose2) {

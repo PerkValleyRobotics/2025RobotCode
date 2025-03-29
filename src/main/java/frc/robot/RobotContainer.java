@@ -187,6 +187,9 @@ public class RobotContainer {
                 NamedCommands.registerCommand("RunDeAlgifier",
                                 new SequentialCommandGroup(new InstantCommand(deAlgifier::out),
                                                 new InstantCommand(deAlgifier::runWheel)).withTimeout(1.0));
+                NamedCommands.registerCommand("FlipDeAlgifierForward", new InstantCommand(deAlgifier::out));
+                NamedCommands.registerCommand("FlipDeAlgifierIn", new InstantCommand(deAlgifier::in));
+
                 autoChooser = new LoggedDashboardChooser<>("Auto Choices",
                                 AutoBuilder.buildAutoChooserWithOptionsModifier(
                                                 (stream) -> COMPETITION_MODE ? stream.filter(

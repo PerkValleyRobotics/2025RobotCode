@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.174795081967213,
-        "y": 7.255686475409835
+        "x": 7.600204918032786,
+        "y": 0.5905225409836055
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2335005592111807,
-        "y": 6.98216460347465
+        "x": 6.631107954545453,
+        "y": 1.048480113636364
       },
       "isLocked": false,
-      "linkedName": "CoralStation"
+      "linkedName": "SourcelessOrigin4"
     },
     {
       "anchor": {
-        "x": 2.301,
-        "y": 4.0249999999999995
+        "x": 3.549886363636363,
+        "y": 2.43453125
       },
       "prevControl": {
-        "x": 2.0473476548919534,
-        "y": 4.741121721139884
+        "x": 4.995767045454546,
+        "y": 1.7863778409090911
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "SideAB"
+      "linkedName": "SideCD"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.590633130962708,
+      "rotationDegrees": 61.385336658603634
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 58.2010871757057
   },
   "reversed": false,
-  "folder": "Scoring Paths",
+  "folder": "Starting Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -53.354350835379655
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

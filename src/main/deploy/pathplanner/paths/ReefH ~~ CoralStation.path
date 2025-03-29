@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.802049180327868,
-        "y": 4.282735655737705
+        "x": 5.783522727277714,
+        "y": 4.608338068186803
       },
       "isLocked": false,
       "linkedName": "ReefH"
+    },
+    {
+      "anchor": {
+        "x": 5.802049180327868,
+        "y": 5.934559659095894
+      },
+      "prevControl": {
+        "x": 5.793474992580888,
+        "y": 5.6847067357500185
+      },
+      "nextControl": {
+        "x": 5.8106233680748485,
+        "y": 6.1844125824417695
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,8 +36,8 @@
         "y": 7.255686475409835
       },
       "prevControl": {
-        "x": 2.408569672131148,
-        "y": 7.907657786885245
+        "x": 2.433068181823168,
+        "y": 6.951661931823167
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +46,8 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": -170.24833765370974
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": -147.24400981516325
     }
   ],
   "constraintZones": [],

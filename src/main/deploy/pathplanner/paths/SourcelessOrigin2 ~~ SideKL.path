@@ -8,11 +8,27 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.565999999999999,
-        "y": 4.75625
+        "x": 5.444488636363636,
+        "y": 5.645383522727272
       },
       "isLocked": false,
       "linkedName": "SourcelessOrigin2"
+    },
+    {
+      "anchor": {
+        "x": 5.4046022727272724,
+        "y": 5.661
+      },
+      "prevControl": {
+        "x": 5.713721590909091,
+        "y": 5.6254403409090905
+      },
+      "nextControl": {
+        "x": 5.156240176986031,
+        "y": 5.6895704287509705
+      },
+      "isLocked": false,
+      "linkedName": null
     },
     {
       "anchor": {
@@ -20,15 +36,20 @@
         "y": 5.661
       },
       "prevControl": {
-        "x": 3.5723360655737713,
-        "y": 6.548090163934426
+        "x": 3.8390625,
+        "y": 5.695241477272727
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "SideKL"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -90.4413276472248
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

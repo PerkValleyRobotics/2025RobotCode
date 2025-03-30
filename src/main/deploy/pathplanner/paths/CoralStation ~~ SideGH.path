@@ -8,43 +8,48 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1345132769047224,
-        "y": 6.950098105320699
+        "x": 1.3624368923845362,
+        "y": 7.090487955491195
       },
       "isLocked": false,
       "linkedName": "CoralStation"
     },
     {
       "anchor": {
-        "x": 5.499,
-        "y": 5.77025
+        "x": 5.643920454545454,
+        "y": 5.455923295454545
       },
       "prevControl": {
-        "x": 5.0625082089176665,
-        "y": 6.272834613124782
+        "x": 5.466335299490328,
+        "y": 5.6471688470523755
       },
       "nextControl": {
-        "x": 5.826344691972107,
-        "y": 5.393339348449579
+        "x": 5.814033229387273,
+        "y": 5.272724922547969
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.161680327868852,
-        "y": 4.066956967213113
+        "x": 6.48153409090909,
+        "y": 4.039957386363636
       },
       "prevControl": {
-        "x": 6.0177692027323655,
-        "y": 5.285293444795651
+        "x": 6.072698863636364,
+        "y": 4.7977982954545455
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "SideGH"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -105.87741312321931
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],

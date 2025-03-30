@@ -43,7 +43,7 @@ public class DriveCommands {
   private static final double FF_START_DELAY = 2.0; // Secs
   private static final double FF_RAMP_RATE = 0.1; // Volts/sec
 
-  private static final PIDController autoRotatePID = new PIDController(10, 0, 0.3);
+  private static final PIDController autoRotatePID = new PIDController(5, 0, 0.3);
   public static final double CAMERA_TO_ROBOT_CENTER_X = 0.0; // forward x m
   public static final double CAMERA_TO_ROBOT_CENTER_Y = 0.0; // x m out from the left of the robot center
 
@@ -128,8 +128,6 @@ public class DriveCommands {
 
           boolean isFlipped = DriverStation.getAlliance().isPresent()
               && DriverStation.getAlliance().get() == Alliance.Red;
-
-          Logger.recordOutput("apriltagToBot", nearestReefSide);
 
           drive.runVelocity(
               ChassisSpeeds.fromFieldRelativeSpeeds(

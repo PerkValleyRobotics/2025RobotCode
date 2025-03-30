@@ -21,12 +21,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveCommands;
 import frc.robot.commands.DriveToNearestReefSideCommand;
 import frc.robot.commands.EndEffectorCommands;
+import frc.robot.commands.RotateToReefCommand;
 import frc.robot.subsystems.CoralSensor.CoralSensor;
 import frc.robot.subsystems.CoralSensor.CoralSensorIO;
 import frc.robot.subsystems.CoralSensor.CoralSensorIOReal;
@@ -254,6 +256,8 @@ public class RobotContainer {
                                                 () -> -driverController.getRightX()).finallyDo(() -> {
                                                         new InstantCommand(() -> drive.stop());
                                                 }));
+                driverController.a().whileTrue(new RotateToReefCommand(drive).andThen(new PrintCommand(
+                                "0.7620.7620.7620.7620.7620.7620.7620.7620.7620.7620.7620.7620.7620.7620.7620.7620.7620.7620.762")));
                 driverController
                                 .y()
                                 .whileTrue(

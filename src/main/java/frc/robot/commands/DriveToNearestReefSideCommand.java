@@ -35,7 +35,7 @@ public class DriveToNearestReefSideCommand extends Command {
   private boolean centerAlign = false;
 
   private final PathConstraints drivetrainConstraints = new PathConstraints(
-      1.5, 4,
+      1, 3,
       Units.degreesToRadians(540), Units.degreesToRadians(720));
 
   /** Creates a new DriveToNearestReefSideCommand. */
@@ -61,9 +61,9 @@ public class DriveToNearestReefSideCommand extends Command {
     Command goToFinalPos = Commands.defer(() -> generateGoToPath(drive.getPose(),
         closestAprilTagPose), Set.of(drive));
 
-    if (distFromAprilTag <= 0.762) {
+    if (distFromAprilTag <= 1) {
       fullPath = new RotateToReefCommand(drive).withTimeout(0.4).andThen(backedUpPath).andThen(goToFinalPos);
-    } else if (distFromAprilTag > 0.762 && distFromAprilTag <= 2) {
+    } else if (distFromAprilTag > 1 && distFromAprilTag <= 1.8) {
       fullPath = new RotateToReefCommand(drive).withTimeout(0.4).andThen(goToFinalPos);
     } else {
       fullPath = new RotateToReefCommand(drive).withTimeout(0.4).andThen(backedUpPath).andThen(goToFinalPos);

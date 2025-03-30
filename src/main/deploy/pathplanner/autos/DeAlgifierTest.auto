@@ -1,0 +1,57 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FlipDeAlgifierOut"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "GoToL2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.475
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "FlipDeAlgifierIn"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunFrontAndBack"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": false,
+  "folder": "CompAutons",
+  "choreoAuto": false
+}

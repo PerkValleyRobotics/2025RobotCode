@@ -24,9 +24,9 @@ import frc.robot.subsystems.Drive.Drive;
 public class RotateToReefCommand extends Command {
   private Drive drive;
 
-  private static final PIDController autoRotatePID = new PIDController(5, 0, 0.3);
-  public static final double CAMERA_TO_ROBOT_CENTER_X = 0.0; // forward x m
-  public static final double CAMERA_TO_ROBOT_CENTER_Y = 0.0; // x m out from the left of the robot center
+  private static final PIDController autoRotatePID = new PIDController(0, 0, 0);
+  public static final double CAMERA_TO_ROBOT_CENTER_X = 0.206375; // forward x m
+  public static final double CAMERA_TO_ROBOT_CENTER_Y = 0.242; // x m out from the left of the robot center
 
   private boolean doneRotating = false;
 
